@@ -3,26 +3,58 @@ name: Build & Deploy
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Build frontend
-        working-directory: frontend
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show repository structure
         run: |
-          npm install -g pnpm
-          pnpm install
-          pnpm run build --if-present || echo 'no build'
-      - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          service_account_key: \${{ secrets.GCP_SA_KEY }}
-          project_id: \${{ secrets.GCP_PROJECT }}
-      - name: Deploy app
+          echo "GFIELD HQ repository check"
+          find . -maxdepth 3 -type f | sort
+
+      - name: Validate frontend preview
         run: |
-          echo "Placeholder for Cloud Run deploy"
+          if [ -f "frontend/index.html" ]; then
+            echo "✅ frontend/index.html exists"
+          else
+            echo "❌ frontend/index.html missing"
+            exit 1
+          fi
+
+      - name: Validate API preview
+        run: |
+          if [ -f "api/main.py" ]; then
+            echo "✅ api/main.py exists"
+          else
+            echo "❌ api/main.py missing"
+            exit 1
+          fi
+
+      - name: Prepare preview artifact
+        run: |
+          mkdir -p deploy_preview
+          cp -r frontend deploy_preview/frontend
+          cp -r admin deploy_preview/admin
+          cp -r api deploy_preview/api
+          cp README.md deploy_preview/README.md
+          echo "GFIELD HQ preview build completed at $(date -u)" > deploy_preview/BUILD_STATUS.txt
+
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gfield-hq-preview
+          path: deploy_preview
+
+      - name: Deployment placeholder
+        run: |
+          echo "✅ Preview workflow completed."
+          echo "Cloud Run deployment is intentionally deferred until GCP_PROJECT and GCP_SA_KEY secrets are configured."
+          echo "Next: add GitHub Actions secrets, then replace this placeholder with real Cloud Run deploy."
