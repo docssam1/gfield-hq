@@ -12,6 +12,15 @@ REPO_ROOT = Path(__file__).resolve().parent
 ALLOWED_CMDS = {
     "status": ["bash", str(REPO_ROOT / "scripts" / "status.sh")],
     "deploy": ["bash", "-lc", f"cd {REPO_ROOT} && git pull --ff-only && git log -1 --oneline"],
+    "algebra2_status": ["bash", str(REPO_ROOT / "scripts" / "algebra2_status.sh")],
+    "algebra2_backup": ["bash", str(REPO_ROOT / "scripts" / "algebra2_backup.sh")],
+}
+
+ALIASES = {
+    "algebra2": "algebra2_status",
+    "a2": "algebra2_status",
+    "a2_status": "algebra2_status",
+    "a2_backup": "algebra2_backup",
 }
 
 logging.basicConfig(level=logging.INFO)
@@ -27,13 +36,14 @@ async def run(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if not context.args:
-        await update.message.reply_text("사용법: /run <status|deploy>")
+        await update.message.reply_text("사용법: /run <status|deploy|algebra2_status|algebra2_backup>")
         return
 
     cmd_key = context.args[0].lower().strip()
+    cmd_key = ALIASES.get(cmd_key, cmd_key)
     command = ALLOWED_CMDS.get(cmd_key)
     if not command:
-        await update.message.reply_text("사용 가능: /run status 또는 /run deploy")
+        await update.message.reply_text("사용 가능: /run status, /run deploy, /run algebra2_status, /run algebra2_backup")
         return
 
     await update.message.reply_text(f"⏳ {cmd_key} 실행 중...")
@@ -44,7 +54,7 @@ async def run(update: Update, context: ContextTypes.DEFAULT_TYPE):
             cwd=str(REPO_ROOT),
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=180,
         )
         output = ((proc.stdout or "") + "\n" + (proc.stderr or "")).strip()
         output = output[-3000:] if output else "no output"
