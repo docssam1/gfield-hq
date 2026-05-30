@@ -4,7 +4,7 @@ Last updated: 2026-05-30 KST
 
 ## 1. Purpose
 
-This document is the handoff/status record for the G-FIELD Hermes Command Center.
+This document is the current handoff/status record for the G-FIELD Hermes Command Center.
 It exists so another GPT, Gemini, developer, or future server environment can continue the work even if the current chat slows down or stops.
 
 ## 2. Core Principle
@@ -89,6 +89,7 @@ Important files currently known:
 - scripts/status.ps1
 - scripts/deploy.ps1
 - .github/workflows/deploy.yml
+- docs/HERMES_CURRENT_STATUS.md
 
 Notes:
 
@@ -112,22 +113,22 @@ Notes:
 
 ## 7. Important Problems Encountered and Resolved
 
-### Problem: Cloud Shell vs VM confusion
+### Cloud Shell vs VM confusion
 
 Cloud Shell is temporary and does not use systemd.
 The 24-hour bot must run on VM, not Cloud Shell.
 
-### Problem: PowerShell command on Linux
+### PowerShell command on Linux
 
 Initial bot_runner.py tried to run PowerShell.
 Cloud Shell/VM are Linux, so runner must use bash.
 
-### Problem: Multiple bot instances
+### Multiple bot instances
 
 Telegram Conflict/getUpdates error happened when both Cloud Shell and VM ran the same bot.
 Correct rule: only VM systemd should run the bot.
 
-### Problem: Token exposure risk
+### Token exposure risk
 
 Bot tokens were visible during troubleshooting.
 Rule: never store token in GitHub or documentation. If exposed, revoke/regenerate from BotFather.
