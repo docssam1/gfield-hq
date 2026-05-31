@@ -15,6 +15,9 @@ ALLOWED_CMDS = {
     "drive_scan": ["bash", "-lc", f"cd {REPO_ROOT} && python3 scripts/drive_scan.py"],
     "algebra2_status": ["bash", str(REPO_ROOT / "scripts" / "algebra2_status.sh")],
     "algebra2_backup": ["bash", str(REPO_ROOT / "scripts" / "algebra2_backup.sh")],
+    "algebra2_diff": ["bash", str(REPO_ROOT / "scripts" / "algebra2_diff.sh")],
+    "algebra2_test": ["bash", str(REPO_ROOT / "scripts" / "algebra2_test.sh")],
+    "algebra2_clean": ["bash", str(REPO_ROOT / "scripts" / "algebra2_clean.sh")],
 }
 
 ALIASES = {
@@ -24,6 +27,9 @@ ALIASES = {
     "a2": "algebra2_status",
     "a2_status": "algebra2_status",
     "a2_backup": "algebra2_backup",
+    "a2_diff": "algebra2_diff",
+    "a2_test": "algebra2_test",
+    "a2_clean": "algebra2_clean",
 }
 
 logging.basicConfig(level=logging.INFO)
@@ -39,14 +45,14 @@ async def run(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if not context.args:
-        await update.message.reply_text("사용법: /run <status|deploy|drive_scan>")
+        await update.message.reply_text("사용법: /run <status|deploy|drive_scan|algebra2_status|algebra2_backup|algebra2_diff|algebra2_test|algebra2_clean>")
         return
 
     cmd_key = context.args[0].lower().strip()
     cmd_key = ALIASES.get(cmd_key, cmd_key)
     command = ALLOWED_CMDS.get(cmd_key)
     if not command:
-        await update.message.reply_text("사용 가능: /run status, /run deploy, /run drive_scan")
+        await update.message.reply_text("사용 가능: /run status, /run deploy, /run drive_scan, /run algebra2_status, /run algebra2_backup, /run algebra2_diff, /run algebra2_test, /run algebra2_clean")
         return
 
     await update.message.reply_text(f"⏳ {cmd_key} 실행 중...")
