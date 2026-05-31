@@ -12,6 +12,10 @@ REPO_ROOT = Path(__file__).resolve().parent
 ALLOWED_CMDS = {
     "status": ["bash", str(REPO_ROOT / "scripts" / "status.sh")],
     "deploy": ["bash", "-lc", f"cd {REPO_ROOT} && git pull --ff-only && git log -1 --oneline"],
+    "deploy_safe": ["bash", str(REPO_ROOT / "scripts" / "deploy_safe.sh")],
+    "hq_status": ["bash", str(REPO_ROOT / "scripts" / "hq_status.sh")],
+    "hq_rebase": ["bash", str(REPO_ROOT / "scripts" / "hq_rebase.sh")],
+    "hq_commands": ["bash", str(REPO_ROOT / "scripts" / "hq_commands.sh")],
     "drive_scan": ["bash", "-lc", f"cd {REPO_ROOT} && python3 scripts/drive_scan.py"],
     "algebra2_status": ["bash", str(REPO_ROOT / "scripts" / "algebra2_status.sh")],
     "algebra2_backup": ["bash", str(REPO_ROOT / "scripts" / "algebra2_backup.sh")],
@@ -27,6 +31,9 @@ ALLOWED_CMDS = {
 ALIASES = {
     "drive": "drive_scan",
     "scan": "drive_scan",
+    "safe": "deploy_safe",
+    "hq": "hq_status",
+    "commands": "hq_commands",
     "algebra2": "algebra2_status",
     "a2": "algebra2_status",
     "a2_status": "algebra2_status",
@@ -53,14 +60,14 @@ async def run(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if not context.args:
-        await update.message.reply_text("사용법: /run <status|deploy|drive_scan|algebra2_status|algebra2_backup|algebra2_diff|algebra2_test|algebra2_clean|algebra2_patch_omr>")
+        await update.message.reply_text("사용법: /run <status|deploy|deploy_safe|hq_status|hq_rebase|hq_commands|drive_scan|algebra2_status|algebra2_backup|algebra2_diff|algebra2_test|algebra2_clean|algebra2_patch_omr|algebra2_patch_materials|algebra2_patch_omr_layout|algebra2_patch_answer_matrix>")
         return
 
     cmd_key = context.args[0].lower().strip()
     cmd_key = ALIASES.get(cmd_key, cmd_key)
     command = ALLOWED_CMDS.get(cmd_key)
     if not command:
-        await update.message.reply_text("사용 가능: /run status, /run deploy, /run drive_scan, /run algebra2_status, /run algebra2_backup, /run algebra2_diff, /run algebra2_test, /run algebra2_clean, /run algebra2_patch_omr")
+        await update.message.reply_text("사용 가능: /run status, /run deploy, /run deploy_safe, /run hq_status, /run hq_rebase, /run hq_commands, /run drive_scan, /run algebra2_status, /run algebra2_backup, /run algebra2_diff, /run algebra2_test, /run algebra2_clean, /run algebra2_patch_omr, /run algebra2_patch_materials, /run algebra2_patch_omr_layout, /run algebra2_patch_answer_matrix")
         return
 
     await update.message.reply_text(f"⏳ {cmd_key} 실행 중...")
