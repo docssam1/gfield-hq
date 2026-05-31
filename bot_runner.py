@@ -20,6 +20,7 @@ ALLOWED_CMDS = {
     "algebra2_clean": ["bash", str(REPO_ROOT / "scripts" / "algebra2_clean.sh")],
     "algebra2_patch_omr": ["bash", str(REPO_ROOT / "scripts" / "algebra2_patch_omr.sh")],
     "algebra2_patch_materials": ["bash", str(REPO_ROOT / "scripts" / "algebra2_patch_materials.sh")],
+    "algebra2_patch_omr_layout": ["bash", str(REPO_ROOT / "scripts" / "algebra2_patch_omr_layout.sh")],
 }
 
 ALIASES = {
@@ -34,6 +35,7 @@ ALIASES = {
     "a2_clean": "algebra2_clean",
     "a2_patch_omr": "algebra2_patch_omr",
     "a2_patch_materials": "algebra2_patch_materials",
+    "a2_patch_omr_layout": "algebra2_patch_omr_layout",
 }
 
 logging.basicConfig(level=logging.INFO)
