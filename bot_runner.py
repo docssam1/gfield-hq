@@ -67,6 +67,15 @@ ALIASES = {
     "omr가로": "algebra2_patch_omr_layout",
     "정오답표": "algebra2_patch_answer_matrix",
     "난이도표": "algebra2_patch_answer_matrix",
+    "동기화": "deploy_safe",
+    "알지상태": "algebra2_status",
+    "알지백업": "algebra2_backup",
+    "알지검사": "algebra2_test",
+    "알지확인": "algebra2_diff",
+    "알지정리": "algebra2_clean",
+    "정오답패치": "algebra2_patch_answer_matrix",
+    "오엠알패치": "algebra2_patch_omr_layout",
+    "교재패치": "algebra2_patch_materials",
 }
 
 logging.basicConfig(level=logging.INFO)
@@ -89,7 +98,7 @@ async def run(update: Update, context: ContextTypes.DEFAULT_TYPE):
     cmd_key = ALIASES.get(cmd_key, cmd_key)
     command = ALLOWED_CMDS.get(cmd_key)
     if not command:
-        await update.message.reply_text("사용 가능: /run 상태, /run 관제, /run 명령, /run 안전배포, /run 복구, /run 대수상태, /run 대수백업, /run 대수검사, /run 대수차이, /run 정오답표 또는 기존 영어 명령")
+        await update.message.reply_text("사용 가능: /run 상태, /run 목록, /run 동기화, /run 복구, /run 알지백업, /run 알지검사, /run 알지확인, /run 정오답패치, /run 오엠알패치, /run 교재패치")
         return
 
     await update.message.reply_text(f"⏳ {cmd_key} 실행 중...")
