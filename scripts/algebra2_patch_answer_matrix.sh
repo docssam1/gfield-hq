@@ -10,108 +10,68 @@ git config user.email "docssam1+gfield-vm-bot@gmail.com"
 
 python3 - <<'PY'
 from pathlib import Path
+import re
 
 p = Path('index.html')
 s = p.read_text(encoding='utf-8')
 
-insert_after = """                const lowDiffHtmlEn = lowDifficultyWrong.length > 0
-                    ? `<div class=\"bg-amber-50 border border-amber-200 rounded-xl p-4 mt-4\">
-                        <h4 class=\"font-bold text-amber-900 text-xs mb-2\">⚠️ Low-Difficulty Miss Alert</h4>
-                        <ul class=\"list-disc pl-4 text-xs space-y-1 text-stone-700\">
-                            ${lowDifficultyWrong.map(x => `<li>Q${x.qId} · ${x.domain}</li>`).join('')}
-                        </ul>
-                        <p class=\"text-[11px] text-amber-900/80 mt-2\">Repeated misses on easier items often indicate prerequisite gaps before Algebra 2 content.</p>
-                    </div>`
-                    : '';"""
+# 1) 한글 안내문에서 Basic/Core/Advanced 영어 설명을 제거하고 한글 설명으로 통일
+s = s.replace(
+    "? 'O = 정답, X = 오답, - = 미채점 / B = Basic, C = Core, A = Advanced'",
+    "? 'O = 정답, X = 오답, - = 미채점 / B = 기본, C = 핵심, A = 심화'"
+)
 
-matrix_block = r'''
+# 2) 기존에 잘못 중복 삽입된 matrix 호출들을 제거
+for token in [
+    "                            ${answerMatrixHtmlKo}\n\n",
+    "                            ${answerMatrixHtmlEn}\n\n",
+]:
+    s = s.replace(token, "")
 
-                const buildAnswerMatrixHtml = (lang = 'ko') => {
-                    const resultLabel = lang === 'ko' ? '결과' : 'Result';
-                    const difficultyLabel = lang === 'ko' ? '난이도' : 'Level';
-                    const title = lang === 'ko' ? '1~40번 정오답 · 난이도 확인표' : 'Q1-Q40 Answer & Difficulty Matrix';
-                    const guide = lang === 'ko'
-                        ? 'O = 정답, X = 오답, - = 미채점 / B = Basic, C = Core, A = Advanced'
-                        : 'O = Correct, X = Incorrect, - = Ungraded / B = Basic, C = Core, A = Advanced';
+# 3) 한글 리포트 첫 번째 grid 앞에는 한글표 1개만 삽입
+ko_marker = """                            <div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 mt-4\">
+                                <div class=\"bg-stone-50 border border-stone-200 rounded-xl p-4\">
+                                    <h4 class=\"font-bold text-emerald-800 text-xs mb-2 border-b border-emerald-100 pb-1\">🌟 강점 분석 영역 (Mastered)</h4>"""
+ko_insert = """                            ${answerMatrixHtmlKo}
 
-                    const makeCell = (qId, type) => {
-                        const status = this.omrMarks[qId - 1];
-                        const difficulty = this.getDifficultyByQuestionId(qId);
-                        if (type === 'number') return `<div class="text-[10px] font-black text-stone-600 text-center">${qId}</div>`;
-                        if (type === 'result') {
-                            const label = status === true ? 'O' : status === false ? 'X' : '-';
-                            const cls = status === true
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                                : status === false
-                                    ? 'bg-rose-50 text-rose-700 border-rose-200'
-                                    : 'bg-stone-50 text-stone-400 border-stone-200';
-                            return `<div class="rounded-md border ${cls} text-[10px] font-black py-1 text-center">${label}</div>`;
-                        }
-                        const label = difficulty === 'Basic' ? 'B' : difficulty === 'Core' ? 'C' : 'A';
-                        const cls = difficulty === 'Basic'
-                            ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
-                            : difficulty === 'Core'
-                                ? 'bg-amber-50 text-amber-700 border-amber-100'
-                                : 'bg-rose-50 text-rose-700 border-rose-100';
-                        return `<div class="rounded-md border ${cls} text-[10px] font-black py-1 text-center">${label}</div>`;
-                    };
+                            <div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 mt-4\">
+                                <div class=\"bg-stone-50 border border-stone-200 rounded-xl p-4\">
+                                    <h4 class=\"font-bold text-emerald-800 text-xs mb-2 border-b border-emerald-100 pb-1\">🌟 강점 분석 영역 (Mastered)</h4>"""
+if "${answerMatrixHtmlKo}" not in s:
+    if ko_marker not in s:
+        raise SystemExit('ko insertion target not found')
+    s = s.replace(ko_marker, ko_insert, 1)
+else:
+    # 혹시 다른 곳에 남아 있으면 일단 위 token 제거 후 다시 삽입됨
+    pass
 
-                    const makeBand = (start, end, label) => {
-                        const nums = [];
-                        const results = [];
-                        const levels = [];
-                        for (let i = start; i <= end; i++) {
-                            nums.push(makeCell(i, 'number'));
-                            results.push(makeCell(i, 'result'));
-                            levels.push(makeCell(i, 'difficulty'));
-                        }
-                        return `
-                            <div class="bg-white border border-stone-200 rounded-xl p-3 overflow-x-auto">
-                                <div class="text-[11px] font-black text-stone-700 mb-2">${label}</div>
-                                <div class="grid grid-cols-[46px_repeat(20,minmax(28px,1fr))] gap-1 min-w-[720px]">
-                                    <div></div>${nums.join('')}
-                                    <div class="text-[10px] font-bold text-stone-500 flex items-center">${resultLabel}</div>${results.join('')}
-                                    <div class="text-[10px] font-bold text-stone-500 flex items-center">${difficultyLabel}</div>${levels.join('')}
-                                </div>
-                            </div>
-                        `;
-                    };
+# 4) 영어 리포트 첫 번째 grid 앞에는 영어표 1개만 삽입
+# 한글 리포트 grid 다음에 나오는 영어 리포트 grid를 찾아서 두 번째 occurrence에 삽입한다.
+needle = """                            <div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 mt-4\">
+                                <div class=\"bg-stone-50 border border-stone-200 rounded-xl p-4\">
+                                    <h4 class=\"font-bold text-emerald-800 text-xs mb-2 border-b border-emerald-100 pb-1\">🌟 Strong Areas (Mastered)</h4>"""
+replacement = """                            ${answerMatrixHtmlEn}
 
-                    return `
-                        <div class="bg-stone-50 border border-stone-200 rounded-xl p-4 mt-4">
-                            <h4 class="font-bold text-stone-800 text-xs mb-1">${title}</h4>
-                            <p class="text-[11px] text-stone-500 mb-3">${guide}</p>
-                            <div class="space-y-3">
-                                ${makeBand(1, 20, 'Q1-Q20')}
-                                ${makeBand(21, 40, 'Q21-Q40')}
-                            </div>
-                        </div>
-                    `;
-                };
+                            <div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 mt-4\">
+                                <div class=\"bg-stone-50 border border-stone-200 rounded-xl p-4\">
+                                    <h4 class=\"font-bold text-emerald-800 text-xs mb-2 border-b border-emerald-100 pb-1\">🌟 Strong Areas (Mastered)</h4>"""
+if "${answerMatrixHtmlEn}" not in s:
+    if needle not in s:
+        raise SystemExit('en insertion target not found')
+    s = s.replace(needle, replacement, 1)
 
-                const answerMatrixHtmlKo = buildAnswerMatrixHtml('ko');
-                const answerMatrixHtmlEn = buildAnswerMatrixHtml('en');
-'''
-
-if 'const buildAnswerMatrixHtml' not in s:
-    if insert_after not in s:
-        raise SystemExit('answer matrix insert target not found')
-    s = s.replace(insert_after, insert_after + matrix_block, 1)
-
-s = s.replace("""                            <div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 mt-4\">""", """                            ${answerMatrixHtmlKo}
-
-                            <div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 mt-4\">""", 1)
-
-s = s.replace("""                            <div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 mt-4\">""", """                            ${answerMatrixHtmlEn}
-
-                            <div class=\"grid grid-cols-1 md:grid-cols-2 gap-4 mt-4\">""", 1)
+# 5) 최종 안전 점검: 한글/영어 matrix 호출은 각각 1회만 허용
+ko_count = s.count('${answerMatrixHtmlKo}')
+en_count = s.count('${answerMatrixHtmlEn}')
+if ko_count != 1 or en_count != 1:
+    raise SystemExit(f'answer matrix placement invalid: ko={ko_count}, en={en_count}')
 
 p.write_text(s, encoding='utf-8')
 PY
 
 git add index.html
-git commit -m "Add answer difficulty matrix to diagnostic report" || true
+git commit -m "Fix answer matrix language placement" || true
 git push origin main
 
-echo "ALGEBRA2 ANSWER MATRIX PATCH DONE"
+echo "ALGEBRA2 ANSWER MATRIX LANG FIX DONE"
 git log -1 --oneline
