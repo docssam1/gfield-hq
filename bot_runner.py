@@ -45,6 +45,28 @@ ALIASES = {
     "a2_patch_materials": "algebra2_patch_materials",
     "a2_patch_omr_layout": "algebra2_patch_omr_layout",
     "a2_patch_answer_matrix": "algebra2_patch_answer_matrix",
+    # Korean aliases
+    "상태": "hq_status",
+    "관제": "hq_status",
+    "명령": "hq_commands",
+    "목록": "hq_commands",
+    "안전배포": "deploy_safe",
+    "배포": "deploy_safe",
+    "복구": "hq_rebase",
+    "리베이스": "hq_rebase",
+
+    "대수": "algebra2_status",
+    "대수상태": "algebra2_status",
+    "대수백업": "algebra2_backup",
+    "대수차이": "algebra2_diff",
+    "대수검사": "algebra2_test",
+    "대수정리": "algebra2_clean",
+
+    "옴알": "algebra2_patch_omr",
+    "omr": "algebra2_patch_omr",
+    "omr가로": "algebra2_patch_omr_layout",
+    "정오답표": "algebra2_patch_answer_matrix",
+    "난이도표": "algebra2_patch_answer_matrix",
 }
 
 logging.basicConfig(level=logging.INFO)
@@ -67,7 +89,7 @@ async def run(update: Update, context: ContextTypes.DEFAULT_TYPE):
     cmd_key = ALIASES.get(cmd_key, cmd_key)
     command = ALLOWED_CMDS.get(cmd_key)
     if not command:
-        await update.message.reply_text("사용 가능: /run status, /run deploy, /run deploy_safe, /run hq_status, /run hq_rebase, /run hq_commands, /run drive_scan, /run algebra2_status, /run algebra2_backup, /run algebra2_diff, /run algebra2_test, /run algebra2_clean, /run algebra2_patch_omr, /run algebra2_patch_materials, /run algebra2_patch_omr_layout, /run algebra2_patch_answer_matrix")
+        await update.message.reply_text("사용 가능: /run 상태, /run 관제, /run 명령, /run 안전배포, /run 복구, /run 대수상태, /run 대수백업, /run 대수검사, /run 대수차이, /run 정오답표 또는 기존 영어 명령")
         return
 
     await update.message.reply_text(f"⏳ {cmd_key} 실행 중...")
