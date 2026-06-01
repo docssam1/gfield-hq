@@ -14,6 +14,9 @@ cat <<'CMDS'
 
 [Drive]
 /run drive_scan
+/run 카톡정리
+/run 리포트정리
+/run 리포트상태
 
 [Algebra2]
 /run algebra2_status
@@ -35,4 +38,10 @@ cat <<'CMDS'
 /run a2_diff
 /run a2_test
 /run a2_clean
+
+[Korean aliases]
+/run 상태
+/run 목록
+/run 동기화
+/run 복구
 CMDS

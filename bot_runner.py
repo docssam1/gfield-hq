@@ -1,7 +1,8 @@
+import logging
 import os
 import subprocess
-import logging
 from pathlib import Path
+
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
@@ -16,7 +17,11 @@ ALLOWED_CMDS = {
     "hq_status": ["bash", str(REPO_ROOT / "scripts" / "hq_status.sh")],
     "hq_rebase": ["bash", str(REPO_ROOT / "scripts" / "hq_rebase.sh")],
     "hq_commands": ["bash", str(REPO_ROOT / "scripts" / "hq_commands.sh")],
-    "drive_scan": ["bash", "-lc", f"cd {REPO_ROOT} && python3 scripts/drive_scan.py"],
+    # Use repo venv python for stability on VM
+    "drive_scan": ["bash", "-lc", f"cd {REPO_ROOT} && ./venv/bin/python scripts/drive_scan.py"],
+    "kakao_inventory": ["bash", "-lc", f"cd {REPO_ROOT} && ./venv/bin/python scripts/kakao_inventory.py"],
+    "report_inventory": ["bash", "-lc", f"cd {REPO_ROOT} && ./venv/bin/python scripts/report_inventory.py"],
+    "report_status": ["bash", "-lc", f"cd {REPO_ROOT} && ./venv/bin/python scripts/report_status.py"],
     "algebra2_status": ["bash", str(REPO_ROOT / "scripts" / "algebra2_status.sh")],
     "algebra2_backup": ["bash", str(REPO_ROOT / "scripts" / "algebra2_backup.sh")],
     "algebra2_diff": ["bash", str(REPO_ROOT / "scripts" / "algebra2_diff.sh")],
@@ -32,6 +37,9 @@ ALLOWED_CMDS = {
 ALIASES = {
     "drive": "drive_scan",
     "scan": "drive_scan",
+    "kakao": "kakao_inventory",
+    "report_inventory": "report_inventory",
+    "report_status": "report_status",
     "safe": "deploy_safe",
     "hq": "hq_status",
     "commands": "hq_commands",
@@ -49,38 +57,20 @@ ALIASES = {
     "a2_audit": "algebra2_audit_mobile_lang",
     # Korean aliases
     "상태": "hq_status",
-    "관제": "hq_status",
-    "명령": "hq_commands",
     "목록": "hq_commands",
-    "안전배포": "deploy_safe",
-    "배포": "deploy_safe",
-    "복구": "hq_rebase",
-    "리베이스": "hq_rebase",
-
-    "대수": "algebra2_status",
-    "대수상태": "algebra2_status",
-    "대수백업": "algebra2_backup",
-    "대수차이": "algebra2_diff",
-    "대수검사": "algebra2_test",
-    "대수정리": "algebra2_clean",
-
-    "옴알": "algebra2_patch_omr",
-    "omr": "algebra2_patch_omr",
-    "omr가로": "algebra2_patch_omr_layout",
-    "정오답표": "algebra2_patch_answer_matrix",
-    "난이도표": "algebra2_patch_answer_matrix",
     "동기화": "deploy_safe",
+    "복구": "hq_rebase",
+    "카톡정리": "kakao_inventory",
+    "리포트정리": "report_inventory",
+    "리포트상태": "report_status",
     "알지상태": "algebra2_status",
     "알지백업": "algebra2_backup",
-    "알지검사": "algebra2_test",
     "알지확인": "algebra2_diff",
+    "알지검사": "algebra2_test",
     "알지정리": "algebra2_clean",
     "정오답패치": "algebra2_patch_answer_matrix",
     "오엠알패치": "algebra2_patch_omr_layout",
     "교재패치": "algebra2_patch_materials",
-    "알지점검": "algebra2_audit_mobile_lang",
-    "모바일점검": "algebra2_audit_mobile_lang",
-    "언어점검": "algebra2_audit_mobile_lang",
 }
 
 logging.basicConfig(level=logging.INFO)
@@ -90,24 +80,34 @@ if not BOT_TOKEN:
 
 app = ApplicationBuilder().token(BOT_TOKEN).build()
 
+
 async def run(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != AUTHORIZED_ID:
-        await update.message.reply_text("🔒 Unauthorized")
+        await update.message.reply_text("⛔ Unauthorized")
         return
 
     if not context.args:
-        await update.message.reply_text("사용법: /run <status|deploy|deploy_safe|hq_status|hq_rebase|hq_commands|drive_scan|algebra2_status|algebra2_backup|algebra2_diff|algebra2_test|algebra2_clean|algebra2_patch_omr|algebra2_patch_materials|algebra2_patch_omr_layout|algebra2_patch_answer_matrix|algebra2_audit_mobile_lang>")
+        await update.message.reply_text(
+            "사용법: /run <status|deploy|deploy_safe|hq_status|hq_rebase|hq_commands|"
+            "drive_scan|kakao_inventory|report_inventory|report_status|"
+            "algebra2_status|algebra2_backup|algebra2_diff|algebra2_test|algebra2_clean|"
+            "algebra2_patch_omr|algebra2_patch_materials|algebra2_patch_omr_layout|"
+            "algebra2_patch_answer_matrix|algebra2_audit_mobile_lang>"
+        )
         return
 
-    cmd_key = context.args[0].lower().strip()
+    cmd_key = context.args[0].strip().lower()
     cmd_key = ALIASES.get(cmd_key, cmd_key)
     command = ALLOWED_CMDS.get(cmd_key)
     if not command:
-        await update.message.reply_text("사용 가능: /run 상태, /run 목록, /run 동기화, /run 복구, /run 알지백업, /run 알지검사, /run 알지확인, /run 알지점검, /run 정오답패치, /run 오엠알패치, /run 교재패치")
+        await update.message.reply_text(
+            "사용 가능: /run 상태, /run 목록, /run 동기화, /run 복구, "
+            "/run drive_scan, /run 카톡정리, /run 리포트정리, /run 리포트상태, "
+            "/run 알지백업, /run 알지검사, /run 알지확인, /run 정오답패치, /run 오엠알패치, /run 교재패치"
+        )
         return
 
     await update.message.reply_text(f"⏳ {cmd_key} 실행 중...")
-
     try:
         proc = subprocess.run(
             command,
@@ -123,7 +123,9 @@ async def run(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await update.message.reply_text(f"⛔ 오류: {e}")
 
+
 app.add_handler(CommandHandler("run", run))
 
 if __name__ == "__main__":
     app.run_polling()
+
