@@ -26,6 +26,7 @@ ALLOWED_CMDS = {
     "algebra2_patch_materials": ["bash", str(REPO_ROOT / "scripts" / "algebra2_patch_materials.sh")],
     "algebra2_patch_omr_layout": ["bash", str(REPO_ROOT / "scripts" / "algebra2_patch_omr_layout.sh")],
     "algebra2_patch_answer_matrix": ["bash", str(REPO_ROOT / "scripts" / "algebra2_patch_answer_matrix.sh")],
+    "algebra2_audit_mobile_lang": ["bash", str(REPO_ROOT / "scripts" / "algebra2_audit_mobile_lang.sh")],
 }
 
 ALIASES = {
@@ -45,6 +46,7 @@ ALIASES = {
     "a2_patch_materials": "algebra2_patch_materials",
     "a2_patch_omr_layout": "algebra2_patch_omr_layout",
     "a2_patch_answer_matrix": "algebra2_patch_answer_matrix",
+    "a2_audit": "algebra2_audit_mobile_lang",
     # Korean aliases
     "상태": "hq_status",
     "관제": "hq_status",
@@ -76,6 +78,9 @@ ALIASES = {
     "정오답패치": "algebra2_patch_answer_matrix",
     "오엠알패치": "algebra2_patch_omr_layout",
     "교재패치": "algebra2_patch_materials",
+    "알지점검": "algebra2_audit_mobile_lang",
+    "모바일점검": "algebra2_audit_mobile_lang",
+    "언어점검": "algebra2_audit_mobile_lang",
 }
 
 logging.basicConfig(level=logging.INFO)
@@ -91,14 +96,14 @@ async def run(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if not context.args:
-        await update.message.reply_text("사용법: /run <status|deploy|deploy_safe|hq_status|hq_rebase|hq_commands|drive_scan|algebra2_status|algebra2_backup|algebra2_diff|algebra2_test|algebra2_clean|algebra2_patch_omr|algebra2_patch_materials|algebra2_patch_omr_layout|algebra2_patch_answer_matrix>")
+        await update.message.reply_text("사용법: /run <status|deploy|deploy_safe|hq_status|hq_rebase|hq_commands|drive_scan|algebra2_status|algebra2_backup|algebra2_diff|algebra2_test|algebra2_clean|algebra2_patch_omr|algebra2_patch_materials|algebra2_patch_omr_layout|algebra2_patch_answer_matrix|algebra2_audit_mobile_lang>")
         return
 
     cmd_key = context.args[0].lower().strip()
     cmd_key = ALIASES.get(cmd_key, cmd_key)
     command = ALLOWED_CMDS.get(cmd_key)
     if not command:
-        await update.message.reply_text("사용 가능: /run 상태, /run 목록, /run 동기화, /run 복구, /run 알지백업, /run 알지검사, /run 알지확인, /run 정오답패치, /run 오엠알패치, /run 교재패치")
+        await update.message.reply_text("사용 가능: /run 상태, /run 목록, /run 동기화, /run 복구, /run 알지백업, /run 알지검사, /run 알지확인, /run 알지점검, /run 정오답패치, /run 오엠알패치, /run 교재패치")
         return
 
     await update.message.reply_text(f"⏳ {cmd_key} 실행 중...")
