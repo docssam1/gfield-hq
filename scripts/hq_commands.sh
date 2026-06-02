@@ -29,6 +29,16 @@ cat <<'CMDS'
 /run algebra2_patch_omr_layout
 /run algebra2_patch_answer_matrix
 
+[Algebra2 한글]
+/run 알지상태
+/run 알지백업
+/run 알지확인
+/run 알지검사
+/run 알지정리
+/run 정오답패치
+/run 오엠알패치
+/run 교재패치
+
 [짧은 별명]
 /run hq
 /run safe
