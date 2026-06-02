@@ -18,6 +18,31 @@ sudo systemctl stop gfield-bot.service
 sudo systemctl disable gfield-bot.service
 ```
 
+## 1.1 New Worker Onboarding Rule
+
+This document is the official new-worker onboarding program for GFIELD Hermes.
+
+Every new worker must do the following before touching code, VM, Drive, or Telegram commands:
+
+1. Read this file first.
+2. Identify their assigned section.
+3. Report which section they are working on.
+4. Run only the commands assigned to that section.
+5. If a new command, server role, output path, risk, or rule is added, update this Markdown file.
+6. Commit the Markdown update together with the related code change.
+
+Required first report from every worker:
+
+```text
+I read docs/HERMES_WORKER_HANDOFF.md.
+Assigned section:
+Planned command/work:
+Expected output:
+Risk checked:
+```
+
+Do not accept undocumented work as finished. If the operation changes Hermes behavior, command list, VM role, privacy handling, or output path, it must be reflected in this document.
+
 ## 2. VM Roles
 
 ### gfield-hq-vm
@@ -329,10 +354,13 @@ Use this message when assigning work:
 GFIELD Hermes currently uses gfield-hq-vm as the only command center and Telegram bot host.
 gfield-core-vm is a worker/API server and must not run the Telegram bot.
 
+This is the GFIELD Hermes new-worker onboarding program.
 Please check your assigned section in docs/HERMES_WORKER_HANDOFF.md first.
 Run only the commands assigned to your role.
 Do not commit student/private output files to GitHub.
 Do not paste full Kakao raw content into Telegram or chat.
+
+If your work adds or changes any command, VM role, output path, privacy rule, or risk, update docs/HERMES_WORKER_HANDOFF.md and report that update.
 
 After checking, report:
 1. What command you ran
@@ -340,5 +368,5 @@ After checking, report:
 3. Output file path, if generated
 4. Any error or collision risk
 5. Any privacy risk
+6. Whether docs/HERMES_WORKER_HANDOFF.md needed an update
 ```
-
