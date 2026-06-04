@@ -370,3 +370,25 @@ After checking, report:
 5. Any privacy risk
 6. Whether docs/HERMES_WORKER_HANDOFF.md needed an update
 ```
+
+## 6. Academy PC / eBook Bridge Hotfix - 2026-06-04 KST
+
+Added Telegram command aliases for academy PC and G.FIELD ON eBook status.
+
+Commands:
+
+```text
+/run PC핑
+/run PC상태
+/run PC목록
+/run PC결과
+/run 이북상태
+/run eBook상태
+/run ebook_status
+```
+
+Current rule:
+
+- PC commands are status-only placeholders until the VM-to-academy-PC bridge path is confirmed.
+- No file mutation, deletion, sending, permission changes, or private data output is allowed from these commands.
+- eBook phase 1 remains academy-PC conversion plus VM inventory/status control.

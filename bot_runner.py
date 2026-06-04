@@ -32,6 +32,10 @@ ALLOWED_CMDS = {
     "algebra2_patch_omr_layout": ["bash", str(REPO_ROOT / "scripts" / "algebra2_patch_omr_layout.sh")],
     "algebra2_patch_answer_matrix": ["bash", str(REPO_ROOT / "scripts" / "algebra2_patch_answer_matrix.sh")],
     "algebra2_audit_mobile_lang": ["bash", str(REPO_ROOT / "scripts" / "algebra2_audit_mobile_lang.sh")],
+    "pc_ping": ["bash", str(REPO_ROOT / "scripts" / "pc_ping.sh")],
+    "pc_status": ["bash", str(REPO_ROOT / "scripts" / "pc_status.sh")],
+    "pc_bridge_status": ["bash", str(REPO_ROOT / "scripts" / "pc_bridge_status.sh")],
+    "ebook_status": ["bash", str(REPO_ROOT / "scripts" / "ebook_status.sh")],
 }
 
 ALIASES = {
@@ -71,6 +75,16 @@ ALIASES = {
     "정오답패치": "algebra2_patch_answer_matrix",
     "오엠알패치": "algebra2_patch_omr_layout",
     "교재패치": "algebra2_patch_materials",
+    "PC핑": "pc_ping",
+    "PC상태": "pc_status",
+    "PC목록": "pc_bridge_status",
+    "PC결과": "pc_bridge_status",
+    "피씨핑": "pc_ping",
+    "피씨상태": "pc_status",
+    "이북상태": "ebook_status",
+    "eBook상태": "ebook_status",
+    "ebook": "ebook_status",
+    "ebook_status": "ebook_status",
 }
 
 logging.basicConfig(level=logging.INFO)
