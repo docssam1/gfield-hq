@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GFIELD ebook viewer</title>
+<style>
+  @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+  :root{
+    --bg:#05070d;
+    --panel:#0a1020;
+    --panel-2:#0f172d;
+    --line:rgba(255,255,255,.08);
+    --gold:#e3c47b;
+    --text:#f8fafc;
+    --muted:#a8b0c3;
+    --shadow:0 24px 80px rgba(0,0,0,.42);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at top left, rgba(35,84,147,.22), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(227,196,123,.09), transparent 28%),
+      linear-gradient(180deg,#04060b,#09101c 44%,#05070d);
+    color:var(--text);
+    font-family:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+    overflow:hidden;
+  }
+  .viewer-app{
+    height:100%;
+    display:grid;
+    grid-template-rows:auto 1fr auto;
+  }
+  .viewer-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    padding:18px 22px 14px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(10,16,32,.92),rgba(10,16,32,.72));
+    backdrop-filter:blur(18px);
+  }
+  .viewer-title p{
+    margin:0;
+    color:var(--gold);
+    font-size:12px;
+    font-weight:1000;
+    letter-spacing:.22em;
+  }
+  .viewer-title h1{
+    margin:8px 0 0;
+    font-size:clamp(20px,2.2vw,28px);
+    line-height:1.15;
+    font-weight:1000;
+    letter-spacing:-.04em;
+    word-break:keep-all;
+  }
+  .viewer-title span{
+    display:block;
+    margin-top:8px;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.65;
+  }
+  .viewer-controls{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:10px;
+  }
+  .mode-group,.page-group{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:6px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:rgba(255,255,255,.03);
+  }
+  .control-btn{
+    border:none;
+    min-width:92px;
+    padding:10px 14px;
+    border-radius:12px;
+    background:transparent;
+    color:#d9dfeb;
+    font-weight:900;
+    cursor:pointer;
+    transition:.2s ease;
+    font-family:inherit;
+  }
+  .control-btn.active{
+    background:linear-gradient(180deg,#f6de9c,#dcb864);
+    color:#111827;
+  }
+  .page-chip{
+    min-width:82px;
+    text-align:center;
+    font-size:14px;
+    font-weight:900;
+    color:#fff5d8;
+  }
+  .page-arrow{
+    width:42px;
+    height:42px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.04);
+    color:#eef2ff;
+    cursor:pointer;
+    font-size:18px;
+    transition:.2s ease;
+  }
+  .page-arrow:disabled{
+    opacity:.3;
+    cursor:default;
+  }
+  .viewer-stage{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px 22px;
+    overflow:hidden;
+  }
+  .spread{
+    width:min(100%,1480px);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    align-items:center;
+    transition:transform .34s ease, opacity .34s ease, filter .34s ease;
+  }
+  .spread.turning{
+    transform:scale(.988) translateY(6px);
+    opacity:.82;
+    filter:blur(1.6px);
+  }
+  .spread.single{
+    grid-template-columns:minmax(0,1fr);
+    max-width:980px;
+  }
+  .page-shell{
+    position:relative;
+    border-radius:28px;
+    border:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(180deg,#0c1326,#070b15);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    aspect-ratio:210 / 297;
+  }
+  .page-shell.hidden{
+    display:none;
+  }
+  .page-shell iframe{
+    width:100%;
+    height:100%;
+    border:none;
+    display:block;
+    background:#070b15;
+    pointer-events:none;
+  }
+  .stage-zone{
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:18%;
+    z-index:5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:rgba(255,255,255,.16);
+    font-size:38px;
+    user-select:none;
+    transition:opacity .2s ease,color .2s ease,background .2s ease;
+  }
+  .stage-zone.left{left:0}
+  .stage-zone.right{right:0}
+  .stage-zone:hover{
+    color:rgba(255,255,255,.34);
+    background:linear-gradient(90deg,rgba(255,255,255,.04),transparent);
+  }
+  .stage-zone.right:hover{
+    background:linear-gradient(270deg,rgba(255,255,255,.04),transparent);
+  }
+  .stage-zone.disabled{
+    opacity:0;
+    pointer-events:none;
+  }
+  .stage-zone .ghost-arrow{
+    display:flex;
+    width:62px;
+    height:62px;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    backdrop-filter:blur(10px);
+    border:1px solid rgba(255,255,255,.06);
+    background:rgba(255,255,255,.03);
+  }
+  .viewer-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    padding:14px 22px 18px;
+    border-top:1px solid var(--line);
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.6;
+    background:linear-gradient(180deg,rgba(8,12,22,.4),rgba(8,12,22,.76));
+  }
+  .viewer-footer strong{
+    color:#fff0c5;
+  }
+  .viewer-status{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .viewer-status span{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:8px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.05);
+  }
+  .loading-screen,.error-screen{
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    padding:24px;
+    text-align:center;
+    z-index:10;
+    background:linear-gradient(180deg,rgba(6,10,18,.94),rgba(6,10,18,.98));
+  }
+  .loading-screen[hidden],.error-screen[hidden]{display:none}
+  .status-card{
+    max-width:520px;
+    padding:28px 26px;
+    border-radius:26px;
+    border:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(180deg,rgba(13,20,36,.94),rgba(9,14,24,.96));
+    box-shadow:var(--shadow);
+  }
+  .status-card b{
+    color:var(--gold);
+    letter-spacing:.2em;
+    font-size:12px;
+  }
+  .status-card h2{
+    margin:10px 0 0;
+    font-size:30px;
+    line-height:1.2;
+    letter-spacing:-.04em;
+  }
+  .status-card p{
+    margin:14px 0 0;
+    color:var(--muted);
+    line-height:1.7;
+    word-break:keep-all;
+  }
+  .preload-frame{
+    position:absolute;
+    width:1px;
+    height:1px;
+    opacity:0;
+    pointer-events:none;
+    inset:-9999px auto auto -9999px;
+  }
+  @media (max-width:960px){
+    .viewer-header{grid-template-columns:1fr;display:grid}
+    .viewer-controls{justify-content:flex-start}
+    .spread{gap:12px}
+    .viewer-stage{padding:12px}
+    .page-shell{border-radius:20px}
+    .stage-zone{width:20%}
+    .viewer-footer{display:block}
+    .viewer-footer p{margin:0 0 10px}
+  }
+</style>
+</head>
+<body>
+  <div class="viewer-app">
+    <header class="viewer-header">
+      <div class="viewer-title">
+        <p>GFIELD EBOOK VIEWER</p>
+        <h1>한 페이지 보기와 책으로 보기로<br>조용히 이어지는 ebook 서재</h1>
+        <span>모바일에서는 손으로 밀어 넘길 수 있고, 책으로 보기 모드에서는 좌우 탭으로 페이지를 자연스럽게 넘길 수 있도록 준비했습니다.</span>
+      </div>
+      <div class="viewer-controls">
+        <div class="mode-group" role="tablist" aria-label="보기 모드">
+          <button class="control-btn active" type="button" id="singleModeBtn">한 페이지 보기</button>
+          <button class="control-btn" type="button" id="bookModeBtn">책으로 보기</button>
+        </div>
+        <div class="page-group">
+          <button class="page-arrow" type="button" id="prevBtn" aria-label="이전 페이지">‹</button>
+          <div class="page-chip" id="pageIndicator">1 / 1</div>
+          <button class="page-arrow" type="button" id="nextBtn" aria-label="다음 페이지">›</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="viewer-stage" id="viewerStage">
+      <div class="loading-screen" id="loadingScreen">
+        <div class="status-card">
+          <b>LOADING</b>
+          <h2>ebook 페이지를 불러오고 있습니다.</h2>
+          <p>처음 연결할 때는 교재 페이지 수를 확인하고, 한 페이지 보기와 책으로 보기 모두에 맞게 viewer를 준비합니다.</p>
+        </div>
+      </div>
+      <div class="error-screen" id="errorScreen" hidden>
+        <div class="status-card">
+          <b>CHECK SOURCE</b>
+          <h2>ebook 원본을 불러오지 못했습니다.</h2>
+          <p id="errorMessage">source.html 파일 경로와 접근 권한을 다시 확인해 주세요.</p>
+        </div>
+      </div>
+
+      <div class="spread single" id="spread">
+        <div class="page-shell" id="leftShell">
+          <iframe id="leftFrame" title="왼쪽 페이지"></iframe>
+        </div>
+        <div class="page-shell hidden" id="rightShell">
+          <iframe id="rightFrame" title="오른쪽 페이지"></iframe>
+        </div>
+      </div>
+
+      <button class="stage-zone left" id="leftZone" aria-label="이전 페이지로 이동">
+        <span class="ghost-arrow">‹</span>
+      </button>
+      <button class="stage-zone right" id="rightZone" aria-label="다음 페이지로 이동">
+        <span class="ghost-arrow">›</span>
+      </button>
+
+      <iframe class="preload-frame" id="loaderFrame" title="원본 로더"></iframe>
+    </main>
+
+    <footer class="viewer-footer">
+      <p><strong>ebook 단독 모드</strong>일 때는 교재 중심으로, <strong>강의 연동 모드</strong>일 때는 바깥 아카이브의 강의 버튼과 AI 튜터가 함께 이어집니다.</p>
+      <div class="viewer-status">
+        <span id="modeStatus">한 페이지 보기</span>
+        <span id="pageStatus">1쪽</span>
+        <span id="sourceStatus">source.html</span>
+      </div>
+    </footer>
+  </div>
+
+<script>
+  const params=new URLSearchParams(location.search);
+  const sourceUrl=params.get('source')||'./source.html';
+  const loaderFrame=document.getElementById('loaderFrame');
+  const leftFrame=document.getElementById('leftFrame');
+  const rightFrame=document.getElementById('rightFrame');
+  const leftShell=document.getElementById('leftShell');
+  const rightShell=document.getElementById('rightShell');
+  const spread=document.getElementById('spread');
+  const loadingScreen=document.getElementById('loadingScreen');
+  const errorScreen=document.getElementById('errorScreen');
+  const errorMessage=document.getElementById('errorMessage');
+  const singleModeBtn=document.getElementById('singleModeBtn');
+  const bookModeBtn=document.getElementById('bookModeBtn');
+  const pageIndicator=document.getElementById('pageIndicator');
+  const prevBtn=document.getElementById('prevBtn');
+  const nextBtn=document.getElementById('nextBtn');
+  const leftZone=document.getElementById('leftZone');
+  const rightZone=document.getElementById('rightZone');
+  const modeStatus=document.getElementById('modeStatus');
+  const pageStatus=document.getElementById('pageStatus');
+  const sourceStatus=document.getElementById('sourceStatus');
+
+  let pageCount=0;
+  let mode='single';
+  let currentIndex=0;
+  let touchStartX=0;
+  let frameReady={left:false,right:false};
+  let loaderReady=false;
+
+  sourceStatus.textContent=sourceUrl.split('/').pop()||'source.html';
+
+  function showError(message){
+    loadingScreen.hidden=true;
+    errorScreen.hidden=false;
+    errorMessage.textContent=message;
+  }
+
+  function getPageNodes(doc){
+    return [...doc.querySelectorAll('.page')];
+  }
+
+  function injectFrameStyle(frameDoc){
+    if(frameDoc.getElementById('gfield-viewer-style'))return;
+    const style=frameDoc.createElement('style');
+    style.id='gfield-viewer-style';
+    style.textContent=`
+      html,body{overflow:hidden!important;background:#09101c!important;}
+      body{padding:24px 0!important;gap:0!important;align-items:center!important;}
+      .page{box-shadow:0 22px 52px rgba(0,0,0,.34)!important;}
+      ::-webkit-scrollbar{display:none!important;}
+    `;
+    frameDoc.head.appendChild(style);
+  }
+
+  function moveFrameToPage(frame,pageIndex){
+    try{
+      const doc=frame.contentDocument;
+      if(!doc)return false;
+      injectFrameStyle(doc);
+      const pages=getPageNodes(doc);
+      const page=pages[pageIndex];
+      if(!page)return false;
+      const top=Math.max(0,page.offsetTop-20);
+      frame.contentWindow.scrollTo({top,left:0,behavior:'instant'});
+      return true;
+    }catch(error){
+      return false;
+    }
+  }
+
+  function getSpreadLabel(){
+    if(mode==='single')return `${currentIndex+1} / ${pageCount}`;
+    const start=currentIndex+1;
+    const end=Math.min(currentIndex+2,pageCount);
+    return `${start}-${end} / ${pageCount}`;
+  }
+
+  function updateNavState(){
+    const atStart=currentIndex<=0;
+    const step=mode==='single'?1:2;
+    const atEnd=currentIndex>=Math.max(0,pageCount-step);
+    prevBtn.disabled=atStart;
+    nextBtn.disabled=atEnd;
+    leftZone.classList.toggle('disabled',atStart);
+    rightZone.classList.toggle('disabled',atEnd);
+    pageIndicator.textContent=getSpreadLabel();
+    pageStatus.textContent=mode==='single'?`${currentIndex+1}쪽`:`${currentIndex+1}~${Math.min(currentIndex+2,pageCount)}쪽`;
+    modeStatus.textContent=mode==='single'?'한 페이지 보기':'책으로 보기';
+  }
+
+  function animateTurn(){
+    spread.classList.add('turning');
+    setTimeout(()=>spread.classList.remove('turning'),280);
+  }
+
+  function renderPages({animate=false}={}){
+    if(!loaderReady || !frameReady.left || !frameReady.right)return;
+    if(animate)animateTurn();
+    spread.classList.toggle('single',mode==='single');
+    rightShell.classList.toggle('hidden',mode==='single');
+    moveFrameToPage(leftFrame,currentIndex);
+    if(mode==='book'){
+      moveFrameToPage(rightFrame,Math.min(currentIndex+1,pageCount-1));
+    }
+    updateNavState();
+    loadingScreen.hidden=true;
+  }
+
+  function setMode(nextMode){
+    mode=nextMode;
+    if(mode==='book' && currentIndex%2!==0){
+      currentIndex=Math.max(0,currentIndex-1);
+    }
+    singleModeBtn.classList.toggle('active',mode==='single');
+    bookModeBtn.classList.toggle('active',mode==='book');
+    renderPages({animate:true});
+  }
+
+  function goNext(){
+    const step=mode==='single'?1:2;
+    const maxIndex=mode==='single'?pageCount-1:Math.max(0,pageCount-2);
+    if(currentIndex>=maxIndex)return;
+    currentIndex=Math.min(currentIndex+step,maxIndex);
+    renderPages({animate:true});
+  }
+
+  function goPrev(){
+    const step=mode==='single'?1:2;
+    if(currentIndex<=0)return;
+    currentIndex=Math.max(0,currentIndex-step);
+    renderPages({animate:true});
+  }
+
+  function handleTouchStart(event){
+    touchStartX=event.changedTouches[0].clientX;
+  }
+
+  function handleTouchEnd(event){
+    const deltaX=event.changedTouches[0].clientX-touchStartX;
+    if(Math.abs(deltaX)<40)return;
+    if(deltaX<0)goNext();
+    else goPrev();
+  }
+
+  function markFrameReady(which){
+    frameReady[which]=true;
+    renderPages();
+  }
+
+  loaderFrame.addEventListener('load',()=>{
+    try{
+      const doc=loaderFrame.contentDocument;
+      if(!doc)throw new Error('loader no document');
+      pageCount=getPageNodes(doc).length;
+      if(!pageCount)throw new Error('no pages found');
+      loaderReady=true;
+      renderPages();
+    }catch(error){
+      showError('ebook 원본에서 페이지를 읽지 못했습니다. source.html 구조를 확인해 주세요.');
+    }
+  });
+
+  [leftFrame,rightFrame].forEach((frame,index)=>{
+    frame.addEventListener('load',()=>{
+      try{
+        const doc=frame.contentDocument;
+        if(!doc)throw new Error('frame no document');
+        injectFrameStyle(doc);
+        markFrameReady(index===0?'left':'right');
+      }catch(error){
+        showError('ebook 페이지를 viewer 안에서 열지 못했습니다. 로컬 파일 경로나 브라우저 권한을 확인해 주세요.');
+      }
+    });
+  });
+
+  singleModeBtn.addEventListener('click',()=>setMode('single'));
+  bookModeBtn.addEventListener('click',()=>setMode('book'));
+  prevBtn.addEventListener('click',goPrev);
+  nextBtn.addEventListener('click',goNext);
+  leftZone.addEventListener('click',goPrev);
+  rightZone.addEventListener('click',goNext);
+  document.getElementById('viewerStage').addEventListener('touchstart',handleTouchStart,{passive:true});
+  document.getElementById('viewerStage').addEventListener('touchend',handleTouchEnd,{passive:true});
+  document.addEventListener('keydown',(event)=>{
+    if(event.key==='ArrowRight')goNext();
+    if(event.key==='ArrowLeft')goPrev();
+  });
+
+  loaderFrame.src=sourceUrl;
+  leftFrame.src=sourceUrl;
+  rightFrame.src=sourceUrl;
+</script>
+</body>
+</html>

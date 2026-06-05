@@ -1,0 +1,1901 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>HS ?鍮??묒슜 媛쒕뀗??- THINKING BASIC</title>
+<style>
+    /* ?꾨━誘몄뾼 ?쒓뎅?????고듃 Pretendard 濡쒕뱶 */
+    @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css");
+
+    @page { size: A4; margin: 0; }
+    body { 
+        margin: 0; padding: 0; 
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; 
+        background: #525659; 
+        display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px 0; 
+    }
+    
+    .page { 
+        width: 210mm; height: 297mm; 
+        background: white; 
+        position: relative; 
+        box-sizing: border-box; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3); 
+        page-break-after: always; 
+        overflow: hidden; 
+    }
+    @media print { 
+        body { background: white; padding: 0; gap: 0; display: block; } 
+        .page { box-shadow: none; margin: 0; page-break-after: always; } 
+    }
+
+    /* ?쒖? (Cover) ?붿옄??*/
+    .cover { background-color: #16417C; color: white; position: relative; }
+    .cover-top-left { 
+        position: absolute; top: 35mm; left: 20mm; 
+        font-size: 28pt; font-weight: 900; color: #EAC996; 
+        letter-spacing: -1.5px;
+    }
+    .cover-line-1 { position: absolute; top: 48mm; left: 35mm; width: 155mm; height: 4px; background: #EAC996; }
+    .cover-line-2 { position: absolute; top: 56mm; left: 0; width: 190mm; height: 10px; background: #EAC996; }
+    
+    .cover-vertical-title { 
+        position: absolute; top: 75mm; right: 25mm; 
+        font-size: 72pt; font-weight: 900; color: #EAC996; 
+        writing-mode: vertical-rl; text-orientation: mixed; 
+        letter-spacing: 14px;
+    }
+    
+    .cover-logo-area { position: absolute; bottom: 25mm; left: 20mm; }
+
+    /* ??⑥썝 媛꾩? ?붿옄??(Section Intro) */
+    .section-intro { 
+        background-color: #f4f7fa; 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: center; 
+        padding: 30mm 20mm;
+    }
+    .intro-box {
+        border: 4px double #16417C;
+        padding: 40px;
+        width: 80%;
+        text-align: center;
+        background: #fff;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    .intro-tag {
+        font-size: 16pt;
+        font-weight: 900;
+        color: #e0a96d;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+    .intro-title {
+        font-size: 32pt;
+        font-weight: 900;
+        color: #16417C;
+        line-height: 1.4;
+        word-break: keep-all;
+    }
+
+    /* ?댁? (Content Page) ?덉씠?꾩썐 */
+    .content-page::before {
+        content: "";
+        position: absolute;
+        top: 10mm; left: 10mm; right: 10mm; bottom: 10mm;
+        border: 2px solid #16417C;
+        pointer-events: none;
+        z-index: 10;
+    }
+    .content-page::after {
+        content: "";
+        position: absolute;
+        top: 11.5mm; left: 11.5mm; right: 11.5mm; bottom: 11.5mm;
+        border: 1px solid rgba(22, 65, 124, 0.3);
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .content-page { padding: 22mm 20mm 20mm 20mm; display: flex; flex-direction: column; }
+    
+    .header { 
+        text-align: right; font-weight: 900; font-size: 15pt; color: #111; 
+        border-bottom: 2px solid #16417C; padding-bottom: 8px; margin-bottom: 6mm; 
+        letter-spacing: 1px;
+    }
+    
+    /* ?섎떒 ?명꽣 ?덉씠?꾩썐 */
+    .footer { 
+        position: absolute; 
+        bottom: 15mm; left: 20mm; right: 20mm; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        border-top: 1.5px solid rgba(22, 65, 124, 0.15); 
+        padding-top: 10px; 
+        font-size: 10pt; 
+        color: #555;
+    }
+    .footer-page-num {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-weight: 800;
+        color: #16417C;
+    }
+    .footer-author {
+        margin-left: auto;
+        font-weight: 900;
+        font-size: 10.5pt;
+        color: #333;
+        letter-spacing: 0.5px;
+    }
+    
+    .concept-title { font-size: 14pt; font-weight: 900; color: #16417C; margin-bottom: 2px; }
+    .concept-subtitle { font-size: 17pt; font-weight: 900; color: #000; margin-bottom: 0px; }
+    
+    /* 臾몄젣 ?뺣젹 ?섑띁 (?먯옣??吏???꾨꼍 諛섏쁺: ?곷떒 諛李?& ?섎㉧吏 怨듦컙 1:1 ?꾨꼍 遺꾪븷) */
+    .problems-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; 
+        flex-grow: 1; 
+        margin-bottom: 15mm; 
+        padding-top: 10px; 
+    }
+
+    /* 媛쒕뀗 臾몄젣 諛뺤뒪 */
+    .concept-box {
+        background-color: #f4f7fa;
+        border: 1.5px dashed #16417C;
+        border-left: 5px solid #16417C;
+        padding: 15px 20px;
+        border-radius: 8px;
+        box-shadow: inset 0 0 10px rgba(22, 65, 124, 0.02);
+    }
+
+    /* 臾몄젣 ?덉씠?꾩썐 */
+    .problem-box { 
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 11.5pt; 
+        line-height: 1.8; 
+        color: #111; 
+        word-break: keep-all; 
+        text-align: justify;
+    }
+    .problem-text {
+        flex: 1;
+    }
+    
+    /* 諛곗? ?붿옄??*/
+    .badge-type { 
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #16417C; 
+        color: #ffffff;
+        font-weight: 800; 
+        font-size: 10pt; 
+        padding: 3px 12px;
+        border-radius: 50px;
+        white-space: nowrap;
+        letter-spacing: -0.3px;
+    }
+    .badge-ex { 
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1.5px solid #16417C;
+        color: #16417C;
+        font-weight: 800;
+        font-size: 10pt;
+        padding: 2px 10px;
+        border-radius: 50px;
+        white-space: nowrap;
+        letter-spacing: -0.3px;
+    }
+    
+    /* 遺꾩닔 ?ㅽ???*/
+    .fraction-box { display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; margin: 0 6px; font-size: 11pt; line-height: 1; }
+    .fraction-box span:first-child { border-bottom: 1.5px solid #111; padding: 0 4px; padding-bottom: 3px; }
+    .fraction-box span:last-child { padding: 0 4px; padding-top: 3px; }
+
+    /* ?섑븰????*/
+    .math-table { 
+        border-collapse: collapse; margin: 15px auto; text-align: center; 
+        background-color: #fff;
+    }
+    .math-table td { 
+        border: 1.8px solid #333; width: 45px; height: 45px; 
+        font-weight: 900; font-size: 14pt; color: #000;
+    }
+
+    /* ???쇰씪誘몃뱶 ?뺣젹 援ъ“ */
+    .pyramid-container { display: flex; flex-direction: column; align-items: center; width: 100%; margin: 10px 0; }
+    .pyramid-row { display: flex; width: 100%; max-width: 350px; align-items: center; margin-bottom: 4px; }
+    .pyramid-label { width: 80px; font-size: 10.5pt; color: #555; text-align: left; }
+    .pyramid-content { flex: 1; text-align: center; font-size: 11pt; letter-spacing: 3px; font-weight: bold; }
+
+    /* ?룸㈃ ?쒖? */
+    .back-cover { 
+        background-color: #16417C; 
+        display: flex; flex-direction: column; justify-content: center; align-items: center; 
+    }
+    .back-logo { opacity: 0.15; transform: scale(1.5); }
+</style>
+</head>
+<body>
+
+    <!-- [1 ?섏씠吏] ?꾨㈃ ?쒖? -->
+    <div class="page cover">
+        <div class="cover-top-left">HS ?鍮??묒슜 媛쒕뀗??/div>
+        <div class="cover-line-1"></div>
+        <div class="cover-line-2"></div>
+        <div class="cover-vertical-title">THINKING BASIC</div>
+        <div class="cover-logo-area">
+            <svg width="250" height="90" viewBox="0 0 250 90">
+                <text x="10" y="45" font-size="40" font-weight="900" fill="#EAC996">G!FIELD</text>
+                <text x="13" y="75" font-size="22" font-weight="900" fill="#ffffff">吏?꾨뱶 ?곸옱援먯쑁</text>
+            </svg>
+        </div>
+    </div>
+
+    <!-- [2 ?섏씠吏] ?댄몴吏 ?덉そ (怨듬갚) -->
+    <div class="page"></div>
+
+    <!-- [3 ?섏씠吏] ??⑥썝 媛꾩? 1 -->
+    <div class="page content-page section-intro">
+        <div class="intro-box">
+            <div class="intro-tag">HS 寃쎌떆 4</div>
+            <div class="intro-title">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        </div>
+        <div class="footer">
+            <span class="footer-page-num">- 1 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [4 ?섏씠吏] 媛쒕뀗 ?좏삎 1 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 1</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        ?섎젅媛 270m???곕せ??9m 媛꾧꺽?쇰줈 ?ｋ굹臾대? ?ш린濡??섏??듬땲?? 臾쇱쓬???듯븯?쒖삤.<br><br>
+                        (1) ?ｋ굹臾대뒗 ??洹몃（??2500?먯씠怨? ??洹몃（ ?щ뒗 ???섍퀬鍮꾨뒗 3600?먯엯?덈떎. ?ｋ굹臾대? 紐⑤몢 ?щ뒗 ???쒕뒗 鍮꾩슜? ?쇰쭏?닿쿋?듬땲源?<br>
+                        (2) ?ｋ굹臾댁? ?ｋ굹臾??ъ씠??3m 媛꾧꺽?쇰줈 ?뚮굹臾대? ?ъ쑝?ㅺ퀬 ?⑸땲?? ?뚮굹臾대? 紐⑤몢 紐?洹몃（ 以鍮꾪빐???⑸땲源? (?? ?ｋ굹臾댁? ?뚮굹臾??ъ씠??媛꾧꺽? 3m?낅땲??
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">80m ?섎뒗 湲??묒そ??5m 媛꾧꺽?쇰줈 ?섎Т媛 ?ъ뼱???덉뒿?덈떎. ?ъ뼱吏??섎Т??紐⑤몢 紐?洹몃（?낅땲源? (?? ?꾨줈??泥섏쓬怨??앹뿉 ?섎Т媛 ?ъ뼱???덉뒿?덈떎.)</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">媛濡?36m, ?몃줈 27m??吏곸궗媛곹삎 紐⑥뼇???붾떒???섎젅??3m 媛꾧꺽?쇰줈 苑껊굹臾대? ?ъ뿀?듬땲?? 苑껊굹臾대? 紐⑤몢 紐?洹몃（ ?ъ뿀?듬땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex3</span>
+                <div class="problem-text">150紐낆쓽 ?대┛?닿? ??以꾨줈 ???덉뒿?덈떎. 2m 媛꾧꺽?쇰줈 ?쇱젙?섍쾶 ???덈떎硫?以꾩쓣 ??湲몄씠??紐⑤몢 紐?m?낅땲源?</div>
+            </div>
+            
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 2 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [5 ?섏씠吏] 媛쒕뀗 ?좏삎 2 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 2</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        1遺??9源뚯????섎? ??踰덉뵫 ?댁슜?섏뿬 媛濡? ?몃줈, ?媛곸꽑?????섏쓽 ?⑹씠 紐⑤몢 媛숆쾶 留뚮뱾?ㅺ퀬 ?⑸땲?? 臾쇱쓬???듯븯?쒖삤.
+                        <table class="math-table">
+                            <tr><td></td><td>1</td><td></td></tr>
+                            <tr><td></td><td>5</td><td></td></tr>
+                            <tr><td></td><td></td><td>2</td></tr>
+                        </table>
+                        (1) 媛곴컖??媛濡? ?몃줈, ?媛곸꽑???덈뒗 ???섏쓽 ?⑹? ?쇰쭏?낅땲源?<br>
+                        (2) 鍮?移몄뿉 ?뚮쭪? ?섎? ???ｌ쑝?쒖삤.
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1;">
+                    <span class="badge-ex">ex1</span>
+                    <div class="problem-text">?ㅻⅨ履?鍮덉뭏??1遺??12源뚯????섎? ??踰덉뵫 ???ｌ뼱 ??以꾩뿉 ?덈뒗 ???섏쓽 ?⑹씠 紐⑤몢 媛숇룄濡?留뚮뱶?몄슂.</div>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 30px); grid-template-rows: repeat(4, 30px); gap: 0; background: #fff; width: max-content; margin: 0 auto; border: 1.5px solid #333;">
+                    <div style="border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; background: #fdf5e6; font-size: 13pt;">1</div>
+                    <div style="border: 1px solid #333; background: #fdf5e6;"></div>
+                    <div style="border: 1px solid #333; background: #fdf5e6;"></div>
+                    <div style="border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; background: #fdf5e6; font-size: 13pt;">4</div>
+                    <div style="border: 1px solid #333; background: #fdf5e6;"></div>
+                    <div style="grid-column: span 2; grid-row: span 2; background: white;"></div>
+                    <div style="border: 1px solid #333; background: #fdf5e6;"></div>
+                    <div style="border: 1px solid #333; background: #fdf5e6;"></div>
+                    <div style="border: 1px solid #333; background: #fdf5e6;"></div>
+                    <div style="border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; background: #fdf5e6; font-size: 13pt;">3</div>
+                    <div style="border: 1px solid #333; background: #fdf5e6;"></div>
+                    <div style="border: 1px solid #333; background: #fdf5e6;"></div>
+                    <div style="border: 1px solid #333; display: flex; align-items: center; justify-content: center; font-weight: bold; background: #fdf5e6; font-size: 13pt;">2</div>
+                </div>
+            </div>
+
+            <div class="problem-box" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1;">
+                    <span class="badge-ex">ex2</span>
+                    <div class="problem-text">?ㅻⅨ履?鍮덉뭏??1遺??9源뚯????섎? ??踰덉뵫 ???ｌ뼱 ??以꾩뿉 ?덈뒗 ???섏쓽 ?⑹씠 紐⑤몢 媛숇룄濡?留뚮뱶?몄슂.</div>
+                </div>
+                <div>
+                    <svg width="120" height="120" viewBox="0 0 120 120">
+                        <polygon points="60,15 20,95 100,95" fill="none" stroke="#e0a96d" stroke-width="2"/>
+                        <circle cx="60" cy="15" r="10" fill="#fff" stroke="#e0a96d" stroke-width="2"/>
+                        <text x="60" y="19" text-anchor="middle" font-size="12" font-weight="bold">8</text>
+                        <circle cx="46.6" cy="41.6" r="10" fill="#fff" stroke="#e0a96d" stroke-width="2"/>
+                        <circle cx="33.3" cy="68.3" r="10" fill="#fff" stroke="#e0a96d" stroke-width="2"/>
+                        <circle cx="73.3" cy="41.6" r="10" fill="#fff" stroke="#e0a96d" stroke-width="2"/>
+                        <circle cx="86.6" cy="68.3" r="10" fill="#fff" stroke="#e0a96d" stroke-width="2"/>
+                        <circle cx="46.6" cy="95" r="10" fill="#fff" stroke="#e0a96d" stroke-width="2"/>
+                        <circle cx="73.3" cy="95" r="10" fill="#fff" stroke="#e0a96d" stroke-width="2"/>
+                        <circle cx="20" cy="95" r="10" fill="#fff" stroke="#e0a96d" stroke-width="2"/>
+                        <text x="20" y="99" text-anchor="middle" font-size="12" font-weight="bold">9</text>
+                        <circle cx="100" cy="95" r="10" fill="#fff" stroke="#e0a96d" stroke-width="2"/>
+                        <text x="100" y="99" text-anchor="middle" font-size="12" font-weight="bold">7</text>
+                    </svg>
+                </div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 3 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [6 ?섏씠吏] 媛쒕뀗 ?좏삎 3 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 3</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        洹ㅼ쓣 紐?紐낆쓽 ?숈깮?ㅼ뿉寃??섎늻??二쇰젮怨??⑸땲?? ??紐낆뿉寃?5媛쒖뵫 ?섎늻??二쇰㈃ 11媛쒓? ?④퀬, 8媛쒖뵫 ?섎늻??二쇰㈃ 10媛쒓? 遺議깊빀?덈떎. ?숈깮 ?섏? 洹ㅼ쓽 ?섎? 媛곴컖 援ы븯?쒖삤.
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">?고븘???숈깮?ㅼ뿉寃??섎늻??二쇰뒗?? ??紐낆뿉寃?5?먮（???섎늻??二쇰㈃ 24?먮（媛 ?④퀬, 7?먮（???섎늻??二쇰㈃ 4?먮（媛 ?⑥뒿?덈떎. ?숈깮 ?섏? ?고븘 ?섎? 媛곴컖 援ы븯?쒖삤.</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">?ы깢??紐?紐낆쓽 ?대┛?댁뿉寃??섎늻??二쇰뒗?? 3媛쒖뵫 ?섎늻??二쇰㈃ 12媛쒓? ?④퀬, 6媛쒖뵫 ?섎늻??二쇰㈃ 6媛쒓? 遺議깊빀?덈떎. ?대┛???섏? ?ы깢 ?섎? 媛곴컖 援ы븯?쒖삤.</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex3</span>
+                <div class="problem-text">?쒖큹媛 媛吏怨??덈뒗 ?덉쑝濡??ш낵瑜?10媛??щ젮硫?100?먯씠 遺議깊븯怨? 媛숈? ?ш낵瑜?12媛??щ젮硫?400?먯씠 遺議깊빀?덈떎. ?쒖큹媛 媛吏??덇낵 ?ш낵 1媛쒖쓽 媛믪쓣 媛곴컖 援ы븯?쒖삤.</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 4 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [7 ?섏씠吏] ?꾩닔 ?좏삎 1, 2 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 1</span>
+                <div class="problem-text">?대뼡 ?먯뿰??媛, ?? ?ㅺ? ?덉뒿?덈떎. 媛? ?섏쓽 ?⑹? 29, ?섏? ?ㅼ쓽 ?⑹? 32, 媛? ?ㅼ쓽 ?⑹? 33?낅땲?? 媛, ?? ?ㅻ뒗 媛곴컖 ?대뼡 ?섏엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 2</span>
+                <div class="problem-text">鍮④컙?? ?몃??? ?뚮???源껊컻??紐⑤몢 20媛??덉뒿?덈떎. 鍮④컙?됱? ?몃??됰낫??3媛쒓? ???곴퀬, ?뚮??됱? ?몃??됰낫??4媛쒓? ???곸뒿?덈떎. 鍮④컙?? ?몃??? ?뚮???源껊컻? 媛곴컖 紐?媛쒖뵫 ?덉뒿?덇퉴?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 5 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [8 ?섏씠吏] ?꾩닔 ?좏삎 3, 4, 5 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 3</span>
+                <div class="problem-text">泥섏쓬???쇰쭏???덉쓣 媛吏怨??덈떎媛 1媛쒖뿉 110???섎뒗 ?붽뎄瑜댄듃瑜?23媛???붾땲 ?⑥? ?덉씠 580?먯씠 ?섏뿀?듬땲?? 泥섏쓬??媛吏怨??덈뜕 ?덉쓣 ?〓씪怨??섏뿬 ?앹쓣 ?몄슦怨????蹂댁떆??</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 4</span>
+                <div class="problem-text">?고븘 5?먮（瑜?1800?? 吏?곌컻 7媛쒕? 1120?? 移?9媛쒕? 4050?먯뿉 ?뚮뒗 臾멸뎄?먯씠 ?덉뒿?덈떎. ?고븘, 吏?곌컻, 移쇱쓣 媛곴컖 4媛쒖뵫 ?щ젮硫?紐⑤몢 ?쇰쭏瑜??댁빞 ?⑸땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 5</span>
+                <div class="problem-text">??沅뚯뿉 300?먯씤 怨듭콉 紐?沅뚭낵 ???먮（??160?먯씤 ?고븘 7?먮（瑜??ш퀬 2620?먯쓣 吏遺덊븯??듬땲?? 怨듭콉? 紐?沅???듬땲源?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 6 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [9 ?섏씠吏] ?꾩닔 ?좏삎 6, 7, 8 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 6</span>
+                <div class="problem-text">?곸닔媛 2500?먯쭨由?梨???沅뚭낵 300?먯쭨由?蹂쇳렂 ???먮（, 150?먯쭨由??고븘 5?먮（瑜??щ뒗 ????鍮꾩슜? ?湲덊븳 ?덉쓽 <div class="fraction-box"><span>1</span><span>3</span></div>?댁뿀?듬땲?? ?湲덊븳 ?덉? ?쇰쭏??듬땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 7</span>
+                <div class="problem-text">踰쎄낵 留덈（瑜?1L??2500???섎뒗 ?섏씤?몃줈 移좏븯?ㅺ퀬 ?⑸땲?? ?섏씤?몃줈 踰쎌쓣 移좏븯???곗뿉??8L媛 ?꾩슂?섍퀬, 留덈（瑜?移좏븯???곗뿉??4L媛 ?꾩슂?⑸땲?? ?섏씤??35000?먯뼱移섎? ?ъ꽌 踰쎄낵 留덈（瑜?移좏븳?ㅻ㈃, ?섏씤?몃뒗 紐?L媛 ?④쾶 ?⑸땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 8</span>
+                <div class="problem-text">?대뒓 ?곹솕愿?먯꽌 ?쇱슂?쇱뿉 ?낆옣??愿?뚭컼 ?섎? 議곗궗??蹂댁븯?붾땲 1250紐??덉뿀?듬땲?? ?낆옣猷뚮뒗 ???щ엺留덈떎 5500?먯씠怨?愿?뚭컼 以묒뿉 臾대즺 珥덈?沅뚯쓣 媛뽮퀬 ???щ엺??150紐낆씠?덉뒿?덈떎. ?곹솕愿?먯꽌 ?꾨쫫??鍮뚮━???湲덇낵 吏곸썝???붽툒 ???щ윭 媛吏 鍮꾩슜???섎（??250留????좊떎怨????? ???좎쓽 ?댁씡湲덉? ?쇰쭏?낅땲源?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 7 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [10 ?섏씠吏] ?꾩닔 ?좏삎 9, 10, 11 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 9</span>
+                <div class="problem-text">???먯뿰?섍? ?덉뒿?덈떎. ???섏쓽 ?⑹? 520?닿퀬 李⑤뒗 60???? ???섎뒗 媛곴컖 ?쇰쭏?낅땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 10</span>
+                <div class="problem-text">?⑺씗???숆탳???숈깮 ?섎뒗 868紐낆엯?덈떎. 洹?以??⑦븰?앹씠 ?ы븰?앸낫??36紐???留롮쓣 ?? ?⑤? ?숈깮 ?섎뒗 媛곴컖 紐?紐낆엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 11</span>
+                <div class="problem-text">湲몄씠媛 4m??泥좎궗媛 ?덉뒿?덈떎. ??泥좎궗瑜?紐⑤몢 ?댁슜?섏뿬 媛濡쒖쓽 湲몄씠媛 ?몃줈??湲몄씠蹂대떎 30cm ??湲??묎컳? 吏곸궗媛곹삎????媛?留뚮뱾 ?? 媛濡쒖쓽 湲몄씠? ?몃줈??湲몄씠??媛곴컖 紐?cm?낅땲源?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 8 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [11 ?섏씠吏] ?꾩닔 ?좏삎 12, 13, 14 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 12</span>
+                <div class="problem-text">?뺢낵 ?숈깮? ?⑸룉?쇰줈 留ㅼ씪 1000?먯뵫 諛쏅뒗???뺤씠 ?숈깮蹂대떎 留ㅼ씪 100?먯뵫 ??留롮씠 媛뽰뒿?덈떎. 1??365?? ?숈븞 ?뺤씠 諛쏅뒗 ?⑸룉? ?쇰쭏?낅땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 13</span>
+                <div class="problem-text">?쒕퀎?대뒗 媛吏怨??덈뜕 援ъ뒳??移쒓뎄 7紐낃낵 ?④퍡 ?묎컳???섎늻??媛吏???援ъ뒳移섍린瑜??섏뿬 5媛쒕? ?껋뿀?듬땲?? ?쒕퀎?댁쓽 ?⑥? 援ъ뒳??13媛쒕씪硫? ?쒕퀎?닿? 泥섏쓬??媛吏怨??덈뜕 援ъ뒳? 紐⑤몢 紐?媛쒖엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 14</span>
+                <div class="problem-text">洹ㅼ쓣 120媛쒖뵫 ?댁? ?곸옄媛 8媛??덉뒿?덈떎. ??洹ㅼ쓣 ???щ엺?먭쾶 30媛쒖뵫 紐⑤몢 ?섎늻??以?ㅻ㈃ 紐?紐낆뿉寃??섎늻??以????덉뒿?덇퉴?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 9 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [12 ?섏씠吏] ?꾩닔 ?좏삎 15, 16, 17 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 15</span>
+                <div class="problem-text">?⑹닔泥좎뿉 30g??異붾? ?ъ븯?붾땲 湲몄씠媛 10cm媛 ?섏뿀?듬땲?? ???⑹닔泥좎뿉 66g??異붾? ?ъ븯???뚯쓽 湲몄씠媛 16cm媛 ?섏뿀?ㅻ㈃, 異붾? ?ъ? ?딆븯???뚯쓽 ?⑹닔泥좎쓽 湲몄씠???쇰쭏?낅땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 16</span>
+                <div class="problem-text">媛숈? 臾닿쾶??鍮?100媛쒓? ?ㅼ뼱 ?덈뒗 鍮????곸옄??臾닿쾶??20kg?낅땲?? ?곸옄???ㅼ뼱 ?덈뒗 鍮?100媛쒖쓽 臾닿쾶媛 ?곸옄留뚯쓽 臾닿쾶蹂대떎 16kg ??臾닿굅???? 鍮?1媛쒖쓽 臾닿쾶??紐?g?낅땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 17</span>
+                <div class="problem-text">?꾨뱾??7?댁씪 ???대㉧?덉쓽 ?곗꽭???꾨뱾???섏씠??5諛곗??듬땲?? ?대㉧?덇? 紐??몄씪 ???꾨뱾???섏씠??2諛곌? ?섍쿋?듬땲源?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 10 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [13 ?섏씠吏] ?꾩닔 ?좏삎 18, 19, 20 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 18</span>
+                <div class="problem-text">怨쇱씪 媛寃뚯뿉??1媛쒖뿉 550???섎뒗 ?ш낵 200媛쒕? ?ъ솕?듬땲?? 洹?以?12媛쒕뒗 ?⑹뼱??踰꾨━怨? ?섎㉧吏 ?ш낵??12200?먯쓽 ?댁씡???④린怨??붿븯?듬땲?? ??媛寃뚯뿉?쒕뒗 ?ш낵 1媛쒕? ?쇰쭏?⑹뿉 ?붿븯?듬땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 19</span>
+                <div class="problem-text">?쒕퀎?대뒗 ?섎（????됱옂??18?μ뵫 二쇱썙???ㅻ뒛源뚯? 紐⑤몢 126?μ쓣 紐⑥븯?듬땲?? ?덉뒳?대뒗 ?댁씪遺???섎（????됱옂??24?μ뵫 二쇱썙??紐⑥쑝?ㅺ퀬 ?⑸땲?? ???щ엺??紐⑥? ??됱옂???섍? 媛숈븘吏?ㅻ㈃ ?쒕퀎?댁? ?덉뒳?대뒗 硫곗튌 ?숈븞 ?④퍡 ??됱옂??紐⑥븘???⑸땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 20</span>
+                <div class="problem-text">?쒖넄?댁쓽 ?섏씠??5諛곕? ?섎㈃, ?꾨쾭吏???곗꽭蹂대떎 ?≪궡?????곸뒿?덈떎. ?? ?꾨쾭吏???곗꽭???쒖넄?대낫??31?댁씠 ??留롮뒿?덈떎. ?꾨쾭吏???곗꽭媛 ?쒖넄?댁쓽 ?섏쓽??2諛곌? ?섎뒗 寃껋? 紐????꾩엯?덇퉴?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 11 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [14 ?섏씠吏] ??⑥썝 媛꾩? 2 -->
+    <div class="page content-page section-intro">
+        <div class="intro-box">
+            <div class="intro-tag">?묒슜 寃쎌떆 4</div>
+            <div class="intro-title">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        </div>
+        <div class="footer">
+            <span class="footer-page-num">- 12 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [15 ?섏씠吏] 媛쒕뀗 ?좏삎 1 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 1</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        愿?몃뒗 臾쇨굔??100媛쒕? ??린?붾뜲, 1媛쒕? ??만 ?뚮쭏??100?먯뵫 諛쏄린濡??섍퀬, 臾쇨굔??源⑤쑉由щ㈃ ?대컲鍮꾨? 諛쏆? ?딄퀬 1媛쒕떦 1200?먯뵫 蹂댁긽?섍린濡??섏??듬땲?? 臾쇨굔??紐⑤몢 ??릿 ??4800?먯쓣 諛쏆븯???? 愿?멸? 源⑤쑉由?臾쇨굔? 紐?媛쒖엯?덇퉴?
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">??낵 ?좊겮媛 紐⑤몢 25留덈━ ?덉뒿?덈떎. ?ㅻ━ ?섏쓽 ?⑹씠 78媛쒖씪 ?? ??낵 ?좊겮??媛곴컖 紐?留덈━?낅땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">媛?곸씠???꾨쾭吏???щ?由꾩쑝濡?130?먯쭨由??고몴? 200?먯쭨由??고몴瑜??щ윭 媛붿뒿?덈떎. 紐⑤몢 30?μ쓣 ?ш퀬 4740?먯쓣 吏遺덊뻽?ㅻ㈃ 媛?곸씠??130?먯쭨由??고몴? 200?먯쭨由??고몴瑜?媛곴컖 紐??μ뵫 ??듬땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex3</span>
+                <div class="problem-text">??媛쒖뿉 550???섎뒗 ?쇰㈃怨???媛쒖뿉 500???섎뒗 ?꾩씠?ㅽ겕由쇱쓣 紐⑤몢 22媛??ш퀬 15000?먯쓣 ???? 嫄곗뒪由꾨룉?쇰줈 3400?먯쓣 諛쏆븯?듬땲?? ?쇰㈃怨??꾩씠?ㅽ겕由쇱쓣 媛곴컖 紐?媛쒖뵫 ??듬땲源?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 13 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [16 ?섏씠吏] 媛쒕뀗 ?좏삎 2 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 2</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        ?곸닔?????먮（??250?먯씤 ?고븘??紐??먮（ ?????덈뒗 ?덉쑝濡????먮（??220?먯씤 ?고븘??紐??먮（ ??붾땲 450?먯씠 ?⑥븯?듬땲?? ?곸닔???고븘??紐??먮（ ??듬땲源?
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">留ㅼ씪 30履쎌뵫 ?쎌쑝硫?怨꾪쉷???좉퉴吏 ???쎌쓣 ???덈뒗 梨낆씠 ?덉뒿?덈떎. ?섎（??25履쎌뵫 怨꾪쉷???좉퉴吏 ?쎌뿀?붾땲 45履쎌씠 ???⑥븯?듬땲?? 泥섏쓬?먮뒗 硫곗튌 ?숈븞?????쎌쓣 怨꾪쉷?댁뿀?듬땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">?덉뒳?대꽕 諛??숈깮?ㅼ? ?꾩옣 ?숈뒿??媛湲??꾪빐 援먰넻鍮꾨줈 1750?먯쓣 嫄룹뼱????寃껋쓣 2000?먯뵫 嫄룹뿀?붾땲 9500?먯씠 ?⑥븯?듬땲?? ?덉뒳?대꽕 諛??숈깮 ?섎뒗 紐⑤몢 紐?紐낆엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex3</span>
+                <div class="problem-text">?쒕퀎?대뒗 ?ш????щ윭 媛붿뒿?덈떎. ?ш? ??媛쒖뿉 80?먯씤 以??뚯븯?쇰굹 65?먯씠?댁꽌 ?덉긽蹂대떎 600?먯씠 ???곴쾶 ?ㅼ뿀?듬땲?? ?쒕퀎?대뒗 ?ш???紐?媛???듬땲源?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 14 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [17 ?섏씠吏] 媛쒕뀗 ?좏삎 3 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 3</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        ?좎??대뒗 ?꾨쭏???щ?由꾩쑝濡?怨쇱씪媛寃뚯뿉 怨쇱씪???щ윭 媛붾뜑??諛곗? 媛? 洹ㅼ쓽 媛寃⑹씠 ?ㅼ쓬怨?媛숈븯?듬땲?? 諛?1媛쒖? 洹?1媛쒖쓽 媛믪쓣 媛곴컖 援ы븯?몄슂.<br><br>
+                        ??諛?3媛쒖쓽 媛믪? 媛?5媛쒖쓽 媛믨낵 媛숈뒿?덈떎.<br>
+                        ??媛?3媛쒖쓽 媛믪? 洹?2媛쒖쓽 媛믨낵 媛숈뒿?덈떎.<br>
+                        ??諛? 洹? 媛먯쓣 5媛쒖뵫 ?ш퀬 5000?먯쓣 ?덉뒿?덈떎.
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">?ㅼ쓬 議곌굔???댁슜?섏뿬 ?고븘, 怨듭콉, 吏?곌컻??媛믪쓣 媛곴컖 援ы븯?쒖삤.<br><br>
+                    ???고븘 3?먮（??媛믨낵 怨듭콉 2沅뚯쓽 媛믪? 媛숈뒿?덈떎.<br>
+                    ??怨듭콉 5沅뚯쓽 媛믨낵 吏?곌컻 9媛쒖쓽 媛믪? 媛숈뒿?덈떎.<br>
+                    ???고븘 2?먮（, 怨듭콉 2沅? 吏?곌컻 2媛쒕? ?ш퀬 2000?먯쓣 ?덉뒿?덈떎.</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">????A, B, C???ㅼ쓬 議곌굔??留욌뒗 ?섏엯?덈떎. ????A, B, C瑜?媛곴컖 援ы븯?쒖삤.<br><br>
+                    ??A??2諛곕뒗 B??5諛곗? 媛숈뒿?덈떎.<br>
+                    ??C??B??4諛곗? 媛숈뒿?덈떎.<br>
+                    ??????A, B, C???⑹? 75?낅땲??</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 15 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [18 ?섏씠吏] 媛쒕뀗 ?좏삎 4 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 4</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        ?대뼡 洹몃쫯??臾쇱쓣 媛 而듭쑝濡?10踰? ??而듭쑝濡?15踰?遺볤굅???먮뒗 媛 而듭쑝濡?8踰? ??而듭쑝濡?21踰?遺?쇰㈃ 媛??梨꾩썙吏묐땲?? ?대븣, ??洹몃쫯??媛 而듭쑝濡쒕쭔 臾쇱쓣 遺?쇰㈃ 紐?踰?留뚯뿉 媛??梨꾩썙吏묐땲源?
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">??洹몃쫯怨??묒? 洹몃쫯?쇰줈 臾쇳넻??臾쇱쓣 ???ｊ퀬 ?덉뒿?덈떎. ??洹몃쫯?쇰줈 3踰? ?묒? 洹몃쫯?쇰줈 3踰????ｌ쑝硫?臾쇳넻??媛??李④퀬 ??洹몃쫯?쇰줈 2踰??묒? 洹몃쫯?쇰줈 6踰덉쓣 ???ｌ뼱????떆 臾쇳넻??媛??李щ떎怨??⑸땲?? ?묒? 洹몃쫯?쇰줈留?臾쇳넻??媛??梨꾩슫?ㅻ㈃ 紐?踰덉쓣 ???ｌ뼱???⑸땲源?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">湲몄씠媛 ?ㅻⅨ ??醫낅쪟??留됰?濡?梨낆긽??媛濡?湲몄씠瑜??ъ뿀?듬땲?? 梨낆긽??媛濡쒕뒗 湲?留됰? 4媛? 吏㏃? 留됰? 6媛쒖쓽 湲몄씠???⑷낵 媛숆퀬, ?? 湲?留됰? 3媛? 吏㏃? 留됰? 8媛쒖쓽 湲몄씠???⑷낵 媛숈뒿?덈떎. ??梨낆긽??媛濡?湲몄씠??湲?留됰? 紐?媛쒖쓽 湲몄씠? 媛숈뒿?덇퉴?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 16 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [19 ?섏씠吏] 媛쒕뀗 ?좏삎 5 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 5</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        A吏?먯뿉??B吏?먭퉴吏 媛???? ?쒖냽 10km???먯쟾嫄곕줈 媛硫??쒖냽 60km???먮룞李⑤줈 媛??寃껊낫???쒓컙????嫄몃┛?ㅺ퀬 ?쒕떎. ??吏??A, B ?ъ씠??嫄곕━瑜?援ы븯?щ씪.
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">A吏?먯뿉??B吏?먭퉴吏 ?쒖냽 80km濡?媛硫??쒖냽 100km濡?媛??寃껊낫??1?쒓컙????嫄몃┛?ㅺ퀬 ?쒕떎. ?대븣, A, B ?ъ씠??嫄곕━瑜?援ы븯?щ씪.</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">A??뿉???쒖냽 100km濡?異쒕컻???덈쭏?꾪샇 ?댁감媛 媛숈? ?쒓컙??30km ?욎뿉 ?덈뒗 B??뿉??媛숈? 諛⑺뼢?쇰줈 ?쒖냽 80km濡?異쒕컻??臾닿턿?뷀샇 ?댁감? 留뚮굹?ㅻ㈃ 紐?km瑜??щ젮???섎뒗吏 援ы븯?щ씪.</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex3</span>
+                <div class="problem-text">泥좎닔媛 ?꾩꽌愿?먯꽌 吏묒쑝濡?媛?붾뜲 ?쒖냽 8km濡??щ━硫??쒖냽 6km濡?嫄룸뒗 寃껊낫??30遺?鍮⑤━ 吏묒뿉 ?꾩갑?쒕떎怨??쒕떎. ?대븣, 吏묒뿉???꾩꽌愿源뚯???嫄곕━瑜?援ы븯?щ씪.</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 17 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [20 ?섏씠吏] ?꾩닔 ?좏삎 1, 2, 3 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 1</span>
+                <div class="problem-text">湲몄씠媛 80km???묒そ??泥섏쓬遺???앷퉴吏 10m 媛꾧꺽?쇰줈 ??됰굹臾대? ?ъ쓣 ???꾩슂????됰굹臾??섏? 8m 媛꾧꺽?쇰줈 ?ъ쓣 ???꾩슂????됰굹臾??섏쓽 李⑤? 援ы븯?쒖삤.</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 2</span>
+                <div class="problem-text">?됱쥌??98?μ쓣 ?쒕퀎, ?앷린, ?덉뒳 ???щ엺???섎늻??媛議뚯뒿?덈떎. ?쒕퀎?대뒗 ?앷린蹂대떎 6????留롮씠, ?앷린???덉뒳?대낫??4?μ쓣 ??留롮씠 媛議뚯뒿?덈떎. 媛곴컖 紐??μ뵫 媛議뚯뒿?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 3</span>
+                <div class="problem-text">?대┛?대뱾?먭쾶 ?ы깢???섎늻??二쇰젮怨??⑸땲?? ???щ엺?먭쾶 8媛쒖뵫 ?섎늻??二쇰㈃ 6媛쒓? ?④퀬, 10媛쒖뵫 ?섎늻??二쇰㈃ 24媛쒓? 遺議깊빀?덈떎. ?대┛?대뱾? 紐?紐낆씠怨? ?ы깢? 紐⑤몢 紐?媛쒖엯?덇퉴?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 18 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [21 ?섏씠吏] ?꾩닔 ?좏삎 4, 5, 6 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 4</span>
+                <div class="problem-text">?곸뿰?대뒗 ?쇱젙 湲곌컙 ?숈븞 ?덉쓣 紐⑥븘 ?숈슜?덉쓣 ?щ젮怨??⑸땲?? ?섎（??700?먯뵫 紐⑥쑝硫?3420?먯씠 遺議깊븯怨? ?섎（??850?먯뵫 紐⑥쑝硫?2280?먯씠 ?⑥뒿?덈떎. ?⑤뒗 ?덉씠 ?놁씠 ?숈슜?덉쓣 ?щ젮硫??섎（???쇰쭏??紐⑥븘???⑸땲源?</div>
+            </div>
+
+            <div class="problem-box" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1;">
+                    <span class="badge-type">?좏삎 5</span>
+                    <div class="problem-text">?ㅻⅨ履?洹몃┝怨?媛숈씠 寃???諛붾몣?뚯쓣 ?띿씠 鍮??뺤궗媛곹삎 紐⑥뼇?쇰줈 ?섏뼱?볦븯?듬땲?? ???뺤궗媛곹삎???곗깋 諛붾몣?뚮줈 ??踰??섎윭?몃㈃, ?곗깋 諛붾몣?뚯씠 72媛??꾩슂?⑸땲?? ???뺤궗媛곹삎???볦씤 寃???諛붾몣?뚯? 紐?媛쒖엯?덇퉴?</div>
+                </div>
+                <div>
+                    <svg width="100" height="100" viewBox="0 0 100 100">
+                        <rect x="15" y="15" width="70" height="70" fill="none" stroke="#16417C" stroke-width="2" stroke-dasharray="3,3"/>
+                        <circle cx="15" cy="15" r="5" fill="#111"/>
+                        <circle cx="50" cy="15" r="5" fill="#111"/>
+                        <circle cx="85" cy="15" r="5" fill="#111"/>
+                        <circle cx="15" cy="50" r="5" fill="#111"/>
+                        <circle cx="85" cy="50" r="5" fill="#111"/>
+                        <circle cx="15" cy="85" r="5" fill="#111"/>
+                        <circle cx="50" cy="85" r="5" fill="#111"/>
+                        <circle cx="85" cy="85" r="5" fill="#111"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 6</span>
+                <div class="problem-text">?섎젅媛 144m???곕せ???덉뒿?덈떎. ???곕せ???섎젅??8m 媛꾧꺽?쇰줈 媛먮굹臾대? ?ъ? ?ㅼ쓬 媛먮굹臾댁? 媛먮굹臾??ъ씠??吏꾨떖????洹몃（?⑹쓣 ?ъ쑝?ㅺ퀬 ?⑸땲?? 媛먮굹臾댁? 吏꾨떖?섎뒗 媛곴컖 紐?洹몃（媛 ?꾩슂?⑸땲源?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 19 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [22 ?섏씠吏] ?꾩닔 ?좏삎 7, 8, 9 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 7</span>
+                <div class="problem-text">媛? ?????щ엺??媛숈? 湲덉븸???덉쓣 紐⑥븘???꾪솕吏瑜?18????듬땲?? 洹몃┝??洹몃┫ ??媛묒씠 ?꾨낫??4????留롮씠 ?ъ슜?섏뿬 媛묒? ?꾩뿉寃?160?먯쓣 二쇱뿀?듬땲?? 泥섏쓬?????щ엺? ?쇰쭏???덉뒿?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 8</span>
+                <div class="problem-text">?⑺씗??媛吏怨??덈뜕 援ъ뒳??<div class="fraction-box"><span>1</span><span>2</span></div>蹂대떎 10媛???留롮? 援ъ뒳??移쒓뎄?먭쾶 二쇨퀬 ?섎㉧吏??<div class="fraction-box"><span>1</span><span>2</span></div>濡?援ъ뒳移섍린瑜??섏뿬 ?껋뿀?듬땲?? ?⑥븘 ?덈뒗 援ъ뒳??22媛쒕씪硫? 泥섏쓬??媛吏怨??덈뜕 援ъ뒳? 紐⑤몢 紐?媛쒖엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 9</span>
+                <div class="problem-text">1?μ뿉 120?먯씤 ?꾪솕吏 紐??μ쓣 ?????덈뒗 ?덉쑝濡?1?μ뿉 95?먯씤 ?꾪솕吏瑜?紐?????붾땲, 375?먯씠 ?⑥븯?듬땲?? ?꾪솕吏瑜?紐?????듬땲源?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 20 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [23 ?섏씠吏] ?꾩닔 ?좏삎 10, 11 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1; padding-right: 15px;">
+                    <span class="badge-type">?좏삎 10</span>
+                    <div class="problem-text">?꾨옒 ?꾪삎?먯꽌 李얠쓣 ???덈뒗 ?쇨컖?뺤? 紐⑤몢 紐?媛??덉뒿?덇퉴?</div>
+                </div>
+                <div>
+                    <svg width="150" height="150" viewBox="0 0 160 160">
+                        <rect x="10" y="10" width="140" height="140" fill="none" stroke="#16417C" stroke-width="2"/>
+                        <rect x="45" y="45" width="70" height="70" fill="none" stroke="#16417C" stroke-width="1.5"/>
+                        <line x1="10" y1="10" x2="150" y2="150" stroke="#16417C" stroke-width="1.5"/>
+                        <line x1="10" y1="150" x2="150" y2="10" stroke="#16417C" stroke-width="1.5"/>
+                        <line x1="80" y1="10" x2="80" y2="150" stroke="#16417C" stroke-width="1.5"/>
+                        <line x1="10" y1="80" x2="150" y2="80" stroke="#16417C" stroke-width="1.5"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="problem-box" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1; padding-right: 15px;">
+                    <span class="badge-type">?좏삎 11</span>
+                    <div class="problem-text">媛? ????吏?먯뿉???쒖넄?댁? ?덉뒳?닿? ?쒕줈 留덉＜ 蹂닿퀬 嫄룰린 ?쒖옉?섏뿬 ??吏?먯뿉 ??留뚮궗?듬땲?? 嫄몄? 嫄곕━???쒖넄?닿? ?덉뒳?대낫??700m ??湲??? 媛?먯꽌 ?ㅺ퉴吏??嫄곕━??紐?m?낅땲源?</div>
+                </div>
+                <div>
+                    <svg width="280" height="80" viewBox="0 0 300 80">
+                        <line x1="20" y1="40" x2="280" y2="40" stroke="#16417C" stroke-width="2"/>
+                        <line x1="20" y1="30" x2="20" y2="50" stroke="#16417C" stroke-width="2"/>
+                        <line x1="200" y1="30" x2="200" y2="50" stroke="#16417C" stroke-width="2"/>
+                        <line x1="280" y1="30" x2="280" y2="50" stroke="#16417C" stroke-width="2"/>
+                        <text x="35" y="25" text-anchor="middle" font-size="11" font-weight="bold" fill="#16417C">媛 (?쒖넄 ??</text>
+                        <text x="200" y="25" text-anchor="middle" font-size="11" font-weight="bold" fill="#16417C">??/text>
+                        <text x="265" y="25" text-anchor="middle" font-size="11" font-weight="bold" fill="#16417C">???덉뒳 (??</text>
+                        <path d="M 20 50 Q 150 75 280 50" fill="none" stroke="#e0a96d" stroke-width="1.5" stroke-dasharray="4"/>
+                        <text x="150" y="75" text-anchor="middle" font-size="12" font-weight="bold" fill="#e0a96d">2.3km</text>
+                    </svg>
+                </div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 21 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [24 ?섏씠吏] ?꾩닔 ?좏삎 12, 13, 14 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 12</span>
+                <div class="problem-text">?숈깮?ㅼ뿉寃??고븘???섎늻??二쇰젮怨??⑸땲?? ???щ엺?먭쾶 3?먮（???섎늻??二쇰㈃ 9?먮（媛 ?④퀬, 5?먮（???섎늻??二쇰㈃ 3?먮（媛 ?⑥뒿?덈떎. ?숈깮 ?섏? ?고븘 ?섎? 媛곴컖 援ы븯?쒖삤.</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 13</span>
+                <div class="problem-text">媛議??섎쭔??湲곕뀗?덉쓣 ?щ젮怨??⑸땲?? 1媛쒖뿉 560?먯쭨由щ? ?щ㈃ 480?먯씠 遺議깊븯怨? 1媛쒖뿉 520?먯쭨由щ? ?щ㈃ 320?먯씠 遺議깊빀?덈떎. 媛議??섎뒗 紐?紐낆엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 14</span>
+                <div class="problem-text">?대뼡 怨쇱씪媛寃뚯뿉??4媛쒖뿉 2000?먯씤 ?ш낵 20媛쒖? 5媛쒖뿉 3000?먯씤 ?ш낵 20媛쒕? ?⑺븯??8媛쒖뿉 4000?먯뵫 ?붿븯?듬땲?? ??怨쇱씪 媛寃뚯뿉?쒕뒗 ?쇰쭏瑜??먰빐 蹂댁븯?듬땲源?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 22 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [25 ?섏씠吏] ?꾩닔 ?좏삎 15, 16, 17 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 15</span>
+                <div class="problem-text">?대뒓 ?숆탳??4?숇뀈 ?숈깮???⑦븰?앹? ?꾩껜??<div class="fraction-box"><span>4</span><span>7</span></div>蹂대떎 21紐낆씠 ???곴퀬, ?ы븰?앹? ?꾩껜??<div class="fraction-box"><span>1</span><span>2</span></div>蹂대떎 49紐낆씠 ???곸뒿?덈떎. 4?숇뀈 ?꾩껜 ?숈깮 ?섎뒗 紐?紐낆엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 16</span>
+                <div class="problem-text">諛붾몣?뚯쓣 ?덉씠 李⑤룄濡??뺤궗媛곹삎 紐⑥뼇?쇰줈 媛濡쒖? ?몃줈瑜??섏뼱?볦븯?붾땲 12媛쒓? ?⑥븘 2?댁뵫 ?섎졇?붾땲 20媛쒓? 遺議깊뻽?듬땲?? 諛붾몣?뚯? 紐⑤몢 紐?媛??덉뒿?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 17</span>
+                <div class="problem-text">?대뼡 ?좉굅??2紐낆쓽 ?꾨낫?먭? ?덉뒿?덈떎. ?ы몴 寃곌낵 5248??以?40?쒕뒗 臾댄슚?쒖?怨????щ엺????李④? 594?쒖씪 ?? ???щ엺???살? ?쒖쓽 ?섎? 媛곴컖 援ы븯?쒖삤.</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 23 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [26 ?섏씠吏] ?꾩닔 ?좏삎 18, 19, 20 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">臾몄젣?몃뒗 諛⑸쾿 李얘린(2)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 18</span>
+                <div class="problem-text">湲??섏옄??4紐낆뵫 ?됱븯?붾땲 35紐낆씠 ?됱? 紐삵빐??6紐낆뵫 ?됱븯?붾땲 15紐낆씠 ???됱쓣 ???덉뿀?듬땲?? ?щ엺 ?섏? ?섏옄 ?섎? 媛곴컖 援ы븯?쒖삤.</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 19</span>
+                <div class="problem-text">?대뼡 ?щ엺???ш? 3000媛쒕? ?대컲?섎뒗?? 1媛쒕? ?대컲???뚮쭏??5?먯뵫 ?대컲鍮꾨? 諛쏄린濡??섍퀬, ?대컲 ?꾩쨷 ?ш???源⑥?硫??대컲鍮꾨? 諛쏆? ?딄퀬 1媛쒕떦 50?먯뵫 蹂댁긽?섍린濡??덉뒿?덈떎. ???щ엺???ш???紐⑤몢 ?대컲????諛쏆? 湲덉븸??6750?먯씠?쇰㈃ ?ш???紐?媛?源쇱뒿?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 20</span>
+                <div class="problem-text">?덉뒳?대뒗 ?묎컳? ?고븘 8?먮（瑜??????덈뒗 ?덉쓣 媛뽮퀬 ?덉뒿?덈떎. ?고븘?????먮（??30?먯뵫 ???멸쾶 ?щ㈃ 10?먮（瑜??????덉뒿?덈떎. ?덉뒳?대뒗 ?쇰쭏瑜?媛뽮퀬 ?덉뒿?덇퉴?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 24 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [27 ?섏씠吏] ??⑥썝 媛꾩? 3 -->
+    <div class="page content-page section-intro">
+        <div class="intro-box">
+            <div class="intro-tag">?묒슜 寃쎌떆 4</div>
+            <div class="intro-title">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        </div>
+        <div class="footer">
+            <span class="footer-page-num">- 25 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [28 ?섏씠吏] 媛쒕뀗 ?좏삎 1 (?섏젙諛섏쁺: EX3 ?대?吏) -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 1</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        ?ㅼ쓬怨?媛숈씠 ?섎? ?섏뼱?볦븯?듬땲?? 臾쇱쓬???듯븯?쒖삤.<br><br>
+                        1, 3, 6, 10, 15, ...<br><br>
+                        (1) 32踰덉㎏ ?볦씠???섎뒗 ?대뼡 ???낅땲源?<br>
+                        (2) 100??媛??媛源뚯슫 ?섍? ?섎뒗 寃껋? 紐?踰덉㎏?낅땲源?
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">?ㅼ쓬怨?媛숈씠 ?섎? ?섏뼱?볦쓣 ?? 30吏?踰덉뿉 ?볦씠???섎뒗 ?대뼡 ?섏엯?덇퉴?<br><br>
+                2, 5, 8, 11, 14, 17, ...</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">?섎? 蹂닿퀬 臾쇱쓬???듯븯?쒖삤.<br><br>
+                <div class="fraction-box"><span>2</span><span>3</span></div>, 
+                <div class="fraction-box"><span>4</span><span>7</span></div>, 
+                <div class="fraction-box"><span>6</span><span>11</span></div>, 
+                <div class="fraction-box"><span>8</span><span>15</span></div>, 
+                <div class="fraction-box"><span>10</span><span>19</span></div>, ...<br><br>
+                (1) ?ㅼ쓬???볦씠???섎뒗 ?대뼡 ?섏엯?덇퉴?<br>
+                (2) 20吏?踰덉뿉 ?볦씠???섎뒗 ?대뼡 ?섏엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex3</span>
+                <div class="problem-text">?ㅼ쓬怨?媛숈씠 諛붾몣?뚯쓣 ?섏뼱?볦쓣 ?? 36吏?踰덉뿉 ?볦씠??諛붾몣?뚯? 臾댁뒯 ?됱엯?덇퉴?<br><br>
+                <!-- ?섏젙 諛섏쁺: 寃寃?고씛??諛섎났 ?⑦꽩 -->
+                <div style="margin-top: 10px;">
+                    <svg width="400" height="30" viewBox="0 0 400 30">
+                        <circle cx="15" cy="15" r="10" fill="#333"/>
+                        <circle cx="45" cy="15" r="10" fill="#333"/>
+                        <circle cx="75" cy="15" r="7" fill="none" stroke="#333" stroke-width="4"/>
+                        <circle cx="105" cy="15" r="7" fill="none" stroke="#333" stroke-width="4"/>
+                        <circle cx="135" cy="15" r="7" fill="none" stroke="#333" stroke-width="4"/>
+                        <circle cx="165" cy="15" r="10" fill="#333"/>
+                        <circle cx="195" cy="15" r="10" fill="#333"/>
+                        <circle cx="225" cy="15" r="7" fill="none" stroke="#333" stroke-width="4"/>
+                        <circle cx="255" cy="15" r="7" fill="none" stroke="#333" stroke-width="4"/>
+                        <circle cx="285" cy="15" r="7" fill="none" stroke="#333" stroke-width="4"/>
+                        <text x="325" y="22" font-size="20" font-weight="bold" fill="#333">...</text>
+                    </svg>
+                </div>
+                </div>
+            </div>
+            <div style="flex: 0 0 1px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 26 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [29 ?섏씠吏] 媛쒕뀗 ?좏삎 2 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 2</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        ??묓몴瑜?蹂닿퀬, 臾쇱쓬???듯븯?쒖삤.
+                        <table class="math-table" style="width:100%; max-width:400px; margin:15px auto;">
+                            <tr><td style="background-color:#f4f7fa; width:60px;">??/td><td>5</td><td>7</td><td>9</td><td>11</td><td>13</td><td>...</td></tr>
+                            <tr><td style="background-color:#f4f7fa;">??/td><td>8</td><td>14</td><td>20</td><td>38</td><td>44</td><td>...</td></tr>
+                        </table>
+                        (1) ?녹? ???ъ씠??愿怨꾨? ?앹쑝濡??섑??댁떆??<br>
+                        (2) ?꾩쓽 ??묓몴瑜??꾩꽦?섏떆??
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">?몃줈??湲몄씠瑜?3cm濡??섍퀬, 媛濡쒖쓽 湲몄씠瑜??щ윭 媛吏濡?諛붽씀??留뚮뱺 吏곸궗媛곹삎???섎젅??湲몄씠瑜??뚯븘蹂댁븯?듬땲?? 臾쇱쓬???듯븯?쒖삤.<br><br>
+                (1) ?쒕? ?꾩꽦?섏떆??
+                <table class="math-table" style="width:100%; max-width:400px; margin:10px auto;">
+                    <tr><td style="background-color:#f4f7fa; font-size:10pt;">媛濡?(cm)</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+                    <tr><td style="background-color:#f4f7fa; font-size:10pt;">?섎젅 (cm)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                </table>
+                (2) 媛濡쒖쓽 湲몄씠? ?몃줈??湲몄씠??愿怨꾨? ?앹쑝濡??섑??댁떆??</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">洹쒖튃??李얠븘 鍮?移몄뿉 ?뚮쭪? ?섎? ???ｌ쑝?쒖삤.
+                <table class="math-table" style="width:100%; max-width:400px; margin:10px auto;">
+                    <tr><td style="background-color:#f4f7fa; width:60px;">??/td><td>24</td><td>12</td><td>8</td><td>6</td><td></td><td>3</td></tr>
+                    <tr><td style="background-color:#f4f7fa;">??/td><td>1</td><td>2</td><td></td><td></td><td>8</td><td>24</td></tr>
+                </table></div>
+            </div>
+            <div style="flex: 0 0 1px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 27 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [30 ?섏씠吏] 媛쒕뀗 ?좏삎 3 (?섏젙諛섏쁺: 遺꾩닔 ?섏뿴) -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 3</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        ?ㅼ쓬 ?섎뱾? ?쇱젙??洹쒖튃???곕씪 ?섏뼱?볦? 寃껋엯?덈떎. 15踰덉㎏ ?섎뒗 ?쇰쭏?낅땲源?<br>
+                        <!-- ?섏젙 諛섏쁺: 遺꾩닔 ?뺥깭 ?쒓린 -->
+                        <div style="margin: 15px 0 10px 10px; padding: 15px; border: 1.5px solid #333; display: inline-block; background: #fff;">
+                            <div class="fraction-box"><span>1</span><span>2</span></div> ,
+                            <div class="fraction-box"><span>3</span><span>6</span></div> ,
+                            <div class="fraction-box"><span>5</span><span>10</span></div> ,
+                            <div class="fraction-box"><span>7</span><span>14</span></div> , ...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">?ㅼ쓬? ?욎쓽 ?섏뿉 ?묎컳? ?섎? ?뷀븯??留뚮뱺 ?섏뿴?낅땲?? ??? 30踰덉㎏ ?섎씪怨????? ??뒗 ?쇰쭏?낅땲源?<br><br>
+                ?? 9, ?? ?? ?? 37, ?? ??/div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">3遺???쒖옉?섏뿬 6???곗뼱 ?몃㈃ 3, 9, 15, ?? 735媛 ?⑸땲?? 735??紐?踰덉㎏ ?섏엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex3</span>
+                <div class="problem-text">?ㅼ쓬 ?섎뱾? ?쇱젙??洹쒖튃???곕씪 ?섏뼱?볦? 寃껋엯?덈떎. 20踰덉㎏ ?섎뒗 ?쇰쭏?낅땲源?<br><br>
+                3<div class="fraction-box"><span>1</span><span>2</span></div>, 
+                1<div class="fraction-box"><span>4</span><span>7</span></div>, 
+                1<div class="fraction-box"><span>1</span><span>4</span></div>, 
+                1<div class="fraction-box"><span>2</span><span>17</span></div>, 
+                1<div class="fraction-box"><span>1</span><span>22</span></div>, 1, ...</div>
+            </div>
+            <div style="flex: 0 0 1px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 28 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [31 ?섏씠吏] 媛쒕뀗 ?좏삎 4 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title">媛쒕뀗 ?좏삎 4</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="concept-box">
+                <div class="problem-box">
+                    <span class="badge-type" style="background-color: #d97706;">媛쒕뀗 臾몄젣</span>
+                    <div class="problem-text" style="font-weight: 700;">
+                        ?ㅼ쓬? ?쇱젙??洹쒖튃???곕씪 ?섎? ?섏뼱?볦? 寃껋엯?덈떎. 1379??紐?踰덉㎏ ?섏씤吏 援ы븯?쒖삤.<br><br>
+                        1, 2, 4, 7, 11, 16, 22, 29, 37, ...
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex1</span>
+                <div class="problem-text">
+                    ?꾨옒? 媛숈씠 ?섎? ?섏뼱?볦븯???? 30踰덉㎏ 以꾩쓽 媛??媛?대뜲 ?섎? 援ы븯?쒖삤.<br>
+                    <div class="pyramid-container">
+                        <div class="pyramid-row"><span class="pyramid-label">1踰덉㎏ 以?:</span><span class="pyramid-content">1</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">2踰덉㎏ 以?:</span><span class="pyramid-content">2 &nbsp;3 &nbsp;4</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">3踰덉㎏ 以?:</span><span class="pyramid-content">5 &nbsp;6 &nbsp;7 &nbsp;8 &nbsp;9</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">4踰덉㎏ 以?:</span><span class="pyramid-content">10 11 12 13 14 15 16</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">5踰덉㎏ 以?:</span><span class="pyramid-content">17 18 19 20 21 22 23 24 25</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex2</span>
+                <div class="problem-text">?ㅼ쓬? ?쇱젙??洹쒖튃???곕씪 ?섎? ?섏뼱?볦? 寃껋엯?덈떎. ??뿉 ?뚮쭪? ?섎? 援ы븯?쒖삤.<br><br>
+                3, 5, 14, 30, 53, ?? ?? ?? ?? ??/div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-ex">ex3</span>
+                <div class="problem-text">?ㅼ쓬? ?쇱젙??洹쒖튃???곕씪 ?섎? ?섏뼱?볦? 寃껋엯?덈떎. 925??紐?踰덉㎏ ?섏씤吏 援ы븯?쒖삤.<br><br>
+                1, 5, 13, 25, 41, 61, 85, 113, ...</div>
+            </div>
+            <div style="flex: 0 0 1px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 29 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [32 ?섏씠吏] ?꾩닔 ?좏삎 1, 2 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box" style="display: flex; flex-direction: column;">
+                <div style="display: flex; align-items: flex-start; gap: 12px; width: 100%;">
+                    <span class="badge-type">?좏삎 1</span>
+                    <div class="problem-text">?꾨옒? 媛숈? ?꾪삎???⑦꽩??怨꾩냽 ?댁뼱吏묐땲?? 1233踰덉㎏ 洹몃┝? ?대뼡 洹몃┝?낅땲源?</div>
+                </div>
+                <!-- ?낅줈???ъ쭊 100% 諛섏쁺: ?? ?뺤궪媛곹삎, ?뺤궗媛곹삎, ?댁쨷 怨쇰뀅??諛섎났 -->
+                <div style="margin-left: 65px; margin-top: 10px;">
+                    <svg width="400" height="30" viewBox="0 0 400 30">
+                       <circle cx="15" cy="15" r="10" fill="#333"/>
+                       <polygon points="45,5 55,25 35,25" fill="#333"/>
+                       <rect x="65" y="5" width="20" height="20" fill="#333"/>
+                       <circle cx="105" cy="15" r="10" fill="#333"/><circle cx="105" cy="15" r="6" fill="#fff"/><circle cx="105" cy="15" r="3" fill="#333"/>
+                       <circle cx="135" cy="15" r="10" fill="#333"/>
+                       <polygon points="165,5 175,25 155,25" fill="#333"/>
+                       <rect x="185" y="5" width="20" height="20" fill="#333"/>
+                       <circle cx="225" cy="15" r="10" fill="#333"/><circle cx="225" cy="15" r="6" fill="#fff"/><circle cx="225" cy="15" r="3" fill="#333"/>
+                       <circle cx="255" cy="15" r="10" fill="#333"/>
+                       <polygon points="285,5 295,25 275,25" fill="#333"/>
+                       <rect x="305" y="5" width="20" height="20" fill="#333"/>
+                       <circle cx="345" cy="15" r="10" fill="#333"/><circle cx="345" cy="15" r="6" fill="#fff"/><circle cx="345" cy="15" r="3" fill="#333"/>
+                       <text x="375" y="22" font-size="20" font-weight="bold" fill="#333">...</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="problem-box" style="display: flex; flex-direction: column;">
+                <div style="display: flex; align-items: flex-start; gap: 12px; width: 100%;">
+                    <span class="badge-type">?좏삎 2</span>
+                    <div class="problem-text">?꾨옒? 媛숈? 臾몄뼇??諛곗뿴?먯꽌 323踰덉㎏ 洹몃┝? ?대뼡 洹몃┝?낅땲源?</div>
+                </div>
+                <!-- ?낅줈???ъ쭊 100% 諛섏쁺: ?곗썝, ?곗썝, 寃??? ?곗궗媛곹삎, 寃??ш컖??諛섎났 -->
+                <div style="margin-left: 65px; margin-top: 10px;">
+                    <svg width="500" height="30" viewBox="0 0 500 30">
+                       <circle cx="15" cy="15" r="10" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                       <circle cx="45" cy="15" r="10" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                       <circle cx="75" cy="15" r="10" fill="#333"/>
+                       <rect x="95" y="5" width="20" height="20" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                       <rect x="125" y="5" width="20" height="20" fill="#333"/>
+                       <circle cx="165" cy="15" r="10" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                       <circle cx="195" cy="15" r="10" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                       <circle cx="225" cy="15" r="10" fill="#333"/>
+                       <rect x="245" y="5" width="20" height="20" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                       <rect x="275" y="5" width="20" height="20" fill="#333"/>
+                       <circle cx="315" cy="15" r="10" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                       <circle cx="345" cy="15" r="10" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                       <circle cx="375" cy="15" r="10" fill="#333"/>
+                       <rect x="395" y="5" width="20" height="20" fill="#fff" stroke="#333" stroke-width="1.5"/>
+                       <rect x="425" y="5" width="20" height="20" fill="#333"/>
+                       <text x="455" y="22" font-size="20" font-weight="bold" fill="#333">...</text>
+                    </svg>
+                </div>
+            </div>
+            <div style="flex: 0 0 1px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 30 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [33 ?섏씠吏] ?꾩닔 ?좏삎 3, 4 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 3</span>
+                <div class="problem-text">洹몃┝怨?媛숈씠 洹쒖튃???곕씪 諛붾몣?뚯쓣 ?뺤궗媛곹삎 紐⑥뼇?쇰줈 ?섏뼱?볦븯?듬땲?? 媛?대뜲???곗깋 諛붾몣?뚯씠 81媛??볦씤 紐⑥뼇?먯꽌 ?섎젅???볦씠??寃???諛붾몣?뚯쓽 ?섎뒗 紐?媛쒖엯?덇퉴?<br>
+                <div style="display: flex; justify-content: center; width: 100%; margin-top: 15px;">
+                    <svg width="450" height="150" viewBox="0 0 450 150">
+                        <!-- 泥レ㎏ 踰?(3x3) -->
+                        <g transform="translate(20, 40)">
+                            <rect x="0" y="0" width="60" height="60" fill="none" stroke="#333" stroke-width="1.5"/>
+                            <line x1="20" y1="0" x2="20" y2="60" stroke="#333" stroke-width="1.5"/>
+                            <line x1="40" y1="0" x2="40" y2="60" stroke="#333" stroke-width="1.5"/>
+                            <line x1="0" y1="20" x2="60" y2="20" stroke="#333" stroke-width="1.5"/>
+                            <line x1="0" y1="40" x2="60" y2="40" stroke="#333" stroke-width="1.5"/>
+                            <circle cx="10" cy="10" r="5" fill="#333"/> <circle cx="30" cy="10" r="5" fill="#333"/> <circle cx="50" cy="10" r="5" fill="#333"/>
+                            <circle cx="10" cy="30" r="5" fill="#333"/> <circle cx="30" cy="30" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="50" cy="30" r="5" fill="#333"/>
+                            <circle cx="10" cy="50" r="5" fill="#333"/> <circle cx="30" cy="50" r="5" fill="#333"/> <circle cx="50" cy="50" r="5" fill="#333"/>
+                            <text x="30" y="85" text-anchor="middle" font-weight="800" font-size="13" fill="#111">泥レ㎏ 踰?/text>
+                        </g>
+                        <!-- ?섏㎏ 踰?(4x4) -->
+                        <g transform="translate(130, 20)">
+                            <rect x="0" y="0" width="80" height="80" fill="none" stroke="#333" stroke-width="1.5"/>
+                            <line x1="20" y1="0" x2="20" y2="80" stroke="#333" stroke-width="1.5"/>
+                            <line x1="40" y1="0" x2="40" y2="80" stroke="#333" stroke-width="1.5"/>
+                            <line x1="60" y1="0" x2="60" y2="80" stroke="#333" stroke-width="1.5"/>
+                            <line x1="0" y1="20" x2="80" y2="20" stroke="#333" stroke-width="1.5"/>
+                            <line x1="0" y1="40" x2="80" y2="40" stroke="#333" stroke-width="1.5"/>
+                            <line x1="0" y1="60" x2="80" y2="60" stroke="#333" stroke-width="1.5"/>
+                            <circle cx="10" cy="10" r="5" fill="#333"/> <circle cx="30" cy="10" r="5" fill="#333"/> <circle cx="50" cy="10" r="5" fill="#333"/> <circle cx="70" cy="10" r="5" fill="#333"/>
+                            <circle cx="10" cy="30" r="5" fill="#333"/> <circle cx="30" cy="30" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="50" cy="30" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="70" cy="30" r="5" fill="#333"/>
+                            <circle cx="10" cy="50" r="5" fill="#333"/> <circle cx="30" cy="50" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="50" cy="50" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="70" cy="50" r="5" fill="#333"/>
+                            <circle cx="10" cy="70" r="5" fill="#333"/> <circle cx="30" cy="70" r="5" fill="#333"/> <circle cx="50" cy="70" r="5" fill="#333"/> <circle cx="70" cy="70" r="5" fill="#333"/>
+                            <text x="40" y="105" text-anchor="middle" font-weight="800" font-size="13" fill="#111">?섏㎏ 踰?/text>
+                        </g>
+                        <!-- ?뗭㎏ 踰?(5x5) -->
+                        <g transform="translate(260, 0)">
+                            <rect x="0" y="0" width="100" height="100" fill="none" stroke="#333" stroke-width="1.5"/>
+                            <line x1="20" y1="0" x2="20" y2="100" stroke="#333" stroke-width="1.5"/>
+                            <line x1="40" y1="0" x2="40" y2="100" stroke="#333" stroke-width="1.5"/>
+                            <line x1="60" y1="0" x2="60" y2="100" stroke="#333" stroke-width="1.5"/>
+                            <line x1="80" y1="0" x2="80" y2="100" stroke="#333" stroke-width="1.5"/>
+                            <line x1="0" y1="20" x2="100" y2="20" stroke="#333" stroke-width="1.5"/>
+                            <line x1="0" y1="40" x2="100" y2="40" stroke="#333" stroke-width="1.5"/>
+                            <line x1="0" y1="60" x2="100" y2="60" stroke="#333" stroke-width="1.5"/>
+                            <line x1="0" y1="80" x2="100" y2="80" stroke="#333" stroke-width="1.5"/>
+                            <circle cx="10" cy="10" r="5" fill="#333"/> <circle cx="30" cy="10" r="5" fill="#333"/> <circle cx="50" cy="10" r="5" fill="#333"/> <circle cx="70" cy="10" r="5" fill="#333"/> <circle cx="90" cy="10" r="5" fill="#333"/>
+                            <circle cx="10" cy="30" r="5" fill="#333"/> <circle cx="30" cy="30" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="50" cy="30" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="70" cy="30" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="90" cy="30" r="5" fill="#333"/>
+                            <circle cx="10" cy="50" r="5" fill="#333"/> <circle cx="30" cy="50" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="50" cy="50" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="70" cy="50" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="90" cy="50" r="5" fill="#333"/>
+                            <circle cx="10" cy="70" r="5" fill="#333"/> <circle cx="30" cy="70" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="50" cy="70" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="70" cy="70" r="5" fill="#fff" stroke="#333" stroke-width="1.5"/> <circle cx="90" cy="70" r="5" fill="#333"/>
+                            <circle cx="10" cy="90" r="5" fill="#333"/> <circle cx="30" cy="90" r="5" fill="#333"/> <circle cx="50" cy="90" r="5" fill="#333"/> <circle cx="70" cy="90" r="5" fill="#333"/> <circle cx="90" cy="90" r="5" fill="#333"/>
+                            <text x="50" y="125" text-anchor="middle" font-weight="800" font-size="13" fill="#111">?뗭㎏ 踰?/text>
+                        </g>
+                        <text x="400" y="60" font-size="24" font-weight="900" fill="#111">...</text>
+                    </svg>
+                </div>
+                </div>
+            </div>
+
+            <div class="problem-box" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1; padding-right: 15px;">
+                    <span class="badge-type">?좏삎 4</span>
+                    <div class="problem-text">洹몃┝怨?媛숈씠 ?ㅺ컖?뺤쓽 瑗???먯뿉 0?먯꽌 300源뚯????섍? ?쒖꽌?濡??뚯뿬???덉뒿?덈떎. 203? ?대뒓 瑗???먯뿉 ?꾩튂?섎ŉ 洹?瑗???먯뿉??紐뉗㎏ 踰덉뿉 ?덉뒿?덇퉴?</div>
+                </div>
+                <div>
+                    <svg width="200" height="230" viewBox="0 -10 200 230">
+                        <polygon points="100,50 160,90 140,160 60,160 40,90" fill="#fdf5e6" stroke="#16417C" stroke-width="2"/>
+                        <text x="100" y="65" text-anchor="middle" font-size="12" font-weight="bold">??/text>
+                        <text x="50" y="95" text-anchor="middle" font-size="12" font-weight="bold">??/text>
+                        <text x="70" y="150" text-anchor="middle" font-size="12" font-weight="bold">??/text>
+                        <text x="130" y="150" text-anchor="middle" font-size="12" font-weight="bold">??/text>
+                        <text x="150" y="95" text-anchor="middle" font-size="12" font-weight="bold">??/text>
+                        <text x="100" y="40" text-anchor="middle" font-size="11">0</text><text x="100" y="28" text-anchor="middle" font-size="11">5</text><text x="100" y="16" text-anchor="middle" font-size="11">10</text><text x="100" y="5" text-anchor="middle" font-size="12">??/text>
+                        <text x="35" y="80" text-anchor="end" font-size="11">1</text><text x="25" y="70" text-anchor="end" font-size="11">6</text><text x="15" y="60" text-anchor="end" font-size="11">11</text><text x="5" y="50" text-anchor="end" font-size="12">??/text>
+                        <text x="50" y="175" text-anchor="end" font-size="11">2</text><text x="40" y="185" text-anchor="end" font-size="11">7</text><text x="30" y="195" text-anchor="end" font-size="11">12</text><text x="20" y="205" text-anchor="end" font-size="12">??/text>
+                        <text x="150" y="175" text-anchor="start" font-size="11">3</text><text x="160" y="185" text-anchor="start" font-size="11">8</text><text x="170" y="195" text-anchor="start" font-size="11">13</text><text x="180" y="205" text-anchor="start" font-size="12">??/text>
+                        <text x="165" y="80" text-anchor="start" font-size="11">4</text><text x="175" y="70" text-anchor="start" font-size="11">9</text><text x="185" y="60" text-anchor="start" font-size="11">14</text><text x="195" y="50" text-anchor="start" font-size="12">??/text>
+                    </svg>
+                </div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 31 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [34 ?섏씠吏] ?꾩닔 ?좏삎 5, 6, 7 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 5</span>
+                <div class="problem-text">2, 6, 10, 14, 18, ...怨?媛숈씠 洹쒖튃?곸쑝濡??섍? ?볦뿬 ?덉뒿?덈떎. 50吏?踰덉뿉 ?ㅻ뒗 ?섎뒗 ?대뼡 ?섏엯?덇퉴?</div>
+            </div>
+
+            <div class="problem-box" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1; padding-right: 15px;">
+                    <span class="badge-type">?좏삎 6</span>
+                    <div class="problem-text">?묒? ?뺤궪媛곹삎?먮뒗 媛곴컖 ?먯씠 3媛쒖뵫 李랁? ?덉뒿?덈떎. ?묒? ?뺤궪媛곹삎??遺숈뿬 ???뺤궪媛곹삎??留뚮뱺 ???먯쓽 媛쒖닔瑜??몄뼱 蹂대땲 紐⑤몢 192媛쒖??듬땲?? ?묒? ?뺤궪媛곹삎??紐?吏?以꾧퉴吏 遺숈뿬 留뚮뱺 寃껋엯?덇퉴?</div>
+                </div>
+                <div>
+                    <svg width="250" height="200" viewBox="0 0 250 200">
+                        <polygon points="125,20 35,170 215,170" fill="#fdf5e6" stroke="#333" stroke-width="1.5"/>
+                        <!-- 媛濡쒖꽑 -->
+                        <line x1="95" y1="70" x2="155" y2="70" stroke="#333" stroke-width="1.5"/>
+                        <line x1="65" y1="120" x2="185" y2="120" stroke="#333" stroke-width="1.5"/>
+                        <!-- ?媛곸꽑 \ -->
+                        <line x1="95" y1="70" x2="155" y2="170" stroke="#333" stroke-width="1.5"/>
+                        <line x1="65" y1="120" x2="95" y2="170" stroke="#333" stroke-width="1.5"/>
+                        <!-- ?媛곸꽑 / -->
+                        <line x1="155" y1="70" x2="95" y2="170" stroke="#333" stroke-width="1.5"/>
+                        <line x1="185" y1="120" x2="155" y2="170" stroke="#333" stroke-width="1.5"/>
+                        
+                        <g fill="#333">
+                            <!-- 泥レ㎏ 以?(1媛? -->
+                            <!-- ?쇨컖??1 (?뺣갑?? -->
+                            <circle cx="125" cy="42" r="2.5"/><circle cx="115" cy="58" r="2.5"/><circle cx="135" cy="58" r="2.5"/>
+                            
+                            <!-- ?섏㎏ 以?(3媛? -->
+                            <!-- ?쇨컖??2 (?뺣갑?? -->
+                            <circle cx="95" cy="92" r="2.5"/><circle cx="85" cy="108" r="2.5"/><circle cx="105" cy="108" r="2.5"/>
+                            <!-- ?쇨컖??3 (??갑?? -->
+                            <circle cx="115" cy="82" r="2.5"/><circle cx="135" cy="82" r="2.5"/><circle cx="125" cy="98" r="2.5"/>
+                            <!-- ?쇨컖??4 (?뺣갑?? -->
+                            <circle cx="155" cy="92" r="2.5"/><circle cx="145" cy="108" r="2.5"/><circle cx="165" cy="108" r="2.5"/>
+
+                            <!-- ?뗭㎏ 以?(5媛? -->
+                            <!-- ?쇨컖??5 (?뺣갑?? -->
+                            <circle cx="65" cy="142" r="2.5"/><circle cx="55" cy="158" r="2.5"/><circle cx="75" cy="158" r="2.5"/>
+                            <!-- ?쇨컖??6 (??갑?? -->
+                            <circle cx="85" cy="132" r="2.5"/><circle cx="105" cy="132" r="2.5"/><circle cx="95" cy="148" r="2.5"/>
+                            <!-- ?쇨컖??7 (?뺣갑?? -->
+                            <circle cx="125" cy="142" r="2.5"/><circle cx="115" cy="158" r="2.5"/><circle cx="135" cy="158" r="2.5"/>
+                            <!-- ?쇨컖??8 (??갑?? -->
+                            <circle cx="145" cy="132" r="2.5"/><circle cx="165" cy="132" r="2.5"/><circle cx="155" cy="148" r="2.5"/>
+                            <!-- ?쇨컖??9 (?뺣갑?? -->
+                            <circle cx="185" cy="142" r="2.5"/><circle cx="175" cy="158" r="2.5"/><circle cx="195" cy="158" r="2.5"/>
+                        </g>
+
+                        <!-- ?붿궡??諛??띿뒪??-->
+                        <text x="235" y="45" font-size="12">??泥レ㎏ 以?/text>
+                        <text x="235" y="95" font-size="12">???섏㎏ 以?/text>
+                        <text x="235" y="145" font-size="12">???뗭㎏ 以?/text>
+                        <text x="125" y="195" font-size="16" font-weight="bold">??/text>
+                        <text x="235" y="175" font-size="16" font-weight="bold">??/text>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="problem-box" style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="flex: 1; padding-right: 15px;">
+                    <span class="badge-type">?좏삎 7</span>
+                    <div class="problem-text">?깅깷媛쒕퉬瑜??ъ슜?댁꽌 ?ㅻⅨ履쎄낵 媛숈씠 ?뺤궗媛곹삎??怨꾩냽 留뚮뱾?ㅺ퀬 ?⑸땲?? 臾쇱쓬???듯븯?쒖삤.<br><br>
+                    (1) ?깅깷媛쒕퉬 73媛쒕줈 ?뺤궗媛곹삎??紐?媛?留뚮뱾 ???덉뒿?덇퉴?<br>
+                    (2) ?뺤궗媛곹삎 36媛쒕? 留뚮뱾?ㅻ㈃ ?깅깷媛쒕퉬??紐?媛쒓? ?꾩슂?⑸땲源?</div>
+                </div>
+                <div>
+                    <!-- 3踰덉㎏ ?대?吏 ????뺣? ?곸슜 -->
+                    <svg width="250" height="80" viewBox="0 0 250 80">
+                        <g transform="translate(10, 10)" stroke="#999" stroke-width="4">
+                            <line x1="0" y1="0" x2="180" y2="0"/><line x1="0" y1="60" x2="180" y2="60"/>
+                            <line x1="0" y1="0" x2="0" y2="60"/><line x1="60" y1="0" x2="60" y2="60"/><line x1="120" y1="0" x2="120" y2="60"/><line x1="180" y1="0" x2="180" y2="60"/>
+                        </g>
+                        <g transform="translate(10, 10)" fill="#d97706">
+                            <circle cx="0" cy="0" r="4"/><circle cx="60" cy="0" r="4"/><circle cx="120" cy="0" r="4"/><circle cx="180" cy="0" r="4"/>
+                            <circle cx="0" cy="60" r="4"/><circle cx="60" cy="60" r="4"/><circle cx="120" cy="60" r="4"/><circle cx="180" cy="60" r="4"/>
+                        </g>
+                        <text x="210" y="45" font-size="20">...</text>
+                    </svg>
+                </div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 32 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [35 ?섏씠吏] ?꾩닔 ?좏삎 8, 9 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 8</span>
+                <div class="problem-text">?쇱젙??洹쒖튃???곕씪 ?섎? ?섏뿴??寃껋엯?덈떎. 鍮?移몄뿉 ?뚮쭪? ?섎? ???ｌ쑝?쒖삤.<br><br>
+                5, 6, 11, 17, 28, [ &nbsp;&nbsp;&nbsp;&nbsp; ], [ &nbsp;&nbsp;&nbsp;&nbsp; ], 118, ...</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 9</span>
+                <div class="problem-text">?ㅼ쓬怨?媛숈씠 吏곸궗媛곹삎 紐⑥뼇?쇰줈 諛붾몣?뚯씠 ?볦뿬???덉뒿?덈떎. 臾쇱쓬???듯븯?쒖삤.<br><br>
+                (1) 媛濡???蹂???볦? ?곗깋 諛붾몣?뚯씠 10媛쒖씪 ?? 寃???諛붾몣?뚯? 紐⑤몢 紐?媛쒖엯?덇퉴?<br>
+                (2) ?섎젅???볦씤 ?곗깋 諛붾몣?뚯씠 紐⑤몢 50媛쒖씪 ?? 寃???諛붾몣?뚯? 紐⑤몢 紐?媛쒖엯?덇퉴?</div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 33 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [36 ?섏씠吏] ?꾩닔 ?좏삎 10, 11, 12 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 10</span>
+                <div class="problem-text">?꾨옒? 媛숈씠 ?섎? ?섏뼱?볦븯???? 15踰덉㎏ 以꾩쓽 媛???ㅻⅨ履쎌뿉 ?덈뒗 ?섎? 援ы븯?쒖삤.<br>
+                    <div class="pyramid-container">
+                        <div class="pyramid-row"><span class="pyramid-label">1踰덉㎏ 以?:</span><span class="pyramid-content">1</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">2踰덉㎏ 以?:</span><span class="pyramid-content">3 &nbsp;5</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">3踰덉㎏ 以?:</span><span class="pyramid-content">7 &nbsp;9 11</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">4踰덉㎏ 以?:</span><span class="pyramid-content">13 15 17 19</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">5踰덉㎏ 以?:</span><span class="pyramid-content">21 23 25 27 29</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 11</span>
+                <div class="problem-text">?ㅼ쓬? ?쇱젙??洹쒖튃???곕씪 遺꾩닔瑜??섏뼱?볦? 寃껋엯?덈떎. 20踰덉㎏ 遺꾩닔瑜?援ы븯?쒖삤.<br><br>
+                <span class="fraction-box"><span>1</span><span>2</span></span>, 
+                <span class="fraction-box"><span>3</span><span>5</span></span>, 
+                <span class="fraction-box"><span>5</span><span>9</span></span>, 
+                <span class="fraction-box"><span>7</span><span>14</span></span>, 
+                <span class="fraction-box"><span>9</span><span>20</span></span>, 
+                <span class="fraction-box"><span>11</span><span>27</span></span>, ...</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 12</span>
+                <div class="problem-text">?꾨옒? 媛숈씠 ?섎? ?섏뼱?볦븯???? 15踰덉㎏ 以꾩쓽 媛?대뜲???덈뒗 ?섎? 援ы븯?쒖삤.<br>
+                    <div class="pyramid-container">
+                        <div class="pyramid-row"><span class="pyramid-label">1踰덉㎏ 以?:</span><span class="pyramid-content">1</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">2踰덉㎏ 以?:</span><span class="pyramid-content">3 &nbsp;5</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">3踰덉㎏ 以?:</span><span class="pyramid-content">7 &nbsp;9 11</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">4踰덉㎏ 以?:</span><span class="pyramid-content">13 15 17 19</span></div>
+                        <div class="pyramid-row"><span class="pyramid-label">5踰덉㎏ 以?:</span><span class="pyramid-content">21 23 25 27 29</span></div>
+                    </div>
+                </div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 34 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [37 ?섏씠吏] ?꾩닔 ?좏삎 13, 14, 15 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 13</span>
+                <div class="problem-text">?ㅼ쓬? ?쇱젙??洹쒖튃???곕씪 遺꾩닔瑜??섏뼱?볦? 寃껋엯?덈떎. 泥섏쓬?쇰줈 <span class="fraction-box"><span>1</span><span>5</span></span>蹂대떎 ?묒븘吏??寃쎌슦??紐?踰덉㎏?낅땲源?<br><br>
+                <span class="fraction-box"><span>1</span><span>2</span></span>, 
+                <span class="fraction-box"><span>3</span><span>5</span></span>, 
+                <span class="fraction-box"><span>5</span><span>9</span></span>, 
+                <span class="fraction-box"><span>7</span><span>14</span></span>, 
+                <span class="fraction-box"><span>9</span><span>20</span></span>, 
+                <span class="fraction-box"><span>11</span><span>27</span></span>, ...</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 14</span>
+                <div class="problem-text">?꾨옒 洹몃┝怨?媛숈씠 ?깅깷媛쒕퉬濡??몃줈媛 2移몄씤 吏곸궗媛곹삎??留뚮뱾?ㅺ퀬 ?쒕떎. ?깅깷媛쒕퉬媛 紐⑤몢 200媛쒕퓧???? 媛?ν븳????吏곸궗媛곹삎??留뚮뱺?ㅻ㈃, 媛濡쒕줈 ?볦씪 ?깅깷媛쒕퉬??理쒕? 紐?媛쒖씠寃좊뒗媛?<br>
+                    <div style="display: flex; align-items: center; justify-content: center; width: 100%; margin-top: 15px;">
+                        <svg width="530" height="120" viewBox="0 0 530 120">
+                    <svg width="530" height="120" viewBox="0 0 530 120">
+                        <g transform="translate(10, 20)" stroke="#16417C" stroke-width="2">
+                            <rect x="0" y="0" width="30" height="60" fill="none" />
+                            <line x1="0" y1="30" x2="30" y2="30" />
+                            <g fill="#d97706" stroke="none">
+                                <circle cx="0" cy="0" r="3.5"/><circle cx="30" cy="0" r="3.5"/>
+                                <circle cx="0" cy="30" r="3.5"/><circle cx="30" cy="30" r="3.5"/>
+                                <circle cx="0" cy="60" r="3.5"/><circle cx="30" cy="60" r="3.5"/>
+                            </g>
+                            <text x="15" y="85" text-anchor="middle" font-size="12" font-weight="bold" fill="#000" stroke="none">1?④퀎</text>
+                        </g>
+                        <path d="M 55 50 L 75 50 M 70 45 L 75 50 L 70 55" stroke="#16417C" stroke-width="3" fill="none" />
+                        
+                        <g transform="translate(90, 20)" stroke="#16417C" stroke-width="2">
+                            <rect x="0" y="0" width="60" height="60" fill="none" />
+                            <line x1="0" y1="30" x2="60" y2="30" />
+                            <line x1="30" y1="0" x2="30" y2="60" />
+                            <g fill="#d97706" stroke="none">
+                                <circle cx="0" cy="0" r="3.5"/><circle cx="30" cy="0" r="3.5"/><circle cx="60" cy="0" r="3.5"/>
+                                <circle cx="0" cy="30" r="3.5"/><circle cx="30" cy="30" r="3.5"/><circle cx="60" cy="30" r="3.5"/>
+                                <circle cx="0" cy="60" r="3.5"/><circle cx="30" cy="60" r="3.5"/><circle cx="60" cy="60" r="3.5"/>
+                            </g>
+                            <text x="30" y="85" text-anchor="middle" font-size="12" font-weight="bold" fill="#000" stroke="none">2?④퀎</text>
+                        </g>
+                        <path d="M 165 50 L 185 50 M 180 45 L 185 50 L 180 55" stroke="#16417C" stroke-width="3" fill="none" />
+
+                        <g transform="translate(200, 20)" stroke="#16417C" stroke-width="2">
+                            <rect x="0" y="0" width="90" height="60" fill="none" />
+                            <line x1="0" y1="30" x2="90" y2="30" />
+                            <line x1="30" y1="0" x2="30" y2="60" />
+                            <line x1="60" y1="0" x2="60" y2="60" />
+                            <g fill="#d97706" stroke="none">
+                                <circle cx="0" cy="0" r="3.5"/><circle cx="30" cy="0" r="3.5"/><circle cx="60" cy="0" r="3.5"/><circle cx="90" cy="0" r="3.5"/>
+                                <circle cx="0" cy="30" r="3.5"/><circle cx="30" cy="30" r="3.5"/><circle cx="60" cy="30" r="3.5"/><circle cx="90" cy="30" r="3.5"/>
+                                <circle cx="0" cy="60" r="3.5"/><circle cx="30" cy="60" r="3.5"/><circle cx="60" cy="60" r="3.5"/><circle cx="90" cy="60" r="3.5"/>
+                            </g>
+                            <text x="45" y="85" text-anchor="middle" font-size="12" font-weight="bold" fill="#000" stroke="none">3?④퀎</text>
+                        </g>
+                        <path d="M 305 50 L 325 50 M 320 45 L 325 50 L 320 55" stroke="#16417C" stroke-width="3" fill="none" />
+
+                        <g transform="translate(340, 20)" stroke="#16417C" stroke-width="2">
+                            <rect x="0" y="0" width="120" height="60" fill="none" />
+                            <line x1="0" y1="30" x2="120" y2="30" />
+                            <line x1="30" y1="0" x2="30" y2="60" />
+                            <line x1="60" y1="0" x2="60" y2="60" />
+                            <line x1="90" y1="0" x2="90" y2="60" />
+                            <g fill="#d97706" stroke="none">
+                                <circle cx="0" cy="0" r="3.5"/><circle cx="30" cy="0" r="3.5"/><circle cx="60" cy="0" r="3.5"/><circle cx="90" cy="0" r="3.5"/><circle cx="120" cy="0" r="3.5"/>
+                                <circle cx="0" cy="30" r="3.5"/><circle cx="30" cy="30" r="3.5"/><circle cx="60" cy="30" r="3.5"/><circle cx="90" cy="30" r="3.5"/><circle cx="120" cy="30" r="3.5"/>
+                                <circle cx="0" cy="60" r="3.5"/><circle cx="30" cy="60" r="3.5"/><circle cx="60" cy="60" r="3.5"/><circle cx="90" cy="60" r="3.5"/><circle cx="120" cy="60" r="3.5"/>
+                            </g>
+                            <text x="60" y="85" text-anchor="middle" font-size="12" font-weight="bold" fill="#000" stroke="none">4?④퀎</text>
+                        </g>
+                        <path d="M 475 50 L 495 50 M 490 45 L 495 50 L 490 55" stroke="#16417C" stroke-width="3" fill="none" />
+                        <text x="515" y="56" font-size="16" font-weight="900" fill="#000">......</text>
+                    </svg>
+                    <div style="font-size: 11.5pt; font-weight: 800; line-height: 1.4; margin-left: 5px; color: #111;">
+                        紐?媛?br>??寃?br>??媛?
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 15</span>
+                <div class="problem-text">?ㅼ쓬???섑??섎뒗 遺꾩닔?ㅼ? 遺꾨え??3???묒븘吏怨?遺꾩옄??3??而ㅼ???遺꾩닔?ㅼ씠?? 泥섏쓬?쇰줈 媛遺꾩닔媛 ?섑??섎뒗 寃껋? 紐?踰덉㎏ 遺꾩닔?몄? 援ы븯?щ씪.<br><br>
+                <span class="fraction-box"><span>1</span><span>1000</span></span>, 
+                <span class="fraction-box"><span>4</span><span>997</span></span>, 
+                <span class="fraction-box"><span>7</span><span>994</span></span>, 
+                <span class="fraction-box"><span>10</span><span>991</span></span>, ...</div>
+            </div>
+            <div style="flex: 0 0 1px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 35 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [38 ?섏씠吏] ?꾩닔 ?좏삎 16, 17, 18 -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 16</span>
+                <div class="problem-text">?ㅼ쓬 遺꾩닔?ㅼ? ?대뼡 洹쒖튃???곕씪 ?섏뼱?볦? 寃껋씠?? ??洹쒖튃???뚮쭪?꾨줉 30踰덉㎏ 遺꾩닔瑜?援ы븯?щ씪.<br><br>
+                <span class="fraction-box"><span>2</span><span>3</span></span>, 
+                1<span class="fraction-box"><span>1</span><span>7</span></span>, 
+                1<span class="fraction-box"><span>3</span><span>11</span></span>, 
+                1<span class="fraction-box"><span>1</span><span>3</span></span>, 
+                1<span class="fraction-box"><span>7</span><span>19</span></span>, ...</div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 17</span>
+                <div class="problem-text">?꾨옒 洹몃┝怨?媛숈씠 ?섏쭅???꾩뿉 30怨?66 ?ъ씠瑜?6?깅텇??媛꾧꺽?쇰줈 ?덇툑??洹몃젮???덈떎. 270? 紐?踰덉씠 ?섍쿋?붿? 援ы븯?щ씪.<br>
+                    <div style="display: flex; justify-content: center; width: 100%; margin-top: 15px;">
+                        <svg width="450" height="90" viewBox="0 0 500 90">
+                            <line x1="50" y1="50" x2="450" y2="50" stroke="#333" stroke-width="3"/>
+                            <g font-size="22" font-weight="900" fill="#16417C">
+                                <text x="50" y="30" text-anchor="middle">??/text>
+                                <text x="116" y="30" text-anchor="middle">??/text>
+                                <text x="183" y="30" text-anchor="middle">??/text>
+                                <text x="250" y="30" text-anchor="middle">??/text>
+                                <text x="316" y="30" text-anchor="middle">??/text>
+                                <text x="383" y="30" text-anchor="middle">??/text>
+                                <text x="450" y="30" text-anchor="middle">??/text>
+                            </g>
+                            <g font-size="18" font-weight="900" fill="#000">
+                                <text x="50" y="80" text-anchor="middle">30</text>
+                                <text x="450" y="80" text-anchor="middle">66</text>
+                            </g>
+                            <g stroke="#333" stroke-width="2.5">
+                                <line x1="50" y1="40" x2="50" y2="60"/><line x1="116" y1="45" x2="116" y2="55"/>
+                                <line x1="183" y1="45" x2="183" y2="55"/><line x1="250" y1="45" x2="250" y2="55"/>
+                                <line x1="316" y1="45" x2="316" y2="55"/><line x1="383" y1="45" x2="383" y2="55"/>
+                                <line x1="450" y1="40" x2="450" y2="60"/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 18</span>
+                <div class="problem-text">??蹂??湲몄씠媛 1cm ?뺤궗媛곹삎???ㅼ쓬 洹몃┝怨?媛숈? 諛⑸쾿?쇰줈 遺숈뿬 ?섍컮?? 100踰덉㎏ ?꾪삎???섎젅??紐??앹씤吏 援ы븯?щ씪.<br>
+                    <div style="display: flex; justify-content: center; width: 100%; margin-top: 15px;">
+                        <svg width="400" height="90" viewBox="0 0 400 90">
+                            <g fill="#f8fafc" stroke="#333" stroke-width="1.5">
+                                <rect x="10" y="60" width="20" height="20"/>
+                                <rect x="50" y="60" width="20" height="20"/><rect x="70" y="60" width="20" height="20"/><rect x="50" y="40" width="20" height="20"/>
+                                <rect x="110" y="60" width="20" height="20"/><rect x="130" y="60" width="20" height="20"/><rect x="150" y="60" width="20" height="20"/>
+                                <rect x="110" y="40" width="20" height="20"/><rect x="130" y="40" width="20" height="20"/><rect x="110" y="20" width="20" height="20"/>
+                                <rect x="190" y="60" width="20" height="20"/><rect x="210" y="60" width="20" height="20"/><rect x="230" y="60" width="20" height="20"/><rect x="250" y="60" width="20" height="20"/>
+                                <rect x="190" y="40" width="20" height="20"/><rect x="210" y="40" width="20" height="20"/><rect x="230" y="40" width="20" height="20"/>
+                                <rect x="190" y="20" width="20" height="20"/><rect x="210" y="20" width="20" height="20"/>
+                                <rect x="190" y="0" width="20" height="20"/>
+                            </g>
+                            <text x="320" y="70" font-size="24" font-weight="900">......</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 36 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [39 ?섏씠吏] ?꾩닔 ?좏삎 19, 20 (?섏젙諛섏쁺: ?媛곸꽑 ???⑦꽩 ?꾪삎) -->
+    <div class="page content-page">
+        <div class="header">THINKING BASIC</div>
+        <div class="concept-title" style="visibility: hidden;">?꾩닔 ?좏삎</div>
+        <div class="concept-subtitle">洹쒖튃 李얠븘 臾몄젣 ?닿껐?섍린(1)</div>
+        
+        <div class="problems-wrapper">
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 19</span>
+                <div class="problem-text">?ㅼ쓬 洹몃┝怨?媛숈씠 ?먯쓣 李띿뼱 ?섍컝 ??10踰덉㎏ 洹몃┝???곗씤 ?먯쓽 媛쒖닔瑜?援ы븯?щ씪.<br>
+                    <!-- ?섏젙 諛섏쁺: 以묒븰 援먯감?먯씠 ?ы븿??1x1, 2x2 ?媛곸꽑 寃⑹옄留?-->
+                    <div style="display: flex; justify-content: center; width: 100%; margin-top: 15px;">
+                        <svg width="450" height="120" viewBox="0 0 450 120">
+                            <!-- 1st: dot -->
+                            <circle cx="20" cy="80" r="3.5" fill="#000"/>
+                            
+                            <!-- 2nd: 1x1 square with diagonals -->
+                            <g transform="translate(60, 40)" stroke="#333" stroke-width="1.5">
+                                <rect x="0" y="0" width="40" height="40" fill="none"/>
+                                <line x1="0" y1="0" x2="40" y2="40"/><line x1="0" y1="40" x2="40" y2="0"/>
+                                <circle cx="0" cy="0" r="3.5" fill="#000" stroke="none"/><circle cx="40" cy="0" r="3.5" fill="#000" stroke="none"/>
+                                <circle cx="0" cy="40" r="3.5" fill="#000" stroke="none"/><circle cx="40" cy="40" r="3.5" fill="#000" stroke="none"/>
+                                <circle cx="20" cy="20" r="3.5" fill="#000" stroke="none"/>
+                            </g>
+
+                            <!-- 3rd: 2x2 squares with diagonals per cell -->
+                            <g transform="translate(140, 0)" stroke="#333" stroke-width="1.5">
+                                <rect x="0" y="0" width="80" height="80" fill="none"/>
+                                <line x1="40" y1="0" x2="40" y2="80"/><line x1="0" y1="40" x2="80" y2="40"/>
+                                <!-- 1,1 --> <line x1="0" y1="0" x2="40" y2="40"/> <line x1="0" y1="40" x2="40" y2="0"/>
+                                <!-- 1,2 --> <line x1="40" y1="0" x2="80" y2="40"/> <line x1="40" y1="40" x2="80" y2="0"/>
+                                <!-- 2,1 --> <line x1="0" y1="40" x2="40" y2="80"/> <line x1="0" y1="80" x2="40" y2="40"/>
+                                <!-- 2,2 --> <line x1="40" y1="40" x2="80" y2="80"/> <line x1="40" y1="80" x2="80" y2="40"/>
+                                
+                                <g fill="#000" stroke="none">
+                                    <circle cx="0" cy="0" r="3.5"/><circle cx="40" cy="0" r="3.5"/><circle cx="80" cy="0" r="3.5"/>
+                                    <circle cx="0" cy="40" r="3.5"/><circle cx="40" cy="40" r="3.5"/><circle cx="80" cy="40" r="3.5"/>
+                                    <circle cx="0" cy="80" r="3.5"/><circle cx="40" cy="80" r="3.5"/><circle cx="80" cy="80" r="3.5"/>
+                                    <circle cx="20" cy="20" r="3.5"/><circle cx="60" cy="20" r="3.5"/>
+                                    <circle cx="20" cy="60" r="3.5"/><circle cx="60" cy="60" r="3.5"/>
+                                </g>
+                            </g>
+                            
+                            <text x="260" y="80" font-size="24" font-weight="900">......</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="problem-box">
+                <span class="badge-type">?좏삎 20</span>
+                <div class="problem-text">?ㅼ쓬? ?쇱젙??洹쒖튃???곕씪 ?섎? ?섏뼱?볦? 寃껋엯?덈떎. ??뿉 ?뚮쭪? ?섎? 援ы븯?쒖삤.<br><br>
+                1000, 988, 970, 946, 916, 880, ?? ?? ?? ?? ?? ??/div>
+            </div>
+            <div style="flex: 0 0 10px;"></div>
+        </div>
+
+        <div class="footer">
+            <span class="footer-page-num">- 37 -</span>
+            <span class="footer-author">By Docssam</span>
+        </div>
+    </div>
+
+    <!-- [40 ?섏씠吏] ?쒕낯 ?룻몴吏 ?붿옄??-->
+    <div class="page back-cover">
+        <div class="back-logo">
+            <svg width="300" height="150" viewBox="0 0 300 150">
+                <text x="50" y="70" font-size="50" font-weight="900" fill="#EAC996">G!FIELD</text>
+                <text x="45" y="110" font-size="25" font-weight="900" fill="#ffffff">THINKING BASIC</text>
+            </svg>
+        </div>
+    </div>
+</body>
+</html>
+

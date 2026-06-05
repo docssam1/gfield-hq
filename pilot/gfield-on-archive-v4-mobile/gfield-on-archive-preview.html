@@ -1,0 +1,1803 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GFIELD-ON ARCHIVE | 지필드 프리미엄 아카이브</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+*{box-sizing:border-box}
+html,body{margin:0;background:#02050b;color:white;font-family:Pretendard,sans-serif;scroll-behavior:smooth}
+body h1,body h2,body h3,body h4,body strong,body b{word-break:keep-all;overflow-wrap:anywhere}
+body p,body span,body label,body button,body a,body small{word-break:keep-all;overflow-wrap:anywhere}
+.access-title,.opening-title,.archive-title,.subtitle,.hero-copy,.story-logo,.story-subcopy,.dashboard-head h2,.dashboard-overlay h3,.lecture-head h2,.target-head h2,.rotate-panel h2,.flash-message,.flash-sub,.pdf-head h2{text-wrap:balance}
+.story-card h4,.story-step strong,.dashboard-fact strong,.dashboard-fact span,.dashboard-note p,.lecture-card strong,.lecture-card span,.target-card h3,.target-card p,.rotate-panel p,.card-copy .helper{text-wrap:pretty}
+:root{--gold:#d4af37;--blue:#60a5fa;--navy:#07111f;--ink:#02050b}
+.gold{color:var(--gold);text-shadow:0 0 32px rgba(212,175,55,.34)}
+.intro{min-height:100vh;position:relative;overflow:hidden;background:#02050b;display:grid;place-items:center}
+.intro video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.92}
+.fallback-bg{position:absolute;inset:0;background:radial-gradient(circle at 16% 10%,rgba(22,65,124,.62),transparent 34%),radial-gradient(circle at 82% 16%,rgba(212,175,55,.22),transparent 30%),radial-gradient(circle at 50% 88%,rgba(124,58,237,.18),transparent 36%),linear-gradient(135deg,#02050b,#07111f 60%,#010205)}
+.fallback-bg::before{content:"";position:absolute;inset:0;background-image:linear-gradient(to right,rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.035) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(circle at center,#000,transparent 82%)}
+.intro::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at center,rgba(2,5,11,.03),rgba(2,5,11,.55) 56%,rgba(2,5,11,.92));pointer-events:none}
+.skip{position:absolute;top:22px;right:22px;z-index:30;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);backdrop-filter:blur(14px);color:white;border-radius:999px;padding:10px 16px;font-size:12px;font-weight:1000;letter-spacing:.14em;cursor:pointer}
+.scene{position:absolute;inset:0;z-index:10;display:grid;place-items:center;text-align:center;padding:28px;opacity:0;transform:translateY(26px) scale(.975);filter:blur(10px);transition:opacity 1.15s ease,transform 1.15s cubic-bezier(.16,1,.3,1),filter 1.15s ease;pointer-events:none;will-change:opacity,transform,filter}
+.scene.on{opacity:1;transform:none;filter:none;pointer-events:auto}
+.kicker{font-size:12px;font-weight:1000;letter-spacing:.34em;color:#f8dd83}
+.opening-kicker{font-size:clamp(18px,2.2vw,28px);letter-spacing:.42em;text-shadow:0 8px 34px rgba(0,0,0,.45)}
+.opening-title{font-size:clamp(42px,6vw,82px);line-height:.96;letter-spacing:-.075em;text-shadow:0 16px 48px rgba(0,0,0,.5)}
+.opening-soon{display:block;color:#f8dd83;font-size:clamp(82px,13vw,180px);line-height:.78;letter-spacing:-.09em;margin-bottom:20px}
+.opening-copy{font-size:clamp(18px,2.2vw,26px);text-shadow:0 10px 34px rgba(0,0,0,.45)}
+.title{font-size:clamp(50px,9vw,122px);font-weight:1000;line-height:.88;letter-spacing:-.085em}
+.archive-title{font-size:clamp(42px,8vw,104px);font-weight:1000;line-height:.9;letter-spacing:-.075em}
+.subtitle{font-size:clamp(23px,4vw,46px);font-weight:1000;line-height:1.16;letter-spacing:-.065em}
+.copy{color:#d1d5db;font-size:clamp(16px,2vw,22px);line-height:1.72;font-weight:700}
+.records{width:min(1120px,calc(100% - 32px));margin:0 auto;display:grid;grid-template-columns:1fr minmax(270px,.8fr) 1fr;gap:16px;align-items:center;justify-items:center}
+.stack{display:grid;gap:12px;width:100%;max-width:330px;margin:0 auto}
+.record{width:100%;border:1px solid rgba(255,255,255,.14);background:rgba(2,6,23,.52);backdrop-filter:blur(16px);border-radius:26px;padding:18px;text-align:left;box-shadow:0 24px 70px rgba(0,0,0,.36);opacity:0;transform:translateY(16px) scale(.97);transition:.52s cubic-bezier(.22,1,.36,1)}
+.record.on{opacity:1;transform:translateY(0) scale(1);border-color:rgba(212,175,55,.38)}
+.record.pop{animation:pop .36s cubic-bezier(.22,1,.36,1)}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.055);box-shadow:0 0 60px rgba(212,175,55,.24)}100%{transform:scale(1)}}
+.recordTitle{display:flex;justify-content:space-between;gap:10px;font-size:15px;font-weight:1000;letter-spacing:-.045em}
+.recordTitle small{font-size:10px;color:#d4af37;letter-spacing:.08em}
+.year{display:grid;grid-template-columns:52px 1fr 46px;gap:8px;align-items:center;margin-top:8px;color:#cbd5e1;font-size:12px}
+.bar{height:6px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#60a5fa,#d4af37);border-radius:999px;transition:.55s cubic-bezier(.22,1,.36,1)}
+.ynum{text-align:right;color:white;font-weight:1000}
+.total{text-align:right;margin-top:12px;color:#d4af37;font-weight:1000;letter-spacing:-.06em}
+.total b{font-size:34px}
+.grand{width:100%;max-width:360px;min-height:330px;border:1px solid rgba(212,175,55,.28);border-radius:36px;background:radial-gradient(circle at 50% 45%,rgba(212,175,55,.24),transparent 64%),rgba(0,0,0,.26);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 100px rgba(212,175,55,.13);position:relative;overflow:hidden}
+.grand::before{content:"";position:absolute;inset:14px;border-radius:28px;border:1px solid rgba(255,255,255,.08)}
+.glabel{position:relative;color:#e5e7eb;font-size:15px;font-weight:1000}
+.gnum{position:relative;margin-top:8px;font-size:clamp(86px,12vw,152px);line-height:.82;font-weight:1000;letter-spacing:-.095em;transition:.34s cubic-bezier(.22,1,.36,1)}
+.gnum.hit{transform:scale(1.1);color:#d4af37;text-shadow:0 0 52px rgba(212,175,55,.38)}
+.gunit{position:relative;margin-top:10px;font-size:28px;font-weight:1000;color:#d4af37}
+.gnote{position:relative;margin-top:12px;color:#cbd5e1;font-size:12px;line-height:1.55}
+.pang-strip{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:22px auto 0}
+.pang{opacity:0;transform:translateY(12px) scale(.92);border:1px solid rgba(212,175,55,.28);background:rgba(212,175,55,.1);color:#fde68a;border-radius:999px;padding:8px 12px;font-size:12px;font-weight:1000}
+.pang.on{animation:pang .46s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes pang{0%{opacity:0;transform:translateY(12px) scale(.92)}60%{opacity:1;transform:translateY(0) scale(1.08)}100%{opacity:1;transform:translateY(0) scale(1)}}
+.access-card{position:absolute;z-index:20;width:min(1180px,calc(100% - 36px));display:grid;grid-template-columns:minmax(380px,.92fr) minmax(360px,1.08fr);gap:24px;align-items:stretch;border:1px solid rgba(255,255,255,.15);background:rgba(15,23,42,.76);backdrop-filter:blur(22px);border-radius:32px;padding:26px;box-shadow:0 30px 90px rgba(0,0,0,.45);opacity:0;transform:translateY(18px);transition:.65s cubic-bezier(.22,1,.36,1);pointer-events:none}
+.access-card.show{opacity:1;transform:none;pointer-events:auto}
+.access-header{grid-column:1/-1;min-width:0;padding:4px 8px 0}
+.access-header .gold{display:block;margin-bottom:12px}
+.access-title{font-size:clamp(38px,4.35vw,58px);line-height:1.02;font-weight:1000;letter-spacing:-.075em;margin:0;color:#fff;white-space:nowrap;text-shadow:0 8px 28px rgba(0,0,0,.28)}
+.card-copy{border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:24px 22px 20px;background:linear-gradient(180deg,rgba(11,18,32,.68),rgba(8,12,22,.32))}
+.card-preview{position:relative;overflow:hidden;border-radius:28px;min-height:100%;padding:30px;background:
+radial-gradient(circle at 16% 18%,rgba(212,175,55,.26),transparent 24%),
+radial-gradient(circle at 82% 22%,rgba(36,115,92,.32),transparent 28%),
+linear-gradient(135deg,#0a111b,#132433 58%,#081018);border:1px solid rgba(212,175,55,.18)}
+.card-preview::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,rgba(255,255,255,.04),transparent 34%,rgba(255,255,255,.02) 55%,transparent 74%)}
+.preview-book{position:absolute;right:28px;bottom:26px;width:168px;height:224px;border-radius:18px;background:linear-gradient(145deg,#0c4c49,#102d3f);border:1px solid rgba(212,175,55,.42);box-shadow:0 18px 44px rgba(0,0,0,.32);transform:rotate(-10deg)}
+.preview-book::before{content:"GFIELD";position:absolute;left:22px;top:28px;color:#e7cf89;font-size:26px;font-weight:1000;letter-spacing:-.05em}
+.preview-book::after{content:"PREMIER";position:absolute;left:22px;top:64px;color:#d6c18e;font-size:12px;font-weight:800;letter-spacing:.18em}
+.preview-card{position:relative;z-index:1;width:min(320px,100%);padding:22px;border-radius:24px;background:rgba(13,17,26,.48);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px);box-shadow:0 18px 40px rgba(0,0,0,.24)}
+.preview-card h3{margin:0;color:#f6deb3;font-size:24px;font-weight:1000;letter-spacing:-.05em;line-height:1.18}
+.preview-card p{margin:12px 0 0;color:#d4d7dd;font-size:15px;line-height:1.8}
+.access-card input{width:100%;height:62px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.38);border-radius:16px;color:white;text-align:center;font-size:20px;font-weight:900;outline:none}
+.access-card input:focus{border-color:#d4af37;box-shadow:0 0 0 4px rgba(212,175,55,.14)}
+.course-box{display:flex;align-items:center;justify-content:center;min-height:62px;border:1px solid rgba(212,175,55,.34);background:linear-gradient(135deg,rgba(52,36,8,.52),rgba(0,0,0,.42));border-radius:16px;color:#f8e29b;text-align:center;font-size:24px;font-weight:1000;letter-spacing:.02em;box-shadow:inset 0 0 0 1px rgba(255,255,255,.05)}
+.access-card label{display:block;margin:16px 0 10px;color:#e5e7eb;font-size:15px;font-weight:1000;letter-spacing:-.02em;text-transform:none}
+.access-card button,.cta{display:inline-flex;align-items:center;justify-content:center;min-height:56px;border:0;border-radius:16px;background:linear-gradient(135deg,#d4af37,#f8dd83);color:#02050b;font-weight:1000;text-decoration:none}
+.access-card button{width:100%;margin-top:18px}
+.helper{margin-top:14px;color:#cbd5e1;font-size:13px;line-height:1.65}
+.err{min-height:22px;margin-top:10px;color:#fca5a5;font-size:14px}
+.preview-cue{
+  position:absolute;
+  left:50%;
+  bottom:28px;
+  z-index:22;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  transform:translateX(-50%);
+  color:#f8dd83;
+  text-align:center;
+  pointer-events:none;
+  animation:previewCueFloat 2.6s ease-in-out infinite;
+}
+.preview-cue svg{
+  width:132px;
+  height:58px;
+  overflow:visible;
+  filter:drop-shadow(0 10px 22px rgba(0,0,0,.34));
+}
+.preview-cue path{
+  fill:none;
+  stroke:#f8dd83;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-dasharray:6 8;
+  opacity:.86;
+}
+.preview-cue polyline{
+  fill:none;
+  stroke:#f8dd83;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.preview-cue span{
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  text-shadow:0 10px 26px rgba(0,0,0,.36);
+}
+@keyframes previewCueFloat{
+  0%,100%{opacity:.42;transform:translateX(-50%) translateY(0)}
+  50%{opacity:1;transform:translateX(-50%) translateY(8px)}
+}
+.page{padding:92px 20px}
+.wrap{width:min(1120px,100%);margin:auto}
+.light{background:#f8fafc;color:#111827}
+.dark{background:#07111f;color:white}
+.eyebrow{font-size:12px;font-weight:1000;letter-spacing:.2em;color:#16417c}
+.dark .eyebrow{color:#f8dd83}
+.h2{font-size:clamp(34px,5vw,62px);line-height:1.1;font-weight:1000;letter-spacing:-.075em;margin:12px 0 18px}
+.lead{font-size:18px;line-height:1.85;color:#4b5563}
+.dark .lead{color:#cbd5e1}
+.hero-copy{font-size:clamp(30px,5vw,60px);line-height:1.14;font-weight:1000;letter-spacing:-.075em}
+.smart-open{padding:96px 20px 56px;background:linear-gradient(180deg,#f8fafc,#eef3f8)}
+.smart-open .open-wrap{width:min(1160px,100%);margin:auto}
+.open-banner{margin:0 auto 34px;padding:24px 28px;border-radius:30px;background:linear-gradient(135deg,#08111f,#132c46);color:white;text-align:center;box-shadow:0 22px 60px rgba(15,23,42,.2)}
+.open-banner strong{display:block;color:#f8dd83;font-size:14px;font-weight:1000;letter-spacing:.24em}
+.open-banner h2{margin:10px 0 0;font-size:clamp(28px,4vw,48px);line-height:1.16;font-weight:1000;letter-spacing:-.065em}
+.smart-story{padding:52px;border-radius:34px;background:#fff;color:#111827;box-shadow:0 24px 70px rgba(15,23,42,.08);border:1px solid #e5e7eb}
+.smart-story .lead{max-width:920px;font-size:20px;line-height:1.9}
+.story-logo{display:inline-block;margin-top:34px;color:#d4af37;font-size:clamp(48px,6.5vw,82px);font-weight:1000;letter-spacing:-.08em}
+.story-subcopy{margin-top:16px;font-size:clamp(34px,5vw,64px);line-height:1.08;font-weight:1000;letter-spacing:-.085em}
+.story-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:30px}
+.story-card{padding:22px 20px;border-radius:24px;background:linear-gradient(180deg,#fbfdff,#f4f7fb);border:1px solid #e5e7eb}
+.story-card b{display:inline-flex;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#233876;font-size:12px;font-weight:1000;letter-spacing:.08em}
+.story-card h4{margin:14px 0 0;font-size:26px;line-height:1.16;font-weight:1000;letter-spacing:-.055em;color:#111827}
+.story-card p{margin:12px 0 0;color:#4b5563;font-size:15px;line-height:1.75}
+.story-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:22px}
+.story-step{padding:18px;border-radius:22px;background:#0b1320;color:#f8fafc;border:1px solid rgba(212,175,55,.14)}
+.story-step span{display:block;color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.14em}
+.story-step strong{display:block;margin-top:10px;font-size:18px;line-height:1.25;font-weight:1000}
+.story-step p{margin:10px 0 0;color:#cbd5e1;font-size:14px;line-height:1.65}
+.secret-showcase{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(280px,.95fr);gap:18px;margin-top:26px;padding:18px;border-radius:28px;background:linear-gradient(135deg,#08111f,#101a2c 56%,#1d2638);border:1px solid rgba(212,175,55,.18);overflow:hidden}
+.secret-copy{padding:14px 10px 14px 8px}
+.secret-copy b{display:inline-flex;padding:7px 11px;border-radius:999px;background:rgba(248,221,131,.14);color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.14em}
+.secret-copy h3{margin:16px 0 0;color:#fff9eb;font-size:clamp(30px,3vw,44px);line-height:1.08;font-weight:1000;letter-spacing:-.07em}
+.secret-copy p{margin:14px 0 0;color:#d5dbe6;font-size:15px;line-height:1.8}
+.secret-visual{position:relative;min-height:260px;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#0b1320}
+.secret-visual img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.02) contrast(1.02)}
+.secret-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,13,.1),rgba(5,8,13,.56))}
+.smart-dashboard{padding:0 20px 100px;background:linear-gradient(180deg,#eef3f8,#08111f 18%,#03060d 100%)}
+.pdf-showcase{padding:0 20px 88px;background:linear-gradient(180deg,#eef3f8 0%,#0c1320 18%,#060a11 100%)}
+.pdf-wrap{width:min(1180px,100%);margin:auto}
+.pdf-frame{
+  border-radius:34px;
+  border:1px solid rgba(212,175,55,.18);
+  background:linear-gradient(180deg,#0d1421,#060a11);
+  box-shadow:0 28px 80px rgba(0,0,0,.34);
+  overflow:hidden;
+}
+.pdf-head{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:flex-end;
+  padding:28px 30px 22px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.pdf-head p{margin:0;color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.24em}
+.pdf-head h2{margin:10px 0 0;color:#f8fafc;font-size:clamp(30px,4.4vw,52px);line-height:1.08;font-weight:1000;letter-spacing:-.07em}
+.pdf-head span{display:block;margin-top:12px;max-width:720px;color:#cbd5e1;font-size:15px;line-height:1.8}
+.pdf-open{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:46px;
+  padding:0 18px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#d4af37,#f8dd83);
+  color:#08111f;
+  font-weight:1000;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.pdf-body{padding:24px}
+.pdf-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.pdf-card{
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  padding:18px;
+  color:#e5e7eb;
+  min-height:100%;
+}
+.pdf-card strong{
+  display:block;
+  color:#f8dd83;
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.18em;
+}
+.pdf-card h3{
+  margin:12px 0 0;
+  color:#f8fafc;
+  font-size:24px;
+  line-height:1.22;
+  font-weight:1000;
+  letter-spacing:-.05em;
+}
+.pdf-card p{
+  margin:12px 0 0;
+  color:#cbd5e1;
+  font-size:14px;
+  line-height:1.75;
+}
+.pdf-card .pdf-open{margin-top:16px}
+.pdf-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+}
+.pdf-pills span{
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:0 12px;
+  border-radius:999px;
+  background:rgba(212,175,55,.12);
+  border:1px solid rgba(212,175,55,.2);
+  color:#f6deb3;
+  font-size:12px;
+  font-weight:900;
+}
+.pdf-mini{
+  display:grid;
+  gap:10px;
+}
+.pdf-mini div{
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.03);
+  padding:14px 15px;
+}
+.pdf-mini b{
+  display:block;
+  color:#f8fafc;
+  font-size:15px;
+  font-weight:1000;
+  letter-spacing:-.03em;
+}
+.pdf-mini span{
+  display:block;
+  margin-top:6px;
+  color:#cbd5e1;
+  font-size:13px;
+  line-height:1.65;
+}
+.pdf-preview-card{
+  grid-column:span 2;
+  padding:0;
+  overflow:hidden;
+}
+.pdf-preview-copy{
+  padding:18px 18px 0;
+}
+.pdf-preview-copy h3{margin:0;color:#f8fafc;font-size:26px;line-height:1.2;font-weight:1000;letter-spacing:-.05em}
+.pdf-preview-copy p{margin:10px 0 0;color:#cbd5e1;font-size:14px;line-height:1.75}
+.pdf-screen{
+  position:relative;
+  border-radius:26px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 16% 8%,rgba(212,175,55,.1),transparent 22%),
+    linear-gradient(145deg,#111827,#0b1120 58%,#070b12);
+  border:1px solid rgba(255,255,255,.08);
+  min-height:420px;
+  margin:16px 18px 18px;
+}
+.pdf-screen::before{
+  content:"GFIELD SMART PREVIEW";
+  position:absolute;
+  left:18px;
+  top:16px;
+  z-index:2;
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:0 12px;
+  border-radius:999px;
+  background:rgba(3,6,13,.72);
+  border:1px solid rgba(255,255,255,.08);
+  color:#f8dd83;
+  font-size:11px;
+  font-weight:1000;
+  letter-spacing:.18em;
+  pointer-events:none;
+}
+.pdf-screen::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(6,10,17,.68),rgba(6,10,17,0) 16%,rgba(6,10,17,0) 84%,rgba(6,10,17,.42)),
+    linear-gradient(90deg,rgba(6,10,17,.16),transparent 10%,transparent 90%,rgba(6,10,17,.16));
+  pointer-events:none;
+}
+.pdf-screen iframe{
+  display:block;
+  width:100%;
+  height:420px;
+  border:0;
+  background:white;
+}
+.ebook-showcase{padding:0 20px 88px;background:linear-gradient(180deg,#dfe7f3 0%,#0c1320 18%,#060a11 100%)}
+.ebook-toolbar{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;padding:18px 18px 0}
+.ebook-toolbar-main{display:flex;flex-direction:column;gap:12px}
+.ebook-toolbar-main h3{margin:0;color:#f8fafc;font-size:30px;line-height:1.14;font-weight:1000;letter-spacing:-.05em}
+.ebook-toolbar-main p{margin:0;color:#cbd5e1;font-size:14px;line-height:1.7}
+.ebook-badges{display:flex;gap:8px;flex-wrap:wrap}
+.ebook-badges span{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:rgba(212,175,55,.1);border:1px solid rgba(212,175,55,.16);color:#f8dd83;font-size:11px;font-weight:1000;letter-spacing:.1em}
+.ebook-toolbar-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.ebook-toolbar-actions .pdf-open{min-height:42px;padding:0 14px}
+.ebook-placeholder{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+.ebook-placeholder[hidden]{display:none}
+.ebook-placeholder-card{width:min(540px,100%);padding:26px;border-radius:24px;background:rgba(6,10,17,.74);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px)}
+.ebook-placeholder-card strong{display:block;color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.18em}
+.ebook-placeholder-card h3{margin:12px 0 0;color:#fffaf0;font-size:28px;line-height:1.18;font-weight:1000;letter-spacing:-.04em}
+.ebook-placeholder-card p{margin:12px 0 0;color:#cbd5e1;font-size:14px;line-height:1.7}
+.pdf-list{
+  margin:14px 0 0;
+  padding:0;
+  list-style:none;
+  display:grid;
+  gap:10px;
+}
+.pdf-list li{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  color:#d7dce4;
+  font-size:13px;
+  line-height:1.65;
+}
+.pdf-list li::before{
+  content:"";
+  flex:none;
+  width:8px;
+  height:8px;
+  margin-top:7px;
+  border-radius:999px;
+  background:#d4af37;
+  box-shadow:0 0 0 4px rgba(212,175,55,.12);
+}
+.dashboard-wrap{width:min(1280px,100%);margin:auto}
+.dashboard-head{text-align:center;color:white;padding:54px 0 22px}
+.dashboard-head p{margin:0;color:#f8dd83;font-size:13px;font-weight:1000;letter-spacing:.24em}
+.dashboard-head h2{margin:14px 0 0;font-size:clamp(34px,5vw,64px);line-height:1.06;font-weight:1000;letter-spacing:-.08em}
+.dashboard-head span{display:block;margin:14px auto 0;max-width:880px;color:#cbd5e1;font-size:17px;line-height:1.8}
+.dashboard-shell{padding:18px;border-radius:36px;background:linear-gradient(180deg,#05080d,#08111a 38%,#04070d);border:1px solid rgba(255,255,255,.08);box-shadow:0 32px 90px rgba(0,0,0,.35)}
+.dashboard-stage{position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(212,175,55,.22);background:#07111f;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+.dashboard-stage::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,6,13,.04),rgba(3,6,13,.16) 58%,rgba(3,6,13,.3));pointer-events:none}
+.dashboard-stage img{display:block;width:100%;height:auto}
+.dashboard-overlay{position:absolute;z-index:2;pointer-events:none}
+.dashboard-overlay b{display:block;color:#f8dd83;font-size:10px;font-weight:1000;letter-spacing:.24em}
+.dashboard-overlay h3{margin:8px 0 0;color:#fff9eb;font-size:clamp(18px,1.9vw,29px);line-height:1.18;font-weight:1000;letter-spacing:-.05em}
+.dashboard-overlay p{margin:10px 0 0;color:#d7dde6;font-size:13px;line-height:1.65}
+.dashboard-overlay.preview-copy{
+  top:24px;
+  left:24px;
+  max-width:300px;
+  padding:0;
+  background:transparent;
+  border:0;
+  backdrop-filter:none;
+  box-shadow:none;
+  text-shadow:0 10px 26px rgba(0,0,0,.42);
+}
+.dashboard-overlay.preview-copy h3{font-size:clamp(17px,1.8vw,26px);line-height:1.14}
+.dashboard-overlay.preview-copy p{max-width:270px;color:#dbe4ef;font-size:12.5px;line-height:1.65}
+.dashboard-overlay.ai-copy{
+  left:24px;
+  bottom:24px;
+  max-width:365px;
+  padding:16px 18px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.08);
+  background:linear-gradient(180deg,rgba(9,15,24,.38),rgba(9,15,24,.62));
+  backdrop-filter:blur(8px);
+  box-shadow:0 14px 32px rgba(0,0,0,.2);
+}
+.dashboard-overlay.ai-copy h3{font-size:clamp(20px,2vw,31px)}
+.dashboard-overlay.ai-copy p{max-width:315px}
+.dashboard-overlay.secret-copy-card{
+  right:22px;
+  bottom:24px;
+  max-width:240px;
+  padding:14px 16px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.06);
+  background:linear-gradient(180deg,rgba(20,27,40,.22),rgba(20,27,40,.5));
+  backdrop-filter:blur(6px);
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+.dashboard-overlay.secret-copy-card h3{font-size:clamp(15px,1.45vw,21px);line-height:1.22}
+.dashboard-overlay.secret-copy-card p{font-size:12px;line-height:1.55}
+.dashboard-pins{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.dashboard-pin{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;border:1px solid rgba(212,175,55,.22);background:rgba(248,221,131,.08);color:#f5deb0;font-size:12px;font-weight:1000;letter-spacing:.04em}
+.dashboard-facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}
+.dashboard-fact{padding:18px;border-radius:22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#e5e7eb}
+.dashboard-fact strong{display:block;color:#f0d18c;font-size:19px;font-weight:1000}
+.dashboard-fact span{display:block;margin-top:9px;font-size:14px;line-height:1.68;color:#cbd5e1}
+.dashboard-foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}
+.dashboard-note{padding:22px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.08)}
+.dashboard-note b{display:block;color:#f8dd83;font-size:13px;font-weight:1000;letter-spacing:.12em}
+.dashboard-note p{margin:12px 0 0;color:#e5e7eb;font-size:15px;line-height:1.75}
+.tutor-showcase{padding:0 20px 88px;background:linear-gradient(180deg,#04070d 0%,#08111f 100%)}
+.tutor-wrap{width:min(1180px,100%);margin:auto}
+.tutor-shell{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:18px;padding:20px;border-radius:34px;background:linear-gradient(145deg,#060b12,#0d1827 58%,#101f31);border:1px solid rgba(212,175,55,.14);box-shadow:0 30px 80px rgba(0,0,0,.28)}
+.tutor-copy{padding:14px 12px 14px 10px}
+.tutor-copy b{display:inline-flex;padding:7px 11px;border-radius:999px;background:rgba(248,221,131,.12);color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.16em}
+.tutor-copy h3{margin:16px 0 0;color:#fffaf0;font-size:clamp(34px,4.4vw,52px);line-height:1.06;font-weight:1000;letter-spacing:-.07em}
+.tutor-copy p{margin:14px 0 0;color:#d5dbe6;font-size:15px;line-height:1.82}
+.tutor-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tutor-pills span{display:inline-flex;align-items:center;min-height:34px;padding:0 12px;border-radius:999px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.16);color:#f5deb0;font-size:12px;font-weight:1000}
+.tutor-visual{position:relative;min-height:280px;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:radial-gradient(circle at 50% 22%,rgba(212,175,55,.16),transparent 28%),linear-gradient(145deg,#07111f,#0c1624 62%,#13253a);display:grid;place-items:center}
+.tutor-visual::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(2,5,11,.18) 44%,rgba(2,5,11,.6));pointer-events:none}
+.tutor-visual img{position:relative;z-index:1;width:min(220px,58%);height:auto;filter:drop-shadow(0 26px 38px rgba(0,0,0,.34))}
+.tutor-visual-note{position:absolute;left:18px;right:18px;bottom:18px;z-index:1;padding:14px 16px;border-radius:18px;background:rgba(6,10,17,.72);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px)}
+.tutor-visual-note strong{display:block;color:#fffaf0;font-size:18px;font-weight:1000;letter-spacing:-.04em}
+.tutor-visual-note span{display:block;margin-top:8px;color:#cbd5e1;font-size:13px;line-height:1.6}
+.rotate-note{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:95;
+  padding:24px;
+  background:
+    radial-gradient(circle at 18% 18%,rgba(248,221,131,.14),transparent 24%),
+    radial-gradient(circle at 82% 22%,rgba(67,107,150,.16),transparent 28%),
+    linear-gradient(145deg,#07111f 0%,#040811 52%,#02050b 100%);
+  align-items:center;
+  justify-content:center;
+}
+.rotate-note::before{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border-radius:28px;
+  border:1px solid rgba(212,175,55,.12);
+  pointer-events:none;
+}
+.rotate-panel{
+  position:relative;
+  width:min(540px,100%);
+  padding:28px;
+  border-radius:30px;
+  background:linear-gradient(180deg,rgba(12,19,32,.92),rgba(7,11,19,.98));
+  border:1px solid rgba(212,175,55,.18);
+  box-shadow:0 30px 80px rgba(0,0,0,.34);
+  text-align:center;
+  color:#f8fafc;
+}
+.rotate-kicker{margin:0;color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.28em}
+.rotate-panel h2{margin:14px 0 0;color:#fffaf0;font-size:clamp(30px,7vw,40px);line-height:1.12;font-weight:1000;letter-spacing:-.05em}
+.rotate-panel h2 span{display:block}
+.rotate-panel p{margin:14px 0 0;color:#cbd5e1;font-size:15px;line-height:1.75}
+.rotate-device{
+  width:174px;
+  height:110px;
+  margin:26px auto 0;
+  border-radius:22px;
+  background:linear-gradient(145deg,#102033,#09111b);
+  border:1px solid rgba(212,175,55,.2);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 22px 48px rgba(0,0,0,.28);
+  position:relative;
+  transform:rotate(-8deg);
+}
+.rotate-device::before{
+  content:"";
+  position:absolute;
+  inset:10px;
+  border-radius:14px;
+  background:
+    linear-gradient(180deg,rgba(212,175,55,.2),transparent 42%),
+    linear-gradient(145deg,#0f1b2b,#0a1320);
+  border:1px solid rgba(255,255,255,.06);
+}
+.rotate-device::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:46px;
+  height:46px;
+  margin:-23px 0 0 -23px;
+  border-radius:999px;
+  border:1px solid rgba(248,221,131,.34);
+  box-shadow:0 0 0 10px rgba(248,221,131,.06);
+}
+.rotate-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-top:20px;
+  color:#f8dd83;
+  font-size:13px;
+  font-weight:1000;
+  letter-spacing:.12em;
+}
+.rotate-arrow svg{width:48px;height:48px;opacity:.92}
+.login-flash{
+  position:fixed;
+  inset:0;
+  z-index:80;
+  display:grid;
+  place-items:center;
+  padding:28px;
+  background:
+    radial-gradient(circle at center,rgba(248,221,131,.24),transparent 24%),
+    linear-gradient(180deg,rgba(255,255,255,.88),rgba(7,17,31,.12) 18%,rgba(2,5,11,.92) 58%,rgba(2,5,11,.98));
+  opacity:0;
+  pointer-events:none;
+  overflow:hidden;
+  transition:opacity .9s ease;
+}
+.login-flash.show{opacity:1}
+.login-flash.flash-hit{animation:loginFlash 2.9s cubic-bezier(.22,1,.36,1) forwards}
+.login-flash::before{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  background:
+    radial-gradient(circle at 28% 36%,rgba(248,221,131,.18),transparent 26%),
+    radial-gradient(circle at 72% 44%,rgba(81,124,164,.16),transparent 32%),
+    radial-gradient(circle at 52% 70%,rgba(255,255,255,.08),transparent 28%);
+  opacity:.82;
+  filter:blur(26px);
+  transform:scale(1);
+  transition:opacity 1.3s ease,transform 1.3s ease,filter 1.3s ease;
+}
+.login-flash.mist-out::before{opacity:0;transform:scale(1.35);filter:blur(44px)}
+@keyframes loginFlash{
+  0%{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,255,255,.94));}
+  18%{background:radial-gradient(circle at center,rgba(248,221,131,.38),transparent 22%),linear-gradient(180deg,rgba(255,255,255,.98),rgba(254,248,224,.66) 26%,rgba(7,17,31,.92) 70%,rgba(2,5,11,.98));}
+  100%{background:radial-gradient(circle at center,rgba(248,221,131,.12),transparent 28%),linear-gradient(180deg,rgba(8,17,31,.9),rgba(2,5,11,.96));}
+}
+.flash-card{
+  position:relative;
+  z-index:1;
+  width:min(1120px,calc(100% - 24px));
+  padding:10px 20px;
+  text-align:center;
+  transform:translateY(18px) scale(1.02);
+  opacity:0;
+  filter:blur(20px);
+  transition:opacity 1.25s ease,transform 1.25s cubic-bezier(.16,1,.3,1),filter 1.25s ease;
+}
+.login-flash.show .flash-card{transform:none;opacity:1;filter:blur(0)}
+.login-flash.mist-out .flash-card{opacity:0;transform:translate(32vw,-36vh) scale(.34);filter:blur(26px)}
+.flash-kicker{color:#f8dd83;font-size:clamp(14px,1.7vw,22px);font-weight:1000;letter-spacing:.34em;text-shadow:0 10px 32px rgba(0,0,0,.45)}
+.flash-message{
+  margin:20px 0 0;
+  color:#f8fafc;
+  font-size:clamp(46px,7vw,92px);
+  line-height:1.06;
+  font-weight:1000;
+  letter-spacing:-.075em;
+  opacity:0;
+  filter:blur(18px);
+  transform:scale(1.04);
+  text-shadow:0 18px 56px rgba(0,0,0,.5);
+  animation:flashMessageFog 1.55s cubic-bezier(.16,1,.3,1) forwards;
+  animation-delay:.18s;
+}
+@keyframes flashMessageFog{
+  0%{opacity:0;filter:blur(20px);transform:scale(1.06)}
+  58%{opacity:1;filter:blur(2px);transform:scale(1.005)}
+  100%{opacity:1;filter:blur(0);transform:scale(1)}
+}
+.flash-sub{
+  margin:24px auto 0;
+  max-width:780px;
+  color:#f8dd83;
+  font-size:clamp(22px,3vw,38px);
+  line-height:1.35;
+  font-weight:1000;
+  letter-spacing:-.045em;
+  opacity:0;
+  transform:translateY(16px);
+  filter:blur(10px);
+  animation:flashSubRise 1.2s cubic-bezier(.16,1,.3,1) forwards;
+  animation-delay:1.45s;
+  text-shadow:0 14px 44px rgba(0,0,0,.48);
+}
+@keyframes flashSubRise{
+  0%{opacity:0;transform:translateY(18px) scale(1.02);filter:blur(12px)}
+  100%{opacity:1;transform:none;filter:none}
+}
+.dock-hello{
+  position:fixed;
+  top:20px;
+  right:22px;
+  z-index:70;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-height:56px;
+  padding:0 18px;
+  border-radius:999px;
+  border:1px solid rgba(212,175,55,.24);
+  background:rgba(7,17,31,.78);
+  backdrop-filter:blur(16px);
+  box-shadow:0 20px 50px rgba(0,0,0,.28);
+  color:#f8fafc;
+  opacity:0;
+  transform:translateY(-14px) scale(.96);
+  pointer-events:none;
+  transition:all .45s cubic-bezier(.22,1,.36,1);
+}
+.dock-hello.show{opacity:1;transform:none}
+.dock-hello.gather-in{animation:dockGatherIn .95s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes dockGatherIn{
+  0%{opacity:0;transform:translate(-120px,58px) scale(.84);filter:blur(18px)}
+  65%{opacity:1;transform:translate(4px,-2px) scale(1.02);filter:blur(1px)}
+  100%{opacity:1;transform:none;filter:blur(0)}
+}
+.dock-mark{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#d4af37,#f8dd83);
+  color:#08111f;
+  font-size:12px;
+  font-weight:1000;
+  letter-spacing:.14em;
+}
+.dock-copy{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  min-width:0;
+}
+.dock-copy small{
+  color:#f8dd83;
+  font-size:10px;
+  font-weight:1000;
+  letter-spacing:.18em;
+}
+.dock-copy strong{
+  color:#f8fafc;
+  font-size:17px;
+  line-height:1.2;
+  font-weight:1000;
+  letter-spacing:-.04em;
+  white-space:nowrap;
+}
+/* GFIELD AI TUTOR MODAL */
+.ai-modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(2,5,11,.85);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px}
+.ai-modal.show{display:flex}
+.ai-modal-content{position:relative;width:min(600px,100%);background:linear-gradient(145deg,#111827,#0b1120);border:1px solid rgba(212,175,55,.28);border-radius:28px;padding:32px;box-shadow:0 30px 90px rgba(0,0,0,.45)}
+.ai-close{position:absolute;top:24px;right:24px;background:transparent;border:none;color:#cbd5e1;font-size:24px;cursor:pointer}
+.ai-page-buttons{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:20px 0}
+.ai-page-buttons button{padding:12px 0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#f8fafc;font-weight:800;cursor:pointer;transition:all .2s}
+.ai-page-buttons button:hover,.ai-page-buttons button.active{background:rgba(212,175,55,.2);border-color:#d4af37;color:#fde68a}
+.ai-prompt-box{min-height:100px;padding:18px;border-radius:16px;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.08);color:#d1d5db;font-size:14px;line-height:1.7;white-space:pre-wrap;margin-bottom:20px}
+.ai-actions{display:flex;gap:12px}
+.ai-btn{flex:1;padding:16px;border-radius:14px;font-weight:900;text-align:center;cursor:pointer;border:none;text-decoration:none;font-size:15px}
+.btn-copy{background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.15)}
+.btn-open{background:linear-gradient(135deg,#d4af37,#f8dd83);color:#02050b}
+.lecture-showcase{padding:0 20px 96px;background:linear-gradient(180deg,#03060d,#08111f 24%,#03060d 100%)}
+.lecture-wrap{width:min(1180px,100%);margin:auto}
+.lecture-frame{padding:28px;border-radius:34px;background:linear-gradient(180deg,#0a121b,#07111f 54%,#05080d);border:1px solid rgba(255,255,255,.08);box-shadow:0 28px 80px rgba(0,0,0,.34)}
+.lecture-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-end}
+.lecture-head p{margin:0;color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.22em}
+.lecture-head h2{margin:12px 0 0;color:#f8fafc;font-size:clamp(30px,4.2vw,52px);line-height:1.08;font-weight:1000;letter-spacing:-.07em}
+.lecture-head span{display:block;margin-top:12px;max-width:760px;color:#cbd5e1;font-size:15px;line-height:1.8}
+.lecture-meta{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.lecture-meta-chip{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border-radius:999px;background:rgba(248,221,131,.08);border:1px solid rgba(212,175,55,.2);color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.06em}
+.lecture-groups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:22px}
+.lecture-group-btn{position:relative;display:flex;align-items:flex-end;justify-content:flex-start;min-height:138px;padding:18px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.1);color:#f8fafc;font-size:14px;font-weight:900;cursor:pointer;transition:all .2s;overflow:hidden;text-align:left}
+.lecture-group-btn::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,17,31,.16),rgba(8,17,31,.76));pointer-events:none}
+.lecture-group-btn.has-image{background-size:cover;background-position:center}
+.lecture-group-btn.has-image::before{background:linear-gradient(180deg,rgba(8,17,31,.1),rgba(8,17,31,.8))}
+.lecture-group-btn.style-gold{background:linear-gradient(135deg,#3d2f08,#8e6a12 52%,#d4af37)}
+.lecture-group-btn.style-navy{background:linear-gradient(145deg,#08111f,#123253 55%,#1b4f81)}
+.lecture-group-btn.style-emerald{background:linear-gradient(145deg,#0a1b1a,#0f3a36 55%,#16685e)}
+.lecture-group-btn.style-wine{background:linear-gradient(145deg,#190d17,#402036 55%,#6d355b)}
+.lecture-group-btn strong{position:relative;z-index:1;display:block;font-size:22px;line-height:1.18;font-weight:1000;letter-spacing:-.04em}
+.lecture-group-btn span{position:relative;z-index:1;display:block;margin-top:8px;color:#cbd5e1;font-size:12px;font-weight:800;letter-spacing:.12em}
+.lecture-group-btn.active,.lecture-group-btn:hover{transform:translateY(-3px);border-color:rgba(212,175,55,.34);box-shadow:0 18px 34px rgba(0,0,0,.22)}
+.lecture-pages{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.lecture-page-btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:#e5e7eb;font-size:13px;font-weight:900;cursor:pointer;transition:all .2s}
+.lecture-page-btn.active,.lecture-page-btn:hover{background:rgba(212,175,55,.16);border-color:rgba(212,175,55,.34);color:#f8dd83}
+.lecture-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:22px}
+.lecture-card{display:flex;flex-direction:column;justify-content:space-between;min-height:150px;padding:18px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.08);color:#f8fafc;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.lecture-card:hover{transform:translateY(-3px);border-color:rgba(212,175,55,.28);box-shadow:0 18px 34px rgba(0,0,0,.18)}
+.lecture-card[type="button"],.lecture-card{cursor:default;text-align:left}
+.lecture-card small{display:block;color:#f8dd83;font-size:11px;font-weight:1000;letter-spacing:.16em}
+.lecture-card strong{display:block;margin-top:12px;color:#fffaf0;font-size:20px;line-height:1.26;font-weight:1000;letter-spacing:-.04em}
+.lecture-card span{display:block;margin-top:14px;color:#cbd5e1;font-size:13px;line-height:1.55}
+.lecture-card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.lecture-action{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#f8fafc;text-decoration:none;font-size:12px;font-weight:1000;letter-spacing:.04em;cursor:pointer}
+.lecture-action.primary{background:linear-gradient(135deg,#d4af37,#f8dd83);border:0;color:#08111f}
+.lecture-empty{margin-top:22px;padding:18px 20px;border-radius:20px;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.12);color:#cbd5e1;font-size:14px;line-height:1.75}
+.target-showcase{padding:0 20px 92px;background:linear-gradient(180deg,#050a11 0%,#09111b 100%)}
+.target-wrap{width:min(1180px,100%);margin:auto}
+.target-frame{padding:34px;border-radius:34px;background:linear-gradient(180deg,rgba(12,19,32,.96),rgba(7,11,19,.98));border:1px solid rgba(212,175,55,.18);box-shadow:0 28px 70px rgba(0,0,0,.26)}
+.target-head p{margin:0;color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.24em}
+.target-head h2{margin:10px 0 0;color:#f8fafc;font-size:clamp(28px,4vw,46px);line-height:1.08;font-weight:1000;letter-spacing:-.06em}
+.target-head span{display:block;margin-top:12px;max-width:760px;color:#cbd5e1;font-size:15px;line-height:1.75}
+.target-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:24px}
+.target-card{min-height:180px;padding:22px;border-radius:26px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;justify-content:space-between;scroll-margin-top:32px}
+.target-card b{display:block;color:#f8dd83;font-size:11px;font-weight:1000;letter-spacing:.18em}
+.target-card h3{margin:12px 0 0;color:#fffaf0;font-size:24px;line-height:1.18;font-weight:1000;letter-spacing:-.04em}
+.target-card p{margin:14px 0 0;color:#cbd5e1;font-size:14px;line-height:1.7}
+.target-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.target-badges span{display:inline-flex;align-items:center;min-height:30px;padding:0 12px;border-radius:999px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.18);color:#f8dd83;font-size:11px;font-weight:900;letter-spacing:.1em}
+.gfield-scroll-focus{animation:gfieldScrollPulse 1.15s ease}
+@keyframes gfieldScrollPulse{
+  0%{box-shadow:0 0 0 0 rgba(212,175,55,.0);transform:translateY(0)}
+  35%{box-shadow:0 0 0 10px rgba(212,175,55,.12);transform:translateY(-2px)}
+  100%{box-shadow:0 0 0 0 rgba(212,175,55,.0);transform:translateY(0)}
+}
+@media(max-width:1200px){.dashboard-facts,.story-grid,.story-flow,.dashboard-foot,.lecture-grid,.lecture-groups,.target-grid{grid-template-columns:1fr 1fr}.secret-showcase{grid-template-columns:1fr}}
+@media(max-width:960px){.records{grid-template-columns:1fr}.grand{order:-1;min-height:280px}.intro{min-height:112vh}.title{font-size:clamp(46px,15vw,88px)}.page{padding:66px 18px}.hero-copy{font-size:clamp(30px,8vw,44px)}.access-card{grid-template-columns:1fr;max-width:620px}.card-preview{min-height:280px}.smart-story,.open-banner,.dashboard-shell,.pdf-frame,.pdf-screen,.flash-card,.story-card,.story-step,.dashboard-note,.dashboard-fact,.secret-showcase,.secret-visual,.dashboard-stage,.lecture-frame,.lecture-card,.lecture-group-btn,.target-frame,.target-card,.rotate-panel{border-radius:24px}.pdf-grid,.story-grid,.story-flow,.dashboard-facts,.dashboard-foot,.secret-showcase,.lecture-grid,.lecture-groups,.target-grid{grid-template-columns:1fr}.dashboard-overlay.preview-copy,.dashboard-overlay.ai-copy,.dashboard-overlay.secret-copy-card{position:static;max-width:none;margin:12px 12px 0;padding:18px;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(9,15,24,.44),rgba(9,15,24,.68));backdrop-filter:blur(10px);box-shadow:none;text-shadow:none}.dashboard-overlay.preview-copy p,.dashboard-overlay.ai-copy p,.dashboard-overlay.secret-copy-card p{max-width:none}.lecture-head,.target-head{display:block}.lecture-meta{justify-content:flex-start;margin-top:16px}.pdf-head{display:block}.pdf-open{margin-top:18px}.pdf-preview-card{grid-column:auto}.pdf-screen,.pdf-screen iframe{min-height:520px;height:520px}.dock-hello{top:14px;right:14px;min-height:52px;padding:0 15px}.dock-copy strong{font-size:15px}}
+@media(max-width:960px){.preview-cue{bottom:18px}.preview-cue svg{width:108px;height:48px}.preview-cue span{font-size:11px;letter-spacing:.18em}}
+@media(max-width:960px) and (orientation:landscape){.access-card{max-width:980px;grid-template-columns:minmax(300px,430px) minmax(240px,1fr)}.card-preview{min-height:0}.intro{min-height:100vh}.smart-open{padding-top:72px}.story-grid,.dashboard-facts,.dashboard-foot,.lecture-grid,.lecture-groups,.target-grid{grid-template-columns:repeat(2,1fr)}.story-flow{grid-template-columns:repeat(2,1fr)}.secret-showcase{grid-template-columns:1fr 1fr}.pdf-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pdf-preview-card{grid-column:span 2}.pdf-open{margin-top:0}.pdf-screen,.pdf-screen iframe{min-height:420px;height:420px}}
+@media(max-width:960px) and (orientation:portrait){.rotate-note{display:flex}}
+@media(max-width:760px){.access-title{white-space:normal;font-size:clamp(30px,8.5vw,42px);line-height:1.08}.access-header{padding:0}}
+</style>
+</head>
+<body>
+<div class="rotate-note" aria-hidden="true">
+  <div class="rotate-panel">
+    <p class="rotate-kicker">GFIELD SMART BOOK</p>
+    <h2><span>가로 화면으로</span><span>더 편하게 이어가실 수 있습니다.</span></h2>
+    <p>교재와 강의, AI 튜터가 함께 보이는 가로형 학습 화면으로 준비되어 있습니다.</p>
+    <p>PC와 태블릿에서는 더욱 원활하게 보실 수 있습니다.</p>
+    <div class="rotate-device"></div>
+    <div class="rotate-arrow">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M12 24c0-6.627 5.373-12 12-12h7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M27 8l4 4-4 4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M36 24c0 6.627-5.373 12-12 12h-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M21 40l-4-4 4-4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>LANDSCAPE VIEW</span>
+    </div>
+  </div>
+</div>
+<div class="login-flash" id="loginFlash" aria-hidden="true">
+  <div class="flash-card">
+    <p class="flash-kicker">DOCSSAM MESSAGE</p>
+    <h2 class="flash-message" id="flashMessage">이제 천천히 시작해보자.</h2>
+    <p class="flash-sub" id="flashSub">오늘은 길게 끌지 않고, 한 문제씩 정확하게 보는 흐름으로 이어가겠습니다.</p>
+  </div>
+</div>
+<div class="dock-hello" id="dockHello" aria-live="polite">
+  <span class="dock-mark">DOC</span>
+  <div class="dock-copy">
+    <small>GFIELD SMART BOOK</small>
+    <strong id="dockText">이제 공부해볼까?</strong>
+  </div>
+</div>
+<main class="intro" id="intro">
+  <div class="fallback-bg"></div>
+  <video id="introVideo" autoplay muted playsinline preload="auto" poster="assets/gfield-on-poster.jpg">
+    <source src="assets/gfield-on-intro.mp4" type="video/mp4">
+  </video>
+  <button class="skip" id="skipIntro" type="button">SKIP</button>
+
+  <section class="scene on" id="scene0">
+    <div>
+      <p class="kicker opening-kicker">G-FIELD OPENING</p>
+      <h1 class="subtitle opening-title mt-6"><span class="opening-soon">곧</span>지필드의 프리미엄 아카이브가 열립니다.</h1>
+      <p class="copy opening-copy mt-6">빠른 선행보다 중요한 것은 흔들리지 않는 학습의 기준입니다.</p>
+    </div>
+  </section>
+
+  <section class="scene" id="scene1">
+    <div>
+      <h2 class="subtitle">선행은 빠른데<br>학습의 깊이가 걱정된다면</h2>
+      <p class="copy mt-5">우리 아이의 실력이 비어 있지는 않은지</p>
+      <p class="copy mt-2 gold">이제, 학습의 깊이를 확인해야 합니다.</p>
+    </div>
+  </section>
+
+  <section class="scene" id="scene2">
+    <div>
+      <h2 class="archive-title">GFIELD-ON<br><span class="gold">ARCHIVE</span></h2>
+      <p class="subtitle mt-6">성공하는 공부 습관을 만드는<br>지필드의 프리미엄 아카이브</p>
+    </div>
+  </section>
+
+  <section class="scene" id="scene3">
+    <div style="width:100%">
+      <div class="records">
+        <div class="stack" id="leftStack"></div>
+        <div class="grand">
+          <div class="glabel">연도별 누적 실적</div>
+          <div class="gnum" id="grandNum">0</div>
+          <div class="gunit">명</div>
+          <div class="gnote">대표 실적은 일부입니다.<br>가운데 숫자는 실제 전체 누적 실적입니다.</div>
+        </div>
+        <div class="stack" id="rightStack"></div>
+      </div>
+      <div class="pang-strip">
+        <span class="pang">영재</span><span class="pang">테마</span><span class="pang">황소 경시</span><span class="pang">영재원</span><span class="pang">특목 경시</span><span class="pang">누적 실적</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="scene4">
+    <div>
+      <p class="kicker gold">GFIELD SMART BOOK</p>
+      <h2 class="subtitle mt-5">이제 우리 아이들의<br>국가대표를 향한 여정이 시작됩니다.</h2>
+    </div>
+  </section>
+
+  <form class="access-card" id="accessForm">
+    <div class="access-header">
+      <p class="gold text-xs font-black tracking-[.22em]">GFIELD SMART BOOK</p>
+      <h1 class="access-title">이제 우리 아이들의 국가대표를 향한 여정이 시작됩니다.</h1>
+    </div>
+    <div class="card-copy">
+      <label for="studentName">학생 이름</label>
+      <input id="studentName" placeholder="학생 이름 입력" maxlength="20" autocomplete="name">
+      <label for="courseName">수강 과정</label>
+      <div class="course-box" id="courseName">HS THINKING BASIC</div>
+      <p class="helper">교재, 강의 영상, AI 튜터가 하나의 흐름으로 연결되는 스마트 학습 공간입니다.</p>
+      <button type="submit">아카이브 입장하기</button>
+      <p class="err" id="errorMsg"></p>
+    </div>
+    <div class="card-preview" aria-hidden="true">
+      <div class="preview-card">
+        <p class="gold text-xs font-black tracking-[.18em]">GFIELD-ON PREVIEW</p>
+        <h3>곧 열릴 지필드의 특별한 공간</h3>
+        <p>지필드 재원생에게 일부 서비스를 먼저 선보입니다.</p>
+      </div>
+      <div class="preview-book"></div>
+    </div>
+  </form>
+  <div class="preview-cue" aria-hidden="true">
+    <svg viewBox="0 0 132 58" role="presentation">
+      <path d="M14 10 C28 12, 34 26, 42 34 S58 48, 66 38"></path>
+      <path d="M118 10 C104 12, 98 26, 90 34 S74 48, 66 38"></path>
+      <polyline points="56,36 66,48 76,36"></polyline>
+    </svg>
+    <span>GFIELD-ON 미리보기</span>
+  </div>
+</main>
+
+<section class="ebook-showcase" id="ebookViewerSection">
+  <div class="pdf-wrap">
+    <div class="pdf-frame">
+      <div class="pdf-head">
+        <div>
+          <p>EBOOK VIEWER</p>
+          <h2 id="ebookViewerTitle">강의와 AI가 붙어 있는 ebook 뷰어</h2>
+          <span id="ebookViewerDescription">로그인 후 바로 이어지는 첫 화면입니다. 교재를 보다가 강의와 AI 튜터, 인쇄와 자료 다운로드까지 한 흐름 안에서 이어집니다.</span>
+        </div>
+        <div class="ebook-toolbar-actions">
+          <button class="pdf-open" type="button" id="ebookAskBtn">질문하기</button>
+          <button class="pdf-open" type="button" id="ebookPrintBtn">인쇄</button>
+          <button class="pdf-open" type="button" id="ebookExpandBtn">크게 보기</button>
+          <a class="pdf-open" id="ebookOpenBtn" href="#" target="_blank" rel="noopener noreferrer">새창으로 보기</a>
+        </div>
+      </div>
+      <div class="ebook-toolbar">
+        <div class="ebook-toolbar-main">
+          <h3 id="ebookToolbarTitle">HS THINKING BASIC</h3>
+          <p id="ebookToolbarCopy">승인된 학생만 조용히 이어갈 수 있는 ebook 서재형 뷰어입니다.</p>
+        </div>
+        <div class="ebook-badges">
+          <span id="ebookStudentBadge">학생 미확인</span>
+          <span>강의 연동</span>
+          <span>AI 튜터 연결</span>
+          <span>인쇄 지원</span>
+        </div>
+      </div>
+      <div class="pdf-body">
+        <div class="pdf-grid">
+          <article class="pdf-card">
+            <strong>VIEWER TOOLS</strong>
+            <h3>교재와 자료를 한 흐름으로</h3>
+            <p>교재를 보는 동시에 강의, 질문, 인쇄, 추가 자료 다운로드까지 바로 이어지도록 구성합니다.</p>
+            <div class="pdf-pills">
+              <span>ebook</span>
+              <span>lecture</span>
+              <span>AI tutor</span>
+            </div>
+            <div class="pdf-mini" style="margin-top:14px">
+              <div><b>강의 보기</b><span>문항과 연결된 강의를 새창 또는 큰 화면으로 확인합니다.</span></div>
+              <div><b>자료 다운로드</b><span>개념 노트 같은 보조 자료는 워터마크 없이 바로 내려받을 수 있습니다.</span></div>
+            </div>
+          </article>
+          <article class="pdf-card">
+            <strong>READING MODE</strong>
+            <h3>조용히 이어지는 승인형 서재</h3>
+            <p>공개 강의몰처럼 보이지 않도록, 재원생에게 필요한 자료만 단정한 뷰어 화면 안에 배치합니다.</p>
+            <ul class="pdf-list">
+              <li>입장 직후 첫 화면은 소개가 아니라 실제 뷰어 중심</li>
+              <li>강의와 AI 질문 버튼은 뷰어 툴바 안에서 바로 작동</li>
+              <li>버튼마다 페이지 스크롤과 자료 다운로드를 함께 연결</li>
+            </ul>
+          </article>
+          <article class="pdf-card pdf-preview-card">
+            <div class="pdf-preview-copy">
+              <h3>ebook 뷰어 미리보기</h3>
+              <p>이 자리에 실제 PDF 또는 HTML ebook이 연결됩니다. 아직 연결 전이면 아래 프리뷰 카드가 유지되고, 연결되면 바로 뷰어로 바뀝니다.</p>
+            </div>
+            <div class="pdf-screen" id="ebookViewerFrameWrap">
+              <div class="ebook-placeholder" id="ebookPlaceholder">
+                <div class="ebook-placeholder-card">
+                  <strong>READY FOR CONNECT</strong>
+                  <h3>ebook 링크가 연결되면<br>이 자리에 바로 열립니다.</h3>
+                  <p>관리자 페이지의 `ebook 뷰어 링크` 칸에 PDF 또는 HTML 경로를 넣으면 로그인 직후 이 영역이 실제 뷰어로 바뀝니다.</p>
+                </div>
+              </div>
+              <iframe id="ebookViewerFrame" title="GFIELD ebook viewer" loading="lazy"></iframe>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="smart-open" id="smartPreview">
+  <div class="open-wrap">
+    <div class="open-banner">
+      <strong>COMING SOON</strong>
+      <h2>곧 지필드의 특별한 공간,<br>GFIELD-ON이 열립니다.</h2>
+    </div>
+
+    <div class="smart-story">
+      <p class="eyebrow">GFIELD-ON ARCHIVE</p>
+      <h2 class="hero-copy mt-4">한 자리에서 꿋꿋이 지켜온<br>성공하는 공부 습관의 10년</h2>
+      <div class="story-logo">GFIELD-ON ARCHIVE</div>
+      <div class="story-subcopy">교재 한 권으로 끝나지 않는<br>지필드의 기록</div>
+      <p class="lead mt-8">지필드는 빠른 선행보다 깊이 있는 이해, 많은 문제보다 정확한 사고, 단발성 성과보다 오래 가는 공부 습관을 더 중요하게 생각해 왔습니다.</p>
+      <div class="story-grid">
+        <article class="story-card">
+          <b>HISTORY</b>
+          <h4>오랜 시간 지켜온 기준</h4>
+          <p>한 해의 유행보다 오래 남는 공부의 기준을 지켜오며, 아이마다 흔들리지 않는 학습 뼈대를 만들어 왔습니다.</p>
+        </article>
+        <article class="story-card">
+          <b>SLOGAN</b>
+          <h4>성공하는 공부 습관</h4>
+          <p>지필드가 말하는 성장은 단순한 점수의 상승이 아니라, 스스로 생각하고 끝까지 밀어가는 공부 습관의 완성입니다.</p>
+        </article>
+        <article class="story-card">
+          <b>PHILOSOPHY</b>
+          <h4>정확하게, 끝까지</h4>
+          <p>답을 빨리 맞히는 것보다 어디서 막혔는지 정확히 알고, 이해한 것을 자기 힘으로 끝까지 연결하는 과정을 더 소중하게 봅니다.</p>
+        </article>
+      </div>
+      <div class="story-flow">
+        <article class="story-step">
+          <span>01</span>
+          <strong>생각의 기준</strong>
+          <p>문제를 보는 기준부터 세우는 공부를 지향합니다.</p>
+        </article>
+        <article class="story-step">
+          <span>02</span>
+          <strong>공부의 깊이</strong>
+          <p>선행보다 중요한 이해의 깊이를 꾸준히 쌓아갑니다.</p>
+        </article>
+        <article class="story-step">
+          <span>03</span>
+          <strong>기록의 축적</strong>
+          <p>교재와 풀이, 리포트가 이어지며 아이의 학습 기록이 남습니다.</p>
+        </article>
+        <article class="story-step">
+          <span>04</span>
+          <strong>성장의 연결</strong>
+          <p>한 권의 교재로 끝나지 않고 다음 배움까지 자연스럽게 이어집니다.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="smart-dashboard">
+  <div class="dashboard-wrap">
+    <div class="dashboard-head">
+      <p>GFIELD-ON PREVIEW</p>
+      <h2>곧 만나게 될<br>GFIELD-ON 미리보기</h2>
+      <span>앞으로 실제로 열릴 플랫폼의 분위기를 먼저 보여드립니다. 지금은 미리보기지만, 교재와 강의, 리포트, DOCSSAM AI튜터가 이 흐름 안에서 하나로 연결될 예정입니다.</span>
+    </div>
+
+    <div class="dashboard-shell">
+      <div class="dashboard-stage">
+        <img src="assets/gfield-on-dashboard.jpg.png" alt="GFIELD-ON 플랫폼 대시보드 미리보기">
+        <div class="dashboard-overlay preview-copy">
+          <b>GFIELD-ON PREVIEW</b>
+          <h3>지필드 재원생에게<br>일부 서비스를 먼저 선보입니다.</h3>
+          <p>지금은 미리보기지만, 앞으로는 이 안에서 교재와 영상, 학습 기록이 자연스럽게 이어지게 됩니다.</p>
+        </div>
+        <div class="dashboard-overlay ai-copy">
+          <b>DOCSSAM AI TUTOR</b>
+          <h3>답을 바로 알려주지 않습니다.</h3>
+          <p>막힌 지점부터 함께 찾고, 영상을 보고도 어려운 순간을 다시 이어주는 지필드식 AI튜터입니다.</p>
+          <div class="dashboard-pins">
+            <span class="dashboard-pin">교재 흐름 연결</span>
+            <span class="dashboard-pin">강의 영상 연동</span>
+            <span class="dashboard-pin">질문 모드 확장</span>
+          </div>
+        </div>
+        <div class="dashboard-overlay secret-copy-card">
+          <b>SECRET EBOOK</b>
+          <h3>함부로 공개하지 못하는<br>지필드만의 자료들</h3>
+          <p>시크릿 EBOOK과 프리미엄 자료, 성취 리포트까지 실제 서비스 안에서 순차적으로 열리게 됩니다.</p>
+        </div>
+      </div>
+
+      <div class="dashboard-facts">
+        <article class="dashboard-fact"><strong>DOCSSAM AI튜터</strong><span>영상을 보고도 어려운 부분을 다시 이어주는 지필드식 질문 흐름이 열립니다.</span></article>
+        <article class="dashboard-fact"><strong>학습 진행 관리</strong><span>교재와 영상, 자료 이용 흐름이 한눈에 보이도록 정리됩니다.</span></article>
+        <article class="dashboard-fact"><strong>성취 리포트</strong><span>학생별 성장 기록과 목표 달성 흐름을 더 분명하게 확인하게 됩니다.</span></article>
+        <article class="dashboard-fact"><strong>대치동 핫 뉴스</strong><span>재원생에게 필요한 교육 정보와 학습 소식을 빠르게 전달합니다.</span></article>
+      </div>
+
+      <div class="dashboard-foot">
+        <article class="dashboard-note">
+          <b>TEXTBOOK FLOW</b>
+          <p>교재 한 권으로 끝나지 않고, 강의와 질문, 다음 학습까지 자연스럽게 이어지는 구조를 만듭니다.</p>
+        </article>
+        <article class="dashboard-note">
+          <b>VIDEO LIBRARY</b>
+          <p>유형별 해설과 핵심 강의가 교재와 연결되어 필요한 순간 바로 다시 확인할 수 있도록 준비됩니다.</p>
+        </article>
+        <article class="dashboard-note">
+          <b>LEARNING REPORT</b>
+          <p>학생별 기록과 성취 리포트가 누적되어 학부모와 학생 모두 학습 방향을 더 쉽게 확인하게 됩니다.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="lecture-showcase" id="lectureShowcase" hidden>
+  <div class="lecture-wrap">
+    <div class="lecture-frame">
+      <div class="lecture-head">
+        <div>
+          <p>LECTURE LIBRARY</p>
+          <h2 id="lectureTitle">강의 버튼 모아보기</h2>
+          <span id="lectureDescription">과정별 강의 버튼이 많은 경우를 대비해 10개씩 페이지로 나눠서 보여줍니다.</span>
+        </div>
+        <div class="lecture-meta">
+          <span class="lecture-meta-chip" id="lectureCourseChip">HS THINKING BASIC</span>
+          <span class="lecture-meta-chip" id="lectureCountChip">0개 강의</span>
+        </div>
+      </div>
+      <div class="lecture-groups" id="lectureGroups"></div>
+      <div class="lecture-pages" id="lecturePages"></div>
+      <div class="lecture-grid" id="lectureGrid"></div>
+      <div class="lecture-empty" id="lectureEmpty">아직 연결된 강의 버튼이 없습니다. 관리자 페이지에서 강의 버튼을 추가하면 이 영역에 자동으로 들어옵니다.</div>
+    </div>
+  </div>
+</section>
+
+<section class="tutor-showcase">
+  <div class="tutor-wrap">
+    <div class="tutor-shell">
+      <div class="tutor-copy">
+        <b>DOCSSAM PRIVATE AI TUTOR</b>
+        <h3>독샘이 이름을 불러주며<br>막힌 지점부터 함께 짚어주는 전용 AI 튜터</h3>
+        <p>정답부터 밀어 넣는 질문창이 아니라, 교재와 강의의 흐름 안에서 학생의 이름과 과정명을 기억하고 어느 지점에서 막혔는지부터 다시 확인해주는 지필드 전용 AI 튜터로 이어집니다.</p>
+        <div class="tutor-pills">
+          <span>학생 이름 연동</span>
+          <span>과정명 연동</span>
+          <span>독샘 말투</span>
+          <span>막힌 지점 확인</span>
+        </div>
+      </div>
+      <div class="tutor-visual">
+        <img src="assets/gfield-logo.png" alt="DOCSSAM 전용 AI 튜터 안내 이미지">
+        <div class="tutor-visual-note">
+          <strong>이름을 기억하는 질문 흐름</strong>
+          <span>노관호, 김명서처럼 학생 이름과 과정을 바탕으로 차분하게 다시 이어주는 전용 AI 튜터를 목표로 합니다.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="target-showcase" id="scrollTargetShowcase" hidden>
+  <div class="target-wrap">
+    <div class="target-frame">
+      <div class="target-head">
+        <p>SCROLL TARGET MAP</p>
+        <h2>강의 버튼이 당겨갈 교재 구간</h2>
+        <span>실제 교재 뷰어에 id 또는 data-scroll-target을 심기 전에도, 지금 단계에서는 이 구간 맵으로 스크롤 흐름을 바로 확인할 수 있습니다.</span>
+      </div>
+      <div class="target-grid" id="scrollTargetGrid"></div>
+    </div>
+  </div>
+</section>
+
+<div class="ai-modal" id="aiModal">
+  <div class="ai-modal-content">
+    <button class="ai-close" type="button" onclick="closeAiModal()" aria-label="AI 튜터 창 닫기">×</button>
+    <p style="color:#d4af37;font-size:12px;font-weight:1000;letter-spacing:.22em;margin:0;">GFIELD AI TUTOR</p>
+    <h2 style="font-size:24px;font-weight:1000;color:white;margin:8px 0;">어디서 막혔는지부터 찾습니다.</h2>
+    <p style="color:#9ca3af;font-size:14px;margin:0 0 16px;">DOCSSAM은 답을 바로 알려주지 않습니다. 쪽수를 선택하면 막힌 지점부터 확인하는 질문 문장이 만들어집니다.</p>
+
+    <div class="ai-page-buttons" id="pageButtons">
+      <button type="button" onclick="selectAiPage(2,this)">2쪽</button>
+      <button type="button" onclick="selectAiPage(3,this)">3쪽</button>
+      <button type="button" onclick="selectAiPage(4,this)">4쪽</button>
+      <button type="button" onclick="selectAiPage(5,this)">5쪽</button>
+      <button type="button" onclick="selectAiPage(6,this)">6쪽</button>
+      <button type="button" onclick="selectAiPage(7,this)">7쪽</button>
+      <button type="button" onclick="selectAiPage(8,this)">8쪽</button>
+      <button type="button" onclick="selectAiPage(9,this)">9쪽</button>
+      <button type="button" onclick="selectAiPage(10,this)">10쪽</button>
+      <button type="button" onclick="selectAiPage(11,this)">11쪽</button>
+    </div>
+
+    <div id="aiPromptBox" class="ai-prompt-box">페이지를 선택하면 DOCSSAM에게 보낼 질문 내용이 여기에 만들어집니다.</div>
+
+    <div class="ai-actions">
+      <button class="ai-btn btn-copy" type="button" onclick="copyAiPrompt()">1. 질문 복사하기</button>
+      <a class="ai-btn btn-open" id="aiTutorOpenLink" href="https://chatgpt.com/g/g-6a209f67658481918e5dfa77c6f86391-hs-habgyeog-jiweon-gfield-on-ai-tyuteo" target="_blank" rel="noopener noreferrer" onclick="closeAiModal()">2. AI 튜터 열기</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const ARCHIVE_ADMIN_STORAGE_KEY='gfield_archive_admin_config';
+const ARCHIVE_REMOTE_CONFIG_PATH='./data/archive-config.json';
+const ARCHIVE_DEFAULT_CONFIG={
+  courseName:'HS THINKING BASIC',
+  ebookViewerUrl:'./books/hs-thinking-basic/viewer.html',
+  aiTutorEnabled:true,
+  aiTutorLink:'https://chatgpt.com/g/g-6a209f67658481918e5dfa77c6f86391-hs-habgyeog-jiweon-gfield-on-ai-tyuteo',
+  approvedStudents:[],
+  topLevelGroups:[],
+  lectureButtons:[]
+};
+function escapeHtml(value){
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;');
+}
+function normalizeStudentName(value){
+  return (value||'').replace(/\s+/g,'').trim();
+}
+function loadArchiveAdminConfig(){
+  try{
+    const raw=localStorage.getItem(ARCHIVE_ADMIN_STORAGE_KEY);
+    if(!raw)return {...ARCHIVE_DEFAULT_CONFIG};
+    const parsed=JSON.parse(raw);
+    return {
+      ...ARCHIVE_DEFAULT_CONFIG,
+      ...parsed,
+      approvedStudents:Array.isArray(parsed?.approvedStudents)?parsed.approvedStudents:[],
+      topLevelGroups:Array.isArray(parsed?.topLevelGroups)?parsed.topLevelGroups:[],
+      lectureButtons:Array.isArray(parsed?.lectureButtons)?parsed.lectureButtons:[]
+    };
+  }catch(error){
+    return {...ARCHIVE_DEFAULT_CONFIG};
+  }
+}
+let archiveConfig=loadArchiveAdminConfig();
+let currentLecturePage=0;
+let currentLectureGroup=0;
+function getLectureButtons(){
+  return Array.isArray(archiveConfig.lectureButtons)?archiveConfig.lectureButtons.filter(item=>item && (item.label||item.url||item.scrollTarget||item.downloadUrl)):[]; 
+}
+function arrangeLoginBelowSections(){
+  const ebook=document.getElementById('ebookViewerSection');
+  const smartPreview=document.getElementById('smartPreview');
+  const lecture=document.getElementById('lectureShowcase');
+  const tutor=document.querySelector('.tutor-showcase');
+  if(!ebook||!smartPreview||!lecture||!tutor)return;
+  const parent=ebook.parentNode;
+  if(!parent)return;
+  if(lecture.previousElementSibling!==ebook){
+    parent.insertBefore(lecture,smartPreview);
+  }
+  if(tutor.previousElementSibling!==lecture){
+    parent.insertBefore(tutor,smartPreview);
+  }
+}
+function setupEbookViewer(){
+  const viewerUrl=(archiveConfig.ebookViewerUrl||ARCHIVE_DEFAULT_CONFIG.ebookViewerUrl||'').trim();
+  const lectureButtons=getLectureButtons();
+  const hasVideoLinks=lectureButtons.some(item=>(item.url||'').trim());
+  const hasDownloadLinks=lectureButtons.some(item=>(item.downloadUrl||'').trim());
+  const frame=document.getElementById('ebookViewerFrame');
+  const placeholder=document.getElementById('ebookPlaceholder');
+  const openBtn=document.getElementById('ebookOpenBtn');
+  const printBtn=document.getElementById('ebookPrintBtn');
+  const expandBtn=document.getElementById('ebookExpandBtn');
+  const askBtn=document.getElementById('ebookAskBtn');
+  const title=document.getElementById('ebookToolbarTitle');
+  const heading=document.getElementById('ebookViewerTitle');
+  const description=document.getElementById('ebookViewerDescription');
+  const toolbarCopy=document.getElementById('ebookToolbarCopy');
+  const studentBadge=document.getElementById('ebookStudentBadge');
+  const badgesWrap=document.querySelector('.ebook-badges');
+  if(title)title.textContent=archiveConfig.courseName||ARCHIVE_DEFAULT_CONFIG.courseName;
+  if(heading)heading.textContent=`${archiveConfig.courseName||ARCHIVE_DEFAULT_CONFIG.courseName} ebook`;
+  if(description){
+    description.textContent=hasVideoLinks
+      ? '로그인 후 바로 이어지는 첫 화면입니다. 교재를 보다가 강의와 AI 튜터, 인쇄와 자료 다운로드까지 한 흐름 안에서 이어집니다.'
+      : '로그인 후 바로 이어지는 첫 화면입니다. 교재 파일만 연결된 경우에는 조용한 ebook 뷰어로 열리고, 버튼과 AI 튜터는 그대로 이어집니다.';
+  }
+  if(toolbarCopy){
+    toolbarCopy.textContent=hasVideoLinks
+      ? '승인된 학생만 조용히 이어갈 수 있는 강의 연동형 ebook 뷰어입니다.'
+      : '승인된 학생만 조용히 이어갈 수 있는 ebook 전용 서재형 뷰어입니다.';
+  }
+  if(studentBadge){
+    const student=sessionStorage.getItem('gfield_student_name');
+    studentBadge.textContent=student?`${student} 전용 뷰어`:'학생 미확인';
+  }
+  if(badgesWrap){
+    badgesWrap.innerHTML=`
+      <span id="ebookStudentBadge">${studentBadge?studentBadge.textContent:'학생 미확인'}</span>
+      <span>${hasVideoLinks?'강의 연동':'ebook 단독'}</span>
+      <span>AI 튜터 연결</span>
+      <span>${hasDownloadLinks?'자료 다운로드':'인쇄 지원'}</span>
+    `;
+  }
+  if(frame)frame.src=viewerUrl||'about:blank';
+  if(placeholder)placeholder.hidden=Boolean(viewerUrl);
+  if(openBtn){
+    openBtn.href=viewerUrl||'#';
+    openBtn.style.pointerEvents=viewerUrl?'auto':'none';
+    openBtn.style.opacity=viewerUrl?'1':'.55';
+  }
+  if(printBtn){
+    printBtn.disabled=!viewerUrl;
+    printBtn.style.opacity=viewerUrl?'1':'.55';
+    printBtn.onclick=()=>{
+      if(!viewerUrl)return;
+      const win=window.open(viewerUrl,'_blank','noopener');
+      if(win)setTimeout(()=>{try{win.print();}catch(e){}},900);
+    };
+  }
+  if(expandBtn){
+    expandBtn.onclick=()=>{
+      const wrap=document.getElementById('ebookViewerFrameWrap');
+      if(wrap?.requestFullscreen)wrap.requestFullscreen();
+    };
+  }
+  if(askBtn)askBtn.onclick=()=>openAiModal();
+}
+function resolveLectureScrollTarget(target){
+  const value=(target||'').trim();
+  if(!value)return null;
+  if(value.startsWith('#'))return document.querySelector(value);
+  return document.getElementById(value) || document.querySelector(`[data-scroll-target="${value}"]`);
+}
+function scrollLectureTarget(target){
+  const node=resolveLectureScrollTarget(target);
+  if(!node)return false;
+  node.scrollIntoView({behavior:'smooth',block:'start'});
+  node.classList.add('gfield-scroll-focus');
+  setTimeout(()=>node.classList.remove('gfield-scroll-focus'),1200);
+  return true;
+}
+function getTopLevelGroups(){
+  const fromConfig=Array.isArray(archiveConfig.topLevelGroups)?archiveConfig.topLevelGroups.filter(item=>item && item.name):[];
+  if(fromConfig.length)return fromConfig;
+  const inferred=[...new Set(getLectureButtons().map(item=>(item.group||'기본').trim()||'기본'))];
+  return inferred.map(name=>({name,image:''}));
+}
+function getLecturePages(lectureButtons){
+  const seen=new Set();
+  const pages=[];
+  lectureButtons.forEach(item=>{
+    const page=(item.page||'기본').trim()||'기본';
+    if(!seen.has(page)){
+      seen.add(page);
+      pages.push(page);
+    }
+  });
+  return pages;
+}
+function getScrollTargetKey(target){
+  const value=(target||'').trim();
+  if(!value)return '';
+  return value.startsWith('#')?value.slice(1):value;
+}
+function renderScrollTargetShowcase(){
+  const section=document.getElementById('scrollTargetShowcase');
+  const grid=document.getElementById('scrollTargetGrid');
+  if(!section||!grid)return;
+  const lectureButtons=getLectureButtons().filter(item=>(item.scrollTarget||'').trim());
+  if(!lectureButtons.length){
+    section.hidden=true;
+    grid.innerHTML='';
+    return;
+  }
+  const seen=new Set();
+  const targets=[];
+  lectureButtons.forEach((item,index)=>{
+    const rawTarget=(item.scrollTarget||'').trim();
+    const key=getScrollTargetKey(rawTarget);
+    if(!key || seen.has(key))return;
+    seen.add(key);
+    targets.push({
+      key,
+      rawTarget,
+      group:(item.group||'기본').trim()||'기본',
+      page:(item.page||'기본').trim()||'기본',
+      label:item.label||`강의 ${index+1}`
+    });
+  });
+  section.hidden=false;
+  grid.innerHTML='';
+  targets.forEach((item,index)=>{
+    const card=document.createElement('article');
+    card.className='target-card';
+    card.id=item.key;
+    card.setAttribute('data-scroll-target',item.rawTarget);
+    card.innerHTML=`
+      <div>
+        <b>TARGET ${String(index+1).padStart(2,'0')}</b>
+        <h3>${escapeHtml(item.key)}</h3>
+        <p>${escapeHtml(item.label)} 버튼이 연결되는 구간입니다. 실제 교재에서는 이 자리 대신 같은 id 또는 data-scroll-target 값을 가진 위치로 이동하게 됩니다.</p>
+      </div>
+      <div class="target-badges">
+        <span>${escapeHtml(item.group)}</span>
+        <span>PAGE ${escapeHtml(item.page)}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+function renderLectureLibrary(){
+  const section=document.getElementById('lectureShowcase');
+  const title=document.getElementById('lectureTitle');
+  const desc=document.getElementById('lectureDescription');
+  const courseChip=document.getElementById('lectureCourseChip');
+  const countChip=document.getElementById('lectureCountChip');
+  const groups=document.getElementById('lectureGroups');
+  const pages=document.getElementById('lecturePages');
+  const grid=document.getElementById('lectureGrid');
+  const empty=document.getElementById('lectureEmpty');
+  if(!section||!title||!desc||!courseChip||!countChip||!groups||!pages||!grid||!empty)return;
+  const lectureButtons=getLectureButtons();
+  const topGroups=getTopLevelGroups();
+  if(currentLectureGroup>=topGroups.length)currentLectureGroup=0;
+  groups.innerHTML='';
+  topGroups.forEach((group,index)=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className=`lecture-group-btn style-${group.style||'classic'}${index===currentLectureGroup?' active':''}${group.image?' has-image':''}`;
+    if(group.image){
+      button.style.backgroundImage=`url('${group.image.replaceAll("'","%27")}')`;
+    }else{
+      button.style.backgroundImage='';
+    }
+    button.innerHTML=`<div><strong>${escapeHtml(group.name)}</strong><span>${escapeHtml(group.caption||'TOP LEVEL')}</span></div>`;
+    button.addEventListener('click',()=>{
+      currentLectureGroup=index;
+      currentLecturePage=0;
+      renderLectureLibrary();
+    });
+    groups.appendChild(button);
+  });
+  const activeGroup=(topGroups[currentLectureGroup]?.name)||'기본';
+  const groupedButtons=lectureButtons.filter(item=>((item.group||'기본').trim()||'기본')===activeGroup);
+  const lecturePages=getLecturePages(groupedButtons);
+  const courseName=archiveConfig.courseName||ARCHIVE_DEFAULT_CONFIG.courseName;
+  const hasVideoLinks=groupedButtons.some(item=>(item.url||'').trim());
+  courseChip.textContent=courseName;
+  countChip.textContent=`${groupedButtons.length}개 버튼`;
+  title.textContent=`${activeGroup} 연결 버튼`;
+  desc.textContent=hasVideoLinks
+    ? '상위 버튼을 먼저 고르고, 그 안에서 페이지값(예: 1, 1.5, 2)에 따라 강의와 자료 버튼을 함께 묶어 보여줍니다.'
+    : '상위 버튼을 먼저 고르고, 그 안에서 페이지값(예: 1, 1.5, 2)에 따라 자료와 스크롤 버튼을 함께 묶어 보여줍니다.';
+  section.hidden=false;
+  if(!groupedButtons.length){
+    grid.innerHTML='';
+    pages.innerHTML='';
+    empty.hidden=false;
+    empty.textContent=`${activeGroup}에 아직 연결된 강의 버튼이 없습니다. 관리자 페이지에서 이 상위 버튼 아래 강의를 추가하면 여기에 자동으로 들어옵니다.`;
+    return;
+  }
+  empty.hidden=true;
+  const pageCount=lecturePages.length;
+  if(currentLecturePage>=pageCount)currentLecturePage=0;
+  pages.innerHTML='';
+  lecturePages.forEach((pageLabel,index)=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className=`lecture-page-btn${index===currentLecturePage?' active':''}`;
+    button.textContent=pageLabel;
+    button.addEventListener('click',()=>{
+      currentLecturePage=index;
+      renderLectureLibrary();
+    });
+    pages.appendChild(button);
+  });
+  const activePage=lecturePages[currentLecturePage]||lecturePages[0];
+  const visibleButtons=groupedButtons.filter(item=>((item.page||'기본').trim()||'기본')===activePage);
+  grid.innerHTML='';
+  visibleButtons.forEach((item,index)=>{
+    const absoluteIndex=groupedButtons.indexOf(item)+1;
+    const card=document.createElement('div');
+    card.className='lecture-card';
+    card.dataset.scrollTarget=(item.scrollTarget||'').trim();
+    const primaryLabel=item.url?'강의 보기':(item.scrollTarget?'해당 위치 보기':(item.downloadUrl?'자료 보기':'준비 중'));
+    const info=item.url
+      ? (item.scrollTarget?`해당 위치로 이동한 뒤 연결된 강의를 새 창에서 엽니다.`:'클릭하면 연결된 강의 링크를 새 창에서 엽니다.')
+      : (item.scrollTarget?`타깃 ${escapeHtml(item.scrollTarget)} 위치로 이동합니다.`:(item.downloadUrl?'연결된 자료를 바로 열거나 내려받을 수 있습니다.':'아직 링크가 연결되지 않았습니다.'));
+    const downloadAction=item.downloadUrl?`<a class="lecture-action" href="${escapeHtml(item.downloadUrl)}" target="_blank" rel="noopener noreferrer" download>${escapeHtml(item.downloadLabel||'자료 다운로드')}</a>`:'';
+    card.innerHTML=`<div><small>PAGE ${escapeHtml(activePage)} · BUTTON ${absoluteIndex}</small><strong>${escapeHtml(item.label||`버튼 ${absoluteIndex}`)}</strong><span>${info}</span></div><div class="lecture-card-actions"><button class="lecture-action primary" type="button">${escapeHtml(primaryLabel)}</button>${downloadAction}</div>`;
+    card.querySelector('.lecture-action.primary')?.addEventListener('click',()=>{
+      scrollLectureTarget(item.scrollTarget);
+      if(item.url)window.open(item.url,'_blank','noopener');
+      else if(item.downloadUrl)window.open(item.downloadUrl,'_blank','noopener');
+    });
+    card.querySelectorAll('a.lecture-action').forEach(link=>{
+      link.addEventListener('click',()=>scrollLectureTarget(item.scrollTarget));
+    });
+    grid.appendChild(card);
+  });
+}
+function applyArchiveConfig(){
+  const courseName=archiveConfig.courseName||ARCHIVE_DEFAULT_CONFIG.courseName;
+  const courseBox=document.getElementById('courseName');
+  if(courseBox)courseBox.textContent=courseName;
+  const aiLink=document.getElementById('aiTutorOpenLink');
+  if(aiLink){
+    aiLink.href=archiveConfig.aiTutorLink||ARCHIVE_DEFAULT_CONFIG.aiTutorLink;
+    aiLink.style.display=archiveConfig.aiTutorEnabled===false?'none':'inline-flex';
+  }
+  arrangeLoginBelowSections();
+  setupEbookViewer();
+  renderLectureLibrary();
+  renderScrollTargetShowcase();
+}
+applyArchiveConfig();
+async function loadRemoteArchiveConfig(){
+  if(!/^https?:$/i.test(location.protocol))return;
+  try{
+    const response=await fetch(`${ARCHIVE_REMOTE_CONFIG_PATH}?ts=${Date.now()}`,{cache:'no-store'});
+    if(!response.ok)return;
+    const remoteConfig=await response.json();
+    archiveConfig={
+      ...ARCHIVE_DEFAULT_CONFIG,
+      ...archiveConfig,
+      ...remoteConfig,
+      approvedStudents:Array.isArray(remoteConfig?.approvedStudents)?remoteConfig.approvedStudents:(archiveConfig.approvedStudents||[]),
+      topLevelGroups:Array.isArray(remoteConfig?.topLevelGroups)?remoteConfig.topLevelGroups:(archiveConfig.topLevelGroups||[]),
+      lectureButtons:Array.isArray(remoteConfig?.lectureButtons)?remoteConfig.lectureButtons:(archiveConfig.lectureButtons||[])
+    };
+    applyArchiveConfig();
+  }catch(error){
+    // Ignore remote config load failures and keep local fallback.
+  }
+}
+loadRemoteArchiveConfig();
+const scenes=['scene0','scene1','scene2','scene3','scene4'];
+const times=[0,1600,3200,5000,7900];
+const data={
+  left:[
+    {title:'영재 클래스',years:[['2023',6],['2024',4],['2025',6]],total:40},
+    {title:'생각하는 황소 경시',years:[['2021',15],['2022',14],['2023',18],['2024',15]],total:62}
+  ],
+  right:[
+    {title:'테마 프리미어',years:[['2023',6],['2024',4],['2025',4]],total:87},
+    {title:'영재원ㆍ특목 경시',years:[['대비',8],['누적',12]],total:120}
+  ],
+  grand:400
+};
+function showScene(n){
+  scenes.forEach((id,i)=>document.getElementById(id).classList.toggle('on',i===n));
+  if(n===3) runRecords();
+}
+function panel(item){
+  const max=Math.max(...item.years.map(y=>y[1]),1);
+  return `<div class="record">
+    <div class="recordTitle"><span>${item.title}</span><small>RECORD</small></div>
+    ${item.years.map(y=>`<div class="year" data-count="${y[1]}" data-max="${max}"><span>${y[0]}</span><div class="bar"><span></span></div><b class="ynum">0</b></div>`).join('')}
+    <div class="total"><b data-total="${item.total}">0</b><span>명</span></div>
+  </div>`;
+}
+function countTo(el,target,duration=700){
+  const start=performance.now();
+  const from=parseInt((el.textContent||'0').replace(/[^0-9]/g,''),10)||0;
+  const diff=target-from;
+  function frame(now){
+    const p=Math.min((now-start)/duration,1);
+    const e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(from+diff*e).toLocaleString('ko-KR');
+    if(p<1)requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+function runRecords(){
+  if(window.recordsStarted)return;
+  window.recordsStarted=true;
+  leftStack.innerHTML=data.left.map(panel).join('');
+  rightStack.innerHTML=data.right.map(panel).join('');
+  [...document.querySelectorAll('.record')].forEach((card,i)=>{
+    setTimeout(()=>{
+      card.classList.add('on','pop');
+      card.querySelectorAll('.year').forEach((row,j)=>{
+        setTimeout(()=>{
+          const c=+row.dataset.count,m=+row.dataset.max;
+          row.querySelector('.bar span').style.width=Math.max(18,Math.round(c/m*100))+'%';
+          countTo(row.querySelector('.ynum'),c,430);
+        },j*135);
+      });
+      setTimeout(()=>countTo(card.querySelector('[data-total]'),+card.querySelector('[data-total]').dataset.total,720),420);
+      setTimeout(()=>card.classList.remove('pop'),500);
+    },i*360);
+  });
+  setTimeout(()=>countTo(grandNum,data.grand,1850),680);
+  setTimeout(()=>grandNum.classList.add('hit'),2600);
+  setTimeout(()=>grandNum.classList.remove('hit'),3200);
+  [...document.querySelectorAll('.pang')].forEach((p,i)=>setTimeout(()=>p.classList.add('on'),1900+i*120));
+}
+function showAccess(){
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('on'));
+  document.getElementById('accessForm').classList.add('show');
+}
+function pickGreetingVariant(seedKey,variants){
+  if(!Array.isArray(variants)||!variants.length)return null;
+  const today=new Date();
+  const daySeed=`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+  const seed=`${seedKey||''}-${daySeed}`;
+  let hash=0;
+  for(let i=0;i<seed.length;i+=1){
+    hash=((hash<<5)-hash)+seed.charCodeAt(i);
+    hash|=0;
+  }
+  return variants[Math.abs(hash)%variants.length];
+}
+function getGreetingTone(name){
+  const hour=new Date().getHours();
+  const safeName=(name||'').trim();
+  const callName=safeName.length>=3?safeName.slice(1):safeName;
+  const lastChar=callName.charCodeAt(callName.length-1);
+  const hasBatchim=lastChar>=0xAC00&&lastChar<=0xD7A3&&(lastChar-0xAC00)%28!==0;
+  const studentNameWithParticle=callName+(hasBatchim?'아':'야');
+  if(hour>=6&&hour<9){
+    return pickGreetingVariant(`${safeName}-morning`,[
+      {
+        flash:`안녕, ${studentNameWithParticle} 학교 가기 전 공부하러 왔구나.`,
+        sub:'오늘은 새로 많이 보려고 하기보다, 아는 걸 정확히 푸는 게 더 중요해.',
+        dock:`${studentNameWithParticle} 오늘도 파이팅!`
+      },
+      {
+        flash:`${studentNameWithParticle}, 등교 전에 잠깐 들렀구나.`,
+        sub:'짧은 시간이라도 흐름을 놓치지 않는 게 중요해. 오늘은 아는 것을 정확히 연결해보자.',
+        dock:`${studentNameWithParticle} 차분히 시작하자.`
+      },
+      {
+        flash:`${studentNameWithParticle}, 아침부터 들어왔네.`,
+        sub:'많이 보기보다 정확하게 푸는 감각을 챙기고 가면 오늘 하루가 더 단단해진다.',
+        dock:`${studentNameWithParticle} 오늘도 잘 해보자.`
+      }
+    ]);
+  }
+  if(hour>=9&&hour<15){
+    return pickGreetingVariant(`${safeName}-daytime`,[
+      {
+        flash:`${studentNameWithParticle}, 지금은 학교에 있을 시간인데 괜찮니?`,
+        sub:`혹시 컨디션이 좋지 않은 건지, 아니면 ${callName} 어머니께서 확인 중이신지 먼저 살펴볼게요.`,
+        dock:`${studentNameWithParticle} 괜찮니?`
+      },
+      {
+        flash:`${studentNameWithParticle}, 이 시간에 들어왔구나.`,
+        sub:`몸이 조금 불편한 건지, 아니면 ${callName} 어머니께서 먼저 확인하고 계신 건지 차분히 볼게요.`,
+        dock:`${studentNameWithParticle} 천천히 보자.`
+      }
+    ]);
+  }
+  if(hour>=22||hour<6){
+    return pickGreetingVariant(`${safeName}-night-mother`,[
+      {
+        flash:`${callName} 어머니, 오늘도 이 시간에 다시 들어오셨네요.`,
+        sub:`아이를 향한 그 마음이 ${callName}의 하루를 조금씩 더 단단하게 만들고 있을 것입니다.`,
+        dock:`${callName} 어머니, 차분히 이어가볼게요.`
+      },
+      {
+        flash:`${callName} 어머니, 늦은 시간까지 아이 공부를 챙기고 계시네요.`,
+        sub:'아이의 미래는 거창한 한 번보다 이렇게 반복되는 관심과 기다림 속에서 더 깊어집니다.',
+        dock:`${callName} 어머니, 함께 확인해볼게요.`
+      },
+      {
+        flash:`${callName} 어머니, 아직은 조용히 준비 중인 공간이지만 다시 찾아와 주셨네요.`,
+        sub:`이 안에 담길 시간들이 결국 ${callName}의 큰 성장으로 이어지길 바랍니다.`,
+        dock:`${callName} 어머니, 오늘도 고맙습니다.`
+      },
+      {
+        flash:`${callName} 어머니, 아직은 먼저 선보이는 단계이지만 함께해 주고 계시네요.`,
+        sub:'더 좋은 경험으로 이어질 수 있도록 차근차근 준비하고 있습니다.',
+        dock:`${callName} 어머니, 편안히 둘러보세요.`
+      }
+    ]);
+  }
+  if(hour>=15&&hour<18){
+    return pickGreetingVariant(`${safeName}-afterschool`,[
+      {
+        flash:`${studentNameWithParticle}, 오늘 학교는 잘 다녀왔니? 오늘도 파이팅^^`,
+        sub:'교재와 영상, 기록을 하나씩 연결해서 오늘의 학습을 시작해보자.',
+        dock:`${studentNameWithParticle} 오늘도 파이팅!`
+      },
+      {
+        flash:`${studentNameWithParticle}, 학교 끝나고 다시 들어왔구나.`,
+        sub:'오늘은 서두르지 말고, 네가 쌓아온 흐름을 차분하게 이어가보자.',
+        dock:`${studentNameWithParticle} 흐름 이어가자.`
+      },
+      {
+        flash:`${studentNameWithParticle}, 오늘도 지필드에 돌아왔네.`,
+        sub:'많이 하기보다 정확하게 이해하는 쪽으로 오늘의 공부를 시작해보자.',
+        dock:`${studentNameWithParticle} 차근차근 가자.`
+      }
+    ]);
+  }
+  return pickGreetingVariant(`${safeName}-default`,[
+    {
+      flash:`${studentNameWithParticle}, 오늘도 지필드에서 학습 흐름을 이어가보자.`,
+      sub:'교재와 영상, 기록을 하나씩 연결해서 오늘의 학습을 시작해보자.',
+      dock:`${studentNameWithParticle} 오늘도 파이팅!`
+    },
+    {
+      flash:`${studentNameWithParticle}, 오늘도 들어왔구나.`,
+      sub:'지금까지 쌓아온 공부가 이어질 수 있도록, 오늘도 차분하게 시작해보자.',
+      dock:`${studentNameWithParticle} 천천히 시작하자.`
+    },
+    {
+      flash:`${studentNameWithParticle}, 오늘의 흐름을 다시 이어가보자.`,
+      sub:'교재와 강의, 기록이 자연스럽게 연결되도록 한 문제씩 정확하게 가보자.',
+      dock:`${studentNameWithParticle} 같이 가보자.`
+    }
+  ]);
+}
+function weatherCodeText(code){
+  if([51,53,55,61,63,65,66,67,80,81,82].includes(code))return 'rain';
+  if([71,73,75,77,85,86].includes(code))return 'snow';
+  if([45,48].includes(code))return 'fog';
+  if([95,96,99].includes(code))return 'storm';
+  if(code===0)return 'clear';
+  if([1,2,3].includes(code))return 'cloud';
+  return '';
+}
+function weatherMessageForStudent(weather,callName){
+  if(!weather)return '';
+  if(weather.kind==='rain')return `오늘은 비가 오네. 이따 학원에 온다면 예쁜 우산 챙기렴, ${callName}야.`;
+  if(weather.kind==='snow')return `오늘은 눈 소식이 있어. 오갈 때 미끄럽지 않게 천천히 움직이자, ${callName}야.`;
+  if(weather.kind==='storm')return `오늘은 날씨가 거칠 수 있어. 이동할 때 무리하지 말고 안전하게 오자, ${callName}야.`;
+  if(weather.kind==='fog')return `오늘은 시야가 흐릴 수 있어. 이동할 때 주변을 잘 보고 천천히 움직이자, ${callName}야.`;
+  if(typeof weather.pm10==='number'&&weather.pm10>=81)return `오늘은 미세먼지가 좋지 않을 수 있어. 코나 눈이 불편하면 공부도 짧게 끊어서 차분히 보자, ${callName}야.`;
+  if(typeof weather.temperature==='number'&&weather.temperature<=0)return `오늘은 꽤 춥네. 몸이 조금 굳을 수 있으니 따뜻하게 챙기고 차분히 시작하자, ${callName}야.`;
+  if(typeof weather.temperature==='number'&&weather.temperature>=30)return `오늘은 많이 더울 수 있어. 쉽게 지칠 수 있으니 물도 챙기고 차분히 시작하자, ${callName}야.`;
+  return '';
+}
+async function getDaechiWeather(){
+  try{
+    const weatherUrl='https://api.open-meteo.com/v1/forecast?latitude=37.498&longitude=127.062&current=temperature_2m,weather_code&timezone=Asia%2FSeoul';
+    const airUrl='https://air-quality-api.open-meteo.com/v1/air-quality?latitude=37.498&longitude=127.062&current=pm10&timezone=Asia%2FSeoul';
+    const [weatherRes,airRes]=await Promise.all([fetch(weatherUrl),fetch(airUrl)]);
+    if(!weatherRes.ok)return null;
+    const weatherData=await weatherRes.json();
+    const airData=airRes.ok?await airRes.json():null;
+    const code=weatherData?.current?.weather_code;
+    return {
+      kind:weatherCodeText(code),
+      temperature:weatherData?.current?.temperature_2m,
+      pm10:airData?.current?.pm10
+    };
+  }catch(e){
+    return null;
+  }
+}
+function typeDockText(text){
+  const target=document.getElementById('dockText');
+  target.textContent=text||'';
+}
+function playLoginGreeting(name){
+  const tone=getGreetingTone(name);
+  const flash=document.getElementById('loginFlash');
+  const dock=document.getElementById('dockHello');
+  const flashMessage=document.getElementById('flashMessage');
+  const flashSub=document.getElementById('flashSub');
+  flash.classList.remove('show','mist-out','flash-hit');
+  dock.classList.remove('show','gather-in');
+  flashMessage.textContent=tone.flash;
+  flashSub.textContent='자, 이제 GFIELD-ON 시작해볼까?';
+  const callName=(name||'').trim().length>=3?(name||'').trim().slice(1):(name||'').trim();
+  getDaechiWeather().then(weather=>{
+    const weatherMessage=weatherMessageForStudent(weather,callName);
+    if(weatherMessage)flashSub.textContent=`${weatherMessage} 자, 이제 GFIELD-ON 시작해볼까?`;
+  });
+  flash.classList.add('show','flash-hit');
+  flash.classList.remove('mist-out');
+  setTimeout(()=>{
+    document.getElementById('ebookViewerSection').scrollIntoView({behavior:'smooth',block:'start'});
+  },5200);
+  setTimeout(()=>{
+    flash.classList.add('mist-out');
+  },5600);
+  setTimeout(()=>{
+    flash.classList.remove('show','mist-out');
+    dock.classList.add('show');
+    dock.classList.add('gather-in');
+    typeDockText(tone.dock);
+  },6600);
+  setTimeout(()=>{
+    flash.classList.remove('flash-hit');
+  },7000);
+}
+times.forEach((t,i)=>setTimeout(()=>showScene(i),t));
+setTimeout(showAccess,9500);
+document.getElementById('skipIntro').addEventListener('click',showAccess);
+document.getElementById('introVideo').addEventListener('error',()=>{document.getElementById('introVideo').style.display='none'});
+document.getElementById('accessForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=normalizeStudentName(document.getElementById('studentName').value);
+  const err=document.getElementById('errorMsg');
+  if(!name){err.textContent='학생 이름을 입력해 주세요.';return}
+  const approvedStudents=(archiveConfig.approvedStudents||[]).map(normalizeStudentName).filter(Boolean);
+  if(approvedStudents.length && !approvedStudents.includes(name)){
+    err.textContent='승인된 학생 이름이 아닙니다.';
+    return;
+  }
+  err.textContent='';
+  sessionStorage.setItem('gfield_student_name',name);
+  sessionStorage.setItem('gfield_course_name',archiveConfig.courseName||ARCHIVE_DEFAULT_CONFIG.courseName);
+  sessionStorage.setItem('gfield_archive_access','approved');
+  setupEbookViewer();
+  playLoginGreeting(name);
+});
+let currentAiPrompt='';
+function openAiModal(){
+  document.getElementById('aiModal').classList.add('show');
+}
+function closeAiModal(){
+  document.getElementById('aiModal').classList.remove('show');
+}
+function selectAiPage(pageNum,button){
+  const studentName=sessionStorage.getItem('gfield_student_name')||'학생';
+  const courseName=sessionStorage.getItem('gfield_course_name')||archiveConfig.courseName||ARCHIVE_DEFAULT_CONFIG.courseName;
+  currentAiPrompt=`학생 이름은 ${studentName}입니다.
+과정은 ${courseName}입니다.
+상황은 "영상을 보고도 이해가 되지 않아 다시 질문하러 왔습니다."입니다.
+
+${pageNum}쪽에서 막혔습니다.
+
+정답만 바로 말하지 말고,
+먼저 ${pageNum}쪽의 어떤 문제인지 확인해 주세요.
+
+그다음 어디서 막혔는지부터 짚고,
+초등 상위권 방식으로 한 단계씩 정확하게 설명해 주세요.`;
+  document.getElementById('aiPromptBox').innerText=currentAiPrompt;
+  document.querySelectorAll('.ai-page-buttons button').forEach(btn=>btn.classList.remove('active'));
+  if(button)button.classList.add('active');
+}
+function copyAiPrompt(){
+  if(!currentAiPrompt){
+    alert('먼저 질문할 페이지를 선택해 주세요.');
+    return;
+  }
+  navigator.clipboard.writeText(currentAiPrompt).then(()=>{
+    alert('질문 내용이 복사되었습니다. AI 튜터 창에 붙여 넣어 주세요.');
+  });
+}
+</script>
+</body>
+</html>
+

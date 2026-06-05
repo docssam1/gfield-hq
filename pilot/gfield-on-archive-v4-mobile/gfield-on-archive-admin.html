@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GFIELD-ON ADMIN</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+*{box-sizing:border-box}
+html,body{margin:0;background:#07111f;color:#f8fafc;font-family:Pretendard,sans-serif}
+:root{--gold:#d4af37;--line:rgba(255,255,255,.12);--panel:#0d1728;--panel2:#101c31}
+body{padding:28px}
+.wrap{width:min(1240px,100%);margin:0 auto}
+.topbar{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-bottom:22px}
+.topbar h1{margin:0;font-size:clamp(32px,5vw,48px);line-height:1.06;font-weight:1000;letter-spacing:-.06em}
+.topbar p{margin:8px 0 0;color:#cbd5e1;font-size:15px;line-height:1.7}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn,.ghost,.danger{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 16px;border-radius:14px;text-decoration:none;border:1px solid var(--line);font-weight:900;cursor:pointer}
+.btn{background:linear-gradient(135deg,#d4af37,#f8dd83);color:#07111f;border:0}
+.ghost{background:rgba(255,255,255,.04);color:#f8fafc}
+.danger{background:rgba(248,113,113,.08);color:#fecaca;border-color:rgba(248,113,113,.24)}
+.layout{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+.stack{display:grid;gap:18px}
+.panel{padding:22px;border-radius:24px;background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);box-shadow:0 18px 50px rgba(0,0,0,.22)}
+.panel h2{margin:0;font-size:24px;line-height:1.2;font-weight:1000;letter-spacing:-.04em}
+.panel p{margin:10px 0 0;color:#cbd5e1;font-size:14px;line-height:1.75}
+.field{margin-top:18px}
+.field label{display:block;margin-bottom:8px;color:#f8dd83;font-size:13px;font-weight:1000;letter-spacing:.08em}
+.field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.22);color:#f8fafc;padding:14px 15px;font:inherit;outline:none}
+.field textarea{min-height:168px;resize:vertical}
+.hint{margin-top:8px;color:#94a3b8;font-size:12px;line-height:1.6}
+.checkline{display:flex;align-items:center;gap:10px;margin-top:16px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.checkline input{width:18px;height:18px}
+.lecture-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:18px}
+.count{color:#f8dd83;font-size:13px;font-weight:1000;letter-spacing:.08em}
+.lecture-list{display:grid;gap:12px;margin-top:14px}
+.lecture-item{padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.lecture-item-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.lecture-index{color:#f8dd83;font-size:12px;font-weight:1000;letter-spacing:.1em}
+.mini-grid{display:grid;grid-template-columns:1fr 1fr .75fr 1.1fr 1.05fr;gap:10px}
+.sub-grid{display:grid;grid-template-columns:.9fr 1.4fr;gap:10px;margin-top:10px}
+.group-list{display:grid;gap:12px;margin-top:14px}
+.group-item{padding:16px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.group-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:10px}
+.radio-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.radio-chip{display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px;font-weight:900;letter-spacing:.04em}
+.radio-chip input{margin:0}
+.status{margin-top:18px;padding:14px 16px;border-radius:16px;background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.18);color:#f8e7ab;font-size:13px;line-height:1.7}
+.github-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.upload-box{margin-top:18px;padding:18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.upload-box input[type=file]{margin-top:12px}
+.upload-list{display:grid;gap:8px;margin-top:12px}
+.upload-item{padding:11px 12px;border-radius:12px;background:rgba(255,255,255,.04);color:#dbe4ef;font-size:13px;line-height:1.55}
+.footer{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.08)}
+.footer small{color:#94a3b8;font-size:12px;line-height:1.6}
+.approved-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+@media(max-width:980px){.layout{grid-template-columns:1fr}.topbar{display:block}.actions{margin-top:16px}.mini-grid,.github-grid,.group-grid,.sub-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div>
+      <h1>GFIELD-ON ADMIN</h1>
+      <p>로컬 관리자 앱처럼 사용하는 페이지입니다. 승인 학생, 과정명, AI 튜터 링크, 강의 버튼 목록을 관리하고 GitHub 저장소로 바로 업로드할 수 있습니다.</p>
+    </div>
+    <div class="actions">
+      <a class="ghost" href="gfield-on-archive-preview.html" target="_blank" rel="noopener">미리보기 열기</a>
+      <button class="ghost" type="button" id="exportBtn">설정 내보내기</button>
+      <label class="ghost" for="importInput" style="cursor:pointer;">설정 불러오기</label>
+      <input id="importInput" type="file" accept="application/json" hidden>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="stack">
+      <section class="panel">
+        <h2>기본 설정</h2>
+        <p>학생이 입장할 때 보이는 과정명과 AI 튜터 연결 기준을 관리합니다.</p>
+
+        <div class="field">
+          <label for="courseName">과정명</label>
+          <input id="courseName" type="text" placeholder="예: HS THINKING BASIC">
+        </div>
+
+        <div class="field">
+          <label for="ebookViewerUrl">ebook 뷰어 링크</label>
+          <input id="ebookViewerUrl" type="text" placeholder="예: ./books/hs-thinking-basic/index.html 또는 ./files/book.pdf">
+        </div>
+
+        <div class="checkline">
+          <input id="aiTutorEnabled" type="checkbox">
+          <label for="aiTutorEnabled" style="margin:0;color:#f8fafc;font-size:15px;font-weight:800;letter-spacing:0">AI 튜터 버튼 사용</label>
+        </div>
+
+        <div class="field">
+          <label for="aiTutorLink">AI 튜터 링크</label>
+          <input id="aiTutorLink" type="url" placeholder="https://chatgpt.com/g/...">
+        </div>
+
+        <div class="status" id="summaryBox"></div>
+      </section>
+
+      <section class="panel">
+        <h2>GitHub 업로드 설정</h2>
+        <p>이 페이지를 원장님 PC에서만 열고 GitHub 토큰으로 업로드하는 구조입니다. 웹에 공개하지 않고 설치형처럼 쓰는 흐름에 맞췄습니다.</p>
+
+        <div class="github-grid">
+          <div class="field">
+            <label for="githubOwner">GitHub Owner</label>
+            <input id="githubOwner" type="text" placeholder="예: docssam1">
+          </div>
+          <div class="field">
+            <label for="githubRepo">GitHub Repo</label>
+            <input id="githubRepo" type="text" placeholder="예: GFIELD-EBOOK">
+          </div>
+          <div class="field">
+            <label for="githubBranch">브랜치</label>
+            <input id="githubBranch" type="text" placeholder="main">
+          </div>
+          <div class="field">
+            <label for="githubConfigPath">config 저장 경로</label>
+            <input id="githubConfigPath" type="text" placeholder="data/archive-config.json">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="githubUploadBasePath">파일 업로드 기본 폴더</label>
+          <input id="githubUploadBasePath" type="text" placeholder="uploads">
+          <div class="hint">예: <code>uploads</code> 또는 <code>books/hs-thinking-basic</code></div>
+        </div>
+
+        <div class="field">
+          <label for="githubToken">GitHub Personal Access Token</label>
+          <input id="githubToken" type="password" placeholder="ghp_...">
+          <div class="hint">토큰은 현재 브라우저 localStorage에만 저장됩니다. 이 페이지를 원장님 PC에서만 쓰는 구조를 전제로 합니다.</div>
+        </div>
+
+        <div class="upload-box">
+          <strong style="display:block;color:#f8dd83;font-size:13px;letter-spacing:.08em;">PDF / HTML / 이미지 업로드</strong>
+          <p style="margin-top:8px">선택한 파일들을 GitHub 저장소의 지정 폴더에 올립니다.</p>
+          <input id="uploadFiles" type="file" multiple>
+          <div class="upload-list" id="uploadList"></div>
+        </div>
+
+        <div class="status" id="githubStatusBox">아직 GitHub 업로드를 실행하지 않았습니다.</div>
+      </section>
+    </div>
+
+    <div class="stack">
+    <section class="panel">
+      <h2>승인 학생 목록</h2>
+      <p>비워두면 아무 이름이나 입장할 수 있습니다. 입력하면 명단에 있는 학생만 통과합니다.</p>
+
+      <div class="field">
+        <label for="approvedStudents">승인 학생 명단</label>
+        <textarea id="approvedStudents" placeholder="한 줄에 한 명씩 입력&#10;예) 노관호&#10;김명서"></textarea>
+      </div>
+
+      <div class="approved-toolbar">
+        <button class="ghost" type="button" id="reloadApprovedBtn">불러오기</button>
+        <button class="ghost" type="button" id="applyApprovedBtn">수정 반영</button>
+        <button class="btn" type="button" id="saveApprovedBtn">저장하기</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>상위 버튼 관리</h2>
+      <p>개념, 필수유형, 모의고사처럼 처음 보이는 상위 버튼 이름과 이미지를 관리합니다.</p>
+
+      <div class="lecture-head">
+        <div class="count" id="groupCount">0개</div>
+        <button class="btn" type="button" id="addGroupBtn">상위 버튼 추가</button>
+      </div>
+
+      <div class="group-list" id="groupList"></div>
+    </section>
+
+    <section class="panel">
+      <h2>강의 버튼 관리</h2>
+      <p>상위 버튼 아래에 들어갈 강의 버튼을 관리합니다. 버튼 이름, 페이지, 링크를 한 줄씩 관리합니다.</p>
+
+      <div class="lecture-head">
+        <div class="count" id="lectureCount">0 / 40</div>
+        <button class="btn" type="button" id="addLectureBtn">강의 버튼 추가</button>
+      </div>
+
+      <div class="lecture-list" id="lectureList"></div>
+    </section>
+    </div>
+  </div>
+
+  <div class="footer">
+    <small>저장 위치: 브라우저 localStorage<br>메인 미리보기는 같은 브라우저에서는 localStorage를, 배포 후에는 GitHub에 올라간 <code>data/archive-config.json</code>을 읽습니다.</small>
+    <div class="actions">
+      <button class="danger" type="button" id="resetBtn">초기화</button>
+      <button class="ghost" type="button" id="saveBtn">로컬 저장</button>
+      <button class="btn" type="button" id="uploadConfigBtn">GitHub에 config 업로드</button>
+      <button class="btn" type="button" id="uploadFilesBtn">선택 파일 업로드</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='gfield_archive_admin_config';
+const GITHUB_STORAGE_KEY='gfield_archive_github_config';
+const DEFAULT_CONFIG={
+  courseName:'HS THINKING BASIC',
+  ebookViewerUrl:'./books/hs-thinking-basic/viewer.html',
+  aiTutorEnabled:true,
+  aiTutorLink:'https://chatgpt.com/g/g-6a209f67658481918e5dfa77c6f86391-hs-habgyeog-jiweon-gfield-on-ai-tyuteo',
+  approvedStudents:[],
+  topLevelGroups:[],
+  lectureButtons:[]
+};
+const DEFAULT_GITHUB_CONFIG={
+  owner:'docssam1',
+  repo:'GFIELD-EBOOK',
+  branch:'main',
+  configPath:'data/archive-config.json',
+  uploadBasePath:'uploads',
+  token:''
+};
+
+function clone(value){
+  return JSON.parse(JSON.stringify(value));
+}
+
+function escapeHtml(value){
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;');
+}
+
+function loadStorage(key,fallback){
+  try{
+    const raw=localStorage.getItem(key);
+    if(!raw)return clone(fallback);
+    const parsed=JSON.parse(raw);
+    return {
+      ...clone(fallback),
+      ...parsed
+    };
+  }catch(error){
+    return clone(fallback);
+  }
+}
+
+let adminConfig=loadStorage(STORAGE_KEY,DEFAULT_CONFIG);
+adminConfig.approvedStudents=Array.isArray(adminConfig.approvedStudents)?adminConfig.approvedStudents:[];
+adminConfig.topLevelGroups=Array.isArray(adminConfig.topLevelGroups)?adminConfig.topLevelGroups:[];
+adminConfig.lectureButtons=Array.isArray(adminConfig.lectureButtons)?adminConfig.lectureButtons:[];
+let githubConfig=loadStorage(GITHUB_STORAGE_KEY,DEFAULT_GITHUB_CONFIG);
+let selectedFiles=[];
+
+function createGroupItem(item={},index=0){
+  const wrap=document.createElement('div');
+  wrap.className='group-item';
+  wrap.innerHTML=`
+    <div class="lecture-item-top">
+      <div class="lecture-index">GROUP ${index+1}</div>
+      <button class="ghost" type="button">삭제</button>
+    </div>
+    <div class="group-grid">
+      <div class="field" style="margin-top:0">
+        <label>상위 버튼 이름</label>
+        <input type="text" class="group-name" placeholder="예: 개념" value="${escapeHtml(item.name||'')}">
+      </div>
+      <div class="field" style="margin-top:0">
+        <label>이미지 주소</label>
+        <input type="text" class="group-image" placeholder="예: assets/concept-card.jpg" value="${escapeHtml(item.image||'')}">
+      </div>
+    </div>
+    <div class="field" style="margin-top:10px">
+      <label>보조 텍스트</label>
+      <input type="text" class="group-caption" placeholder="예: 문제푸는 방법 찾기" value="${escapeHtml(item.caption||'')}">
+    </div>
+    <div class="field" style="margin-top:10px">
+      <label>버튼 스타일</label>
+      <div class="radio-row">
+        ${[
+          ['classic','클래식'],
+          ['gold','골드'],
+          ['navy','네이비'],
+          ['emerald','에메랄드'],
+          ['wine','와인']
+        ].map(([value,label])=>`<label class="radio-chip"><input type="radio" name="group-style-${index}" value="${value}" ${(item.style||'classic')===value?'checked':''}>${label}</label>`).join('')}
+      </div>
+    </div>
+  `;
+  wrap.querySelector('button').addEventListener('click',()=>{
+    wrap.remove();
+    refreshGroupIndices();
+    updateSummary();
+  });
+  return wrap;
+}
+
+function createLectureItem(item={},index=0){
+  const wrap=document.createElement('div');
+  wrap.className='lecture-item';
+  wrap.innerHTML=`
+    <div class="lecture-item-top">
+      <div class="lecture-index">BUTTON ${index+1}</div>
+      <button class="ghost" type="button">삭제</button>
+    </div>
+    <div class="mini-grid">
+      <div class="field" style="margin-top:0">
+        <label>상위 버튼</label>
+        <input type="text" class="lecture-group" placeholder="예: 개념" value="${escapeHtml(item.group||'')}">
+      </div>
+      <div class="field" style="margin-top:0">
+        <label>버튼 이름</label>
+        <input type="text" class="lecture-label" placeholder="예: 개념 강의" value="${escapeHtml(item.label||'')}">
+      </div>
+      <div class="field" style="margin-top:0">
+        <label>페이지</label>
+        <input type="text" class="lecture-page" placeholder="예: 1 또는 1.5" value="${escapeHtml(item.page||'')}">
+      </div>
+      <div class="field" style="margin-top:0">
+        <label>링크 주소</label>
+        <input type="url" class="lecture-url" placeholder="https://youtu.be/... 또는 https://..." value="${escapeHtml(item.url||'')}">
+      </div>
+      <div class="field" style="margin-top:0">
+        <label>스크롤 타깃</label>
+        <input type="text" class="lecture-scroll-target" placeholder="예: #p1-5 또는 question-12" value="${escapeHtml(item.scrollTarget||'')}">
+      </div>
+    </div>
+    <div class="sub-grid">
+      <div class="field" style="margin-top:0">
+        <label>다운로드 이름</label>
+        <input type="text" class="lecture-download-label" placeholder="예: 개념 노트" value="${escapeHtml(item.downloadLabel||'')}">
+      </div>
+      <div class="field" style="margin-top:0">
+        <label>다운로드 링크</label>
+        <input type="url" class="lecture-download-url" placeholder="https://... 또는 ./files/note.pdf" value="${escapeHtml(item.downloadUrl||'')}">
+      </div>
+    </div>
+  `;
+  wrap.querySelector('button').addEventListener('click',()=>{
+    wrap.remove();
+    refreshLectureIndices();
+    updateSummary();
+  });
+  return wrap;
+}
+
+function refreshLectureIndices(){
+  [...document.querySelectorAll('.lecture-item')].forEach((item,index)=>{
+    item.querySelector('.lecture-index').textContent=`BUTTON ${index+1}`;
+  });
+  document.getElementById('lectureCount').textContent=`${document.querySelectorAll('.lecture-item').length} / 40`;
+}
+function refreshGroupIndices(){
+  [...document.querySelectorAll('.group-item')].forEach((item,index)=>{
+    item.querySelector('.lecture-index').textContent=`GROUP ${index+1}`;
+  });
+  document.getElementById('groupCount').textContent=`${document.querySelectorAll('.group-item').length}개`;
+}
+
+function renderUploadList(){
+  const box=document.getElementById('uploadList');
+  box.innerHTML='';
+  selectedFiles.forEach(file=>{
+    const item=document.createElement('div');
+    item.className='upload-item';
+    item.textContent=`${file.name} (${Math.round(file.size/1024)} KB)`;
+    box.appendChild(item);
+  });
+  if(!selectedFiles.length){
+    const item=document.createElement('div');
+    item.className='upload-item';
+    item.textContent='아직 선택된 파일이 없습니다.';
+    box.appendChild(item);
+  }
+}
+
+function renderForm(){
+  document.getElementById('courseName').value=adminConfig.courseName||'';
+  document.getElementById('ebookViewerUrl').value=adminConfig.ebookViewerUrl||'';
+  document.getElementById('approvedStudents').value=(adminConfig.approvedStudents||[]).join('\n');
+  document.getElementById('aiTutorEnabled').checked=adminConfig.aiTutorEnabled!==false;
+  document.getElementById('aiTutorLink').value=adminConfig.aiTutorLink||'';
+  document.getElementById('githubOwner').value=githubConfig.owner||'';
+  document.getElementById('githubRepo').value=githubConfig.repo||'';
+  document.getElementById('githubBranch').value=githubConfig.branch||'main';
+  document.getElementById('githubConfigPath').value=githubConfig.configPath||'data/archive-config.json';
+  document.getElementById('githubUploadBasePath').value=githubConfig.uploadBasePath||'uploads';
+  document.getElementById('githubToken').value=githubConfig.token||'';
+  const groupList=document.getElementById('groupList');
+  groupList.innerHTML='';
+  (adminConfig.topLevelGroups||[]).forEach((item,index)=>groupList.appendChild(createGroupItem(item,index)));
+  refreshGroupIndices();
+  const list=document.getElementById('lectureList');
+  list.innerHTML='';
+  (adminConfig.lectureButtons||[]).forEach((item,index)=>list.appendChild(createLectureItem(item,index)));
+  refreshLectureIndices();
+  renderUploadList();
+  updateSummary();
+}
+
+function collectConfigFromForm(){
+  const approvedStudents=document.getElementById('approvedStudents').value
+    .split(/\r?\n/)
+    .map(v=>v.replace(/\s+/g,'').trim())
+    .filter(Boolean);
+  const topLevelGroups=[...document.querySelectorAll('.group-item')].map(item=>({
+    name:item.querySelector('.group-name').value.trim(),
+    image:item.querySelector('.group-image').value.trim(),
+    caption:item.querySelector('.group-caption').value.trim(),
+    style:item.querySelector('input[type="radio"]:checked')?.value||'classic'
+  })).filter(item=>item.name || item.image || item.caption);
+  const lectureButtons=[...document.querySelectorAll('.lecture-item')].map(item=>({
+    group:item.querySelector('.lecture-group').value.trim(),
+    label:item.querySelector('.lecture-label').value.trim(),
+    page:item.querySelector('.lecture-page').value.trim(),
+    url:item.querySelector('.lecture-url').value.trim(),
+    scrollTarget:item.querySelector('.lecture-scroll-target').value.trim(),
+    downloadLabel:item.querySelector('.lecture-download-label').value.trim(),
+    downloadUrl:item.querySelector('.lecture-download-url').value.trim()
+  })).filter(item=>item.group || item.label || item.page || item.url || item.scrollTarget || item.downloadUrl);
+  return {
+    courseName:document.getElementById('courseName').value.trim()||DEFAULT_CONFIG.courseName,
+    ebookViewerUrl:document.getElementById('ebookViewerUrl').value.trim(),
+    aiTutorEnabled:document.getElementById('aiTutorEnabled').checked,
+    aiTutorLink:document.getElementById('aiTutorLink').value.trim()||DEFAULT_CONFIG.aiTutorLink,
+    approvedStudents,
+    topLevelGroups,
+    lectureButtons
+  };
+}
+
+function collectGithubConfigFromForm(){
+  return {
+    owner:document.getElementById('githubOwner').value.trim()||DEFAULT_GITHUB_CONFIG.owner,
+    repo:document.getElementById('githubRepo').value.trim()||DEFAULT_GITHUB_CONFIG.repo,
+    branch:document.getElementById('githubBranch').value.trim()||DEFAULT_GITHUB_CONFIG.branch,
+    configPath:document.getElementById('githubConfigPath').value.trim()||DEFAULT_GITHUB_CONFIG.configPath,
+    uploadBasePath:(document.getElementById('githubUploadBasePath').value.trim()||DEFAULT_GITHUB_CONFIG.uploadBasePath).replace(/^\/+|\/+$/g,''),
+    token:document.getElementById('githubToken').value.trim()
+  };
+}
+
+function saveLocalState(){
+  adminConfig=collectConfigFromForm();
+  githubConfig=collectGithubConfigFromForm();
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(adminConfig));
+  localStorage.setItem(GITHUB_STORAGE_KEY,JSON.stringify(githubConfig));
+}
+
+function updateSummary(){
+  const config=collectConfigFromForm();
+  document.getElementById('summaryBox').innerHTML=
+    `현재 과정명: <strong>${escapeHtml(config.courseName)}</strong><br>`+
+    `ebook 링크: <strong>${config.ebookViewerUrl?escapeHtml(config.ebookViewerUrl):'미설정'}</strong><br>`+
+    `승인 학생 수: <strong>${config.approvedStudents.length}명</strong><br>`+
+    `상위 버튼 수: <strong>${config.topLevelGroups.length}개</strong><br>`+
+    `AI 튜터: <strong>${config.aiTutorEnabled?'사용':'숨김'}</strong><br>`+
+    `강의 버튼 저장 수: <strong>${config.lectureButtons.length}개</strong>`;
+}
+
+function setGithubStatus(message,isError=false){
+  const box=document.getElementById('githubStatusBox');
+  box.style.color=isError?'#fecaca':'#f8e7ab';
+  box.innerHTML=message;
+}
+
+async function getGitHubSha(config,path){
+  const response=await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path}?ref=${encodeURIComponent(config.branch)}`,{
+    headers:{Authorization:`Bearer ${config.token}`,Accept:'application/vnd.github+json'}
+  });
+  if(response.status===404)return null;
+  if(!response.ok){
+    throw new Error(`GitHub 조회 실패: ${response.status}`);
+  }
+  const data=await response.json();
+  return data.sha||null;
+}
+
+async function uploadContentToGitHub(config,path,contentBase64,message){
+  const sha=await getGitHubSha(config,path);
+  const body={
+    message,
+    content:contentBase64,
+    branch:config.branch
+  };
+  if(sha)body.sha=sha;
+  const response=await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}/contents/${path}`,{
+    method:'PUT',
+    headers:{
+      Authorization:`Bearer ${config.token}`,
+      Accept:'application/vnd.github+json',
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify(body)
+  });
+  if(!response.ok){
+    const text=await response.text();
+    throw new Error(`GitHub 업로드 실패: ${response.status} ${text}`);
+  }
+  return response.json();
+}
+
+function stringToBase64(value){
+  return btoa(unescape(encodeURIComponent(value)));
+}
+
+async function fileToBase64(file){
+  const buffer=await file.arrayBuffer();
+  let binary='';
+  const bytes=new Uint8Array(buffer);
+  const chunk=0x8000;
+  for(let i=0;i<bytes.length;i+=chunk){
+    binary+=String.fromCharCode(...bytes.subarray(i,i+chunk));
+  }
+  return btoa(binary);
+}
+
+document.getElementById('courseName').addEventListener('input',updateSummary);
+document.getElementById('approvedStudents').addEventListener('input',updateSummary);
+document.getElementById('aiTutorEnabled').addEventListener('change',updateSummary);
+document.getElementById('aiTutorLink').addEventListener('input',updateSummary);
+document.getElementById('addGroupBtn').addEventListener('click',()=>{
+  document.getElementById('groupList').appendChild(createGroupItem({},document.querySelectorAll('.group-item').length));
+  refreshGroupIndices();
+  updateSummary();
+});
+
+document.getElementById('reloadApprovedBtn').addEventListener('click',()=>{
+  const saved=loadStorage(STORAGE_KEY,DEFAULT_CONFIG);
+  document.getElementById('approvedStudents').value=(saved.approvedStudents||[]).join('\n');
+  updateSummary();
+});
+document.getElementById('applyApprovedBtn').addEventListener('click',updateSummary);
+document.getElementById('saveApprovedBtn').addEventListener('click',()=>{
+  saveLocalState();
+  updateSummary();
+  alert('승인 학생 목록이 저장되었습니다.');
+});
+
+document.getElementById('addLectureBtn').addEventListener('click',()=>{
+  const count=document.querySelectorAll('.lecture-item').length;
+  if(count>=40){
+    alert('강의 버튼은 최대 40개까지 저장할 수 있습니다.');
+    return;
+  }
+  document.getElementById('lectureList').appendChild(createLectureItem({},count));
+  refreshLectureIndices();
+  updateSummary();
+});
+
+document.getElementById('saveBtn').addEventListener('click',()=>{
+  saveLocalState();
+  updateSummary();
+  alert('로컬에 저장되었습니다. 미리보기 페이지를 새로고침하면 반영됩니다.');
+});
+
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  if(!confirm('저장된 관리자 설정을 초기화할까요?'))return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(GITHUB_STORAGE_KEY);
+  adminConfig=clone(DEFAULT_CONFIG);
+  githubConfig=clone(DEFAULT_GITHUB_CONFIG);
+  selectedFiles=[];
+  renderForm();
+  setGithubStatus('초기화되었습니다.');
+});
+
+document.getElementById('exportBtn').addEventListener('click',()=>{
+  const data=JSON.stringify(collectConfigFromForm(),null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='gfield-on-admin-config.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('importInput').addEventListener('change',async event=>{
+  const file=event.target.files?.[0];
+  if(!file)return;
+  try{
+    const text=await file.text();
+    const parsed=JSON.parse(text);
+    adminConfig={
+      ...clone(DEFAULT_CONFIG),
+      ...parsed,
+      approvedStudents:Array.isArray(parsed?.approvedStudents)?parsed.approvedStudents:[],
+      topLevelGroups:Array.isArray(parsed?.topLevelGroups)?parsed.topLevelGroups:[],
+      lectureButtons:Array.isArray(parsed?.lectureButtons)?parsed.lectureButtons:[]
+    };
+    renderForm();
+  }catch(error){
+    alert('설정 파일을 읽지 못했습니다.');
+  }finally{
+    event.target.value='';
+  }
+});
+
+document.getElementById('uploadFiles').addEventListener('change',event=>{
+  selectedFiles=[...event.target.files];
+  renderUploadList();
+});
+
+document.getElementById('uploadConfigBtn').addEventListener('click',async ()=>{
+  saveLocalState();
+  const config=collectGithubConfigFromForm();
+  if(!config.token){
+    alert('GitHub 토큰을 입력해 주세요.');
+    return;
+  }
+  try{
+    setGithubStatus('config.json 업로드 중입니다...');
+    const json=JSON.stringify(adminConfig,null,2);
+    await uploadContentToGitHub(
+      config,
+      config.configPath,
+      stringToBase64(json),
+      `Update archive config: ${adminConfig.courseName}`
+    );
+    setGithubStatus(`config 업로드 완료: <strong>${escapeHtml(config.configPath)}</strong>`);
+  }catch(error){
+    setGithubStatus(escapeHtml(error.message),true);
+  }
+});
+
+document.getElementById('uploadFilesBtn').addEventListener('click',async ()=>{
+  saveLocalState();
+  const config=collectGithubConfigFromForm();
+  if(!config.token){
+    alert('GitHub 토큰을 입력해 주세요.');
+    return;
+  }
+  if(!selectedFiles.length){
+    alert('업로드할 파일을 먼저 선택해 주세요.');
+    return;
+  }
+  try{
+    setGithubStatus(`${selectedFiles.length}개 파일 업로드 중입니다...`);
+    for(const file of selectedFiles){
+      const content=await fileToBase64(file);
+      const path=`${config.uploadBasePath}/${file.name}`;
+      await uploadContentToGitHub(
+        config,
+        path,
+        content,
+        `Upload ${file.name}`
+      );
+    }
+    setGithubStatus(`${selectedFiles.length}개 파일 업로드 완료: <strong>${escapeHtml(config.uploadBasePath)}</strong>`);
+  }catch(error){
+    setGithubStatus(escapeHtml(error.message),true);
+  }
+});
+
+renderForm();
+</script>
+</body>
+</html>
