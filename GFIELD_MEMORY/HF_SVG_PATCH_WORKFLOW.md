@@ -1,20 +1,31 @@
-# 프리미어 HF — SVG 유사문제 PATCH 워크플로우
+# 프리미어 HF — 유사문제 이미지 PATCH 워크플로우
 
 > 작성: Claude (관호 지시하에) / 2026.06.15
+
+---
+
+## 확정된 방향
+
+SVG 새로 제작 ❌  
+원본 이미지 크롭 → `<img>` 태그로 연결 ✅
+
+```
+유사문제 = 텍스트(sq.js 이미 완성) + 원본 이미지 크롭본
+```
 
 ---
 
 ## 워크플로우
 
 ```
-1. Claude → GFIELD_MEMORY/PATCH_SVG_{typeId}.md 작성 (SVG 코드 조각만)
+1. Claude → GFIELD_MEMORY/PATCH_IMG_{typeId}.md 작성 (조각만)
 2. GPT    → GitHub fetch + 해당 조각만 patch + push
 3. Claude → GitHub Pages에서 결과 확인만
 ```
 
 ---
 
-## PATCH 파일 작성 원칙 (GPT / Claude 공통)
+## PATCH 파일 작성 원칙
 
 ```
 - 줄 번호로 지시하지 마라
@@ -33,16 +44,7 @@
 - repo: docssam1/Hyper-Focus-answer-Key
 - branch: main
 
-## 작업 1 — SVG 파일 신규 생성
-### 파일 경로
-premier-hyper-focus/assets/similar/sq-01-1.svg
-
-### 내용 (전체 신규)
-<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
-  ...
-</svg>
-
-## 작업 2 — sq-a.js에 svgUrl 추가
+## 작업 1 — sq-a.js에 imgUrl 추가
 ### 파일
 premier-hyper-focus/data/sq-a.js
 
@@ -50,32 +52,37 @@ premier-hyper-focus/data/sq-a.js
 { id: "1-A", question: "...", answer: "...", hint1: "...", hint2: "..." }
 
 ### 교체할 블록
-{ id: "1-A", question: "...", answer: "...", hint1: "...", hint2: "...", svgUrl: "./assets/similar/sq-01-1.svg" }
+{ id: "1-A", question: "...", answer: "...", hint1: "...", hint2: "...", imgUrl: "./assets/similar/sq-01-1.jpg" }
 ```
 
 ---
 
-## 참고 파일 URL (필요한 typeId 부분만 읽을 것 — 전체 읽기 금지)
+## 이미지 업로드 방법
 
-| 파일 | URL |
-|------|-----|
-| tutor-scripts.js | https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-hyper-focus/data/tutor-scripts.js |
-| sq-a.js | https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-hyper-focus/data/sq-a.js |
-| sq-b.js | https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-hyper-focus/data/sq-b.js |
-| sq-c.js | https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-hyper-focus/data/sq-c.js |
-| 원본 이미지 | Drive 폴더 ID: 1jMg0m9l7BTSkjgeAo0OJDVH02fi5qpnn |
+Drive 원본 이미지 → 크롭 → GitHub push:
+
+```
+repo: docssam1/Hyper-Focus-answer-Key
+branch: main
+경로: premier-hyper-focus/assets/similar/
+파일명: sq-01-1.jpg, sq-01-2.jpg ... sq-54-1.jpg, sq-54-2.jpg
+```
+
+원본 이미지 위치:
+```
+Drive 폴더 ID: 1jMg0m9l7BTSkjgeAo0OJDVH02fi5qpnn
+URL: https://drive.google.com/drive/folders/1jMg0m9l7BTSkjgeAo0OJDVH02fi5qpnn
+```
 
 ---
 
-## SVG 제작 규칙
+## 참고 파일 URL (필요한 typeId 조각만 읽을 것)
 
-1. 원본 이미지 + 해당 typeId의 `scriptSummary` 동시 참고
-2. sq-a/b/c.js 기존 question 숫자와 **다르게** 변형
-3. 유사문제 **2개** 생성 (난이도 동급)
-4. SVG 크기: `width="400" height="300"`
-5. 색상: **흑백** (인쇄 가능)
-6. 한글 포함 시: `font-family="Noto Sans KR, sans-serif"`
-7. 파일명: `sq-01-1.svg`, `sq-01-2.svg` (typeId 두 자리)
+| 파일 | URL |
+|------|-----|
+| sq-a.js | https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-hyper-focus/data/sq-a.js |
+| sq-b.js | https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-hyper-focus/data/sq-b.js |
+| sq-c.js | https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-hyper-focus/data/sq-c.js |
 
 ---
 
@@ -91,4 +98,4 @@ premier-hyper-focus/data/sq-a.js
 
 - Claude: 해당 typeId 조각만 확인 — 전체 파일 읽기 금지
 - GPT: 조각만 교체 — 전체 파일 새로 쓰기 금지
-- Claude: 결과 확인만 — GitHub Pages URL에서 SVG 렌더링만 확인
+- Claude: 결과 확인만 — GitHub Pages URL에서 이미지 렌더링 확인
