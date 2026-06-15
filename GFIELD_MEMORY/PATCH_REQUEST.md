@@ -34,14 +34,21 @@ docssam1/gfield-hq → GFIELD_MEMORY/WORKER_OPERATING_RULES.md
 
 ## PATCH 1
 FIND:
-## 공통 작업 원칙
+---
+
+## 1. Think Before Coding
 
 REPLACE:
+---
+
 ## 파일 수정 규칙 (Claude 전용 강제 규칙)
+
 - `get_file_contents`로 HTML/JS 등 운영 파일 전체 읽기 금지
 - `create_or_update_file`로 운영 파일 전체 쓰기 금지
 - GitHub에 허용된 유일한 쓰기: `GFIELD_MEMORY/PATCH_REQUEST.md` 업데이트만
 - 위 규칙 위반이 필요한 경우: "전체 수정 필요. 이유: ___" 명시 후 원장님 승인 필수
 - 승인 없이 전체 파일을 읽거나 쓴 경우: 작업 중단 후 보고
 
-## 공통 작업 원칙
+---
+
+## 1. Think Before Coding
