@@ -13,11 +13,57 @@
 
 ---
 
-## 2. 분류표
+## 2. 반드시 먼저 읽을 파일
+
+작업 전 아래 3개 파일을 반드시 읽고 내용을 파악한 후 시작할 것.
+
+### 2-1. tutor-scripts.js (핵심 스크립트)
+```
+repo: docssam1/Hyper-Focus-answer-Key
+경로: premier-hyper-focus/data/tutor-scripts.js
+```
+
+각 typeId별로 다음 필드가 있음:
+- `typeTitle` — 유형 제목
+- `scriptSummary` — 문제 핵심 요약 ← **SVG 제작 시 이 내용 기준으로 그릴 것**
+- `docssamExplanation` — 풀이 설명 ← **유사문제 숫자/조건 변형 시 참고**
+- `answer` — 정답
+- `hint` — 힌트 ← **유사문제 hint 작성 시 참고**
+- `parentTip` — 학부모 팁
+
+### 2-2. sq-a.js (typeId 1~17 유사문제 데이터)
+```
+repo: docssam1/Hyper-Focus-answer-Key
+경로: premier-hyper-focus/data/sq-a.js
+```
+
+### 2-3. sq-b.js + sq-c.js (typeId 18~54)
+```
+경로: premier-hyper-focus/data/sq-b.js
+경로: premier-hyper-focus/data/sq-c.js
+```
+
+각 question 객체 구조:
+```js
+{
+  id: "1-A",
+  question: "문제 텍스트",
+  answer: "정답",
+  solution: "풀이",
+  hint1: "힌트1",
+  hint2: "힌트2",
+  svgUrl: ""  // ← 이 필드에 SVG 경로 추가 예정
+}
+```
+
+---
+
+## 3. 분류표
 
 ### A. SVG 새로 제작 (39개) — Gemini Vision 담당
 
-원본 이미지를 보고 SVG 코드로 재현. 숫자/조건만 바꿔서 유사문제 2개 생성.
+원본 이미지를 보고 SVG 코드로 재현. 숫자/조건만 바꿔서 유사문제 2개 생성.  
+**tutor-scripts.js의 scriptSummary를 반드시 참고해서 SVG 내용이 맞는지 검증할 것.**
 
 | typeId | 유형명 |
 |--------|--------|
@@ -63,32 +109,33 @@
 
 ### B. 텍스트만 (15개) — HTML 텍스트로 처리
 
-숫자/이름만 바꾼 텍스트 문제. 이미지 불필요.
+숫자/이름만 바꾼 텍스트 문제. 이미지 불필요.  
+**tutor-scripts.js의 docssamExplanation 참고해서 숫자/조건 변형할 것.**
 
 21, 33, 34, 35, 36, 37, 38, 39, 44, 46, 47, 48, 50, 51, 53
 
 ---
 
-## 3. Gemini Vision 작업 지시
+## 4. Gemini Vision 작업 지시
 
-### 3-1. 분류 검증 (먼저 할 것)
+### 4-1. 분류 검증 (먼저 할 것)
 
-아래 Drive 파일들을 열어서 각 이미지를 보고 판단:
+Drive 폴더(`1jMg0m9l7BTSkjgeAo0OJDVH02fi5qpnn`)에서 각 이미지를 열고:
+- tutor-scripts.js의 해당 typeId `scriptSummary`와 이미지가 일치하는지 확인
 - SVG로 재현 가능한가?
 - 숫자만 바꿔도 되는가?
 - 구조가 복잡해서 보류해야 하는가?
 
-**Drive 폴더:** `1jMg0m9l7BTSkjgeAo0OJDVH02fi5qpnn`
+### 4-2. SVG 생성 규칙
 
-### 3-2. SVG 생성 규칙
-
-1. 원본 이미지를 보고 SVG 코드로 재현
+1. 원본 이미지 + tutor-scripts.js scriptSummary 동시 참고
 2. 숫자/조건만 바꿔서 유사문제 2개 생성
 3. SVG 크기: `width="400" height="300"` 기준
 4. 색상: 흑백 위주 (인쇄 가능해야 함)
 5. 파일명: `sq-{typeId}-1.svg`, `sq-{typeId}-2.svg`
+6. sq-a/b/c.js의 기존 question 텍스트와 겹치지 않게 숫자 변형
 
-### 3-3. 결과물 저장 위치
+### 4-3. 결과물 저장 위치
 
 ```
 GitHub: docssam1/Hyper-Focus-answer-Key
@@ -98,7 +145,7 @@ GitHub: docssam1/Hyper-Focus-answer-Key
 
 ---
 
-## 4. GPT 작업 지시
+## 5. GPT 작업 지시
 
 Gemini가 생성한 SVG를 GitHub에 push:
 
@@ -115,18 +162,22 @@ svgUrl: "./assets/similar/sq-01-1.svg"
 
 ---
 
-## 5. 우선순위
+## 6. 우선순위
 
-1차: typeId 1~10 (쌓기나무/도형 기본형) — SVG 가장 만들기 쉬움  
+1차: typeId 1~10 (쌓기나무/도형 기본형)  
 2차: typeId 11~20  
 3차: typeId 21~54 나머지
 
 ---
 
-## 6. 관련 파일
+## 7. 관련 파일 전체 목록
 
-| 파일 | 위치 |
-|------|------|
-| 유사문제 데이터 | `premier-hyper-focus/data/sq-a/b/c.js` |
-| 원본 이미지 | Drive `1jMg0m9l7BTSkjgeAo0OJDVH02fi5qpnn` |
-| 뷰어 | `premier-hyper-focus/viewer-ai-tutor.html` |
+| 파일 | repo / 위치 |
+|------|-------------|
+| **tutor-scripts.js** | `Hyper-Focus-answer-Key / premier-hyper-focus/data/tutor-scripts.js` |
+| **sq-a.js** | `Hyper-Focus-answer-Key / premier-hyper-focus/data/sq-a.js` |
+| **sq-b.js** | `Hyper-Focus-answer-Key / premier-hyper-focus/data/sq-b.js` |
+| **sq-c.js** | `Hyper-Focus-answer-Key / premier-hyper-focus/data/sq-c.js` |
+| 원본 이미지 | Drive 폴더 `1jMg0m9l7BTSkjgeAo0OJDVH02fi5qpnn` |
+| SVG 저장 위치 | `Hyper-Focus-answer-Key / premier-hyper-focus/assets/similar/` |
+| 뷰어 | `Hyper-Focus-answer-Key / premier-hyper-focus/viewer-ai-tutor.html` |
