@@ -7,7 +7,7 @@
 ## [지시서 시작 — 아래부터 복사]
 
 너는 GFIELD 프리미어 하이퍼 포커스 AI 튜터 시스템의 백엔드 개발자야.
-아래 기존 코드와 설계도를 읽고 두 가지 결과물을 만들어줘.
+아래 기존 코드와 설계도를 읽고 세 가지 결과물을 만들어줘.
 
 ---
 
@@ -99,8 +99,7 @@ BLOCKED_WORDS = ["교차점", "단면화", "단면", "교차"]
 
 ### 분류 체계
 ```python
-# 각 typeId마다 두 가지 분류 속성
-"legacyGroup": "A",          # A(그림39개) 또는 B(텍스트15개)
+"legacyGroup": "A",           # A(그림39개) 또는 B(텍스트15개)
 "functionalGroup": "공간/기하" # 공간/기하, 평면/논리, 연산/규칙, 가중치/활용
 ```
 
@@ -124,7 +123,6 @@ BLOCKED_WORDS = ["교차점", "단면화", "단면", "교차"]
     "blockedWords": ["교차점", "단면화", "단면", "교차"],
     "preferredPhrases": ["대장 블록", "케이크 쪼개기", "콕콕 세기"]
   },
-  "lockPolicy": "→ hf_runtime.py의 LOCK_POLICY 참조",
   "originalProblem": {
     "questionId": "q01_origin",
     "difficulty": "same",
@@ -142,7 +140,7 @@ BLOCKED_WORDS = ["교차점", "단면화", "단면", "교차"]
       "answer": "정답",
       "answerStory": "풀이 스토리",
       "handwritingData": {
-        "svgPath": "SVG Path 문자열",
+        "svgPath": "사람이 쓴 듯한 자연스러운 곡선 SVG Path 문자열 (Bezier 곡선 포함)",
         "duration": 2000,
         "color": "#FF0000",
         "emphasisTrigger": "CALCULATION_ERROR"
@@ -183,7 +181,7 @@ BLOCKED_WORDS = ["교차점", "단면화", "단면", "교차"]
 - sq-a/b/c.js의 기존 question 텍스트와 다른 숫자/조건 사용
 - 모든 텍스트에서 금지어(교차, 단면 등) 사용 금지
 - 유아어 우선: '교차점' → '길이 만나는 곳', '단면' → '잘린 면' 등
-- handwritingData.svgPath: 풀이 과정을 손글씨로 쓰는 자연스러운 곡선 SVG Path
+- **handwritingData.svgPath: 반드시 사람이 쓴 듯한 자연스러운 Bezier 곡선(C, Q 명령어 포함) SVG Path 문자열로 생성**
 - audioScript: [도입] → [핵심 개념 1문장] → [실수 방지 팁] → [격려] 30초 이내
 
 ### 출력 형식
@@ -193,12 +191,76 @@ BLOCKED_WORDS = ["교차점", "단면화", "단면", "교차"]
 
 ---
 
+## 결과물 3 — viewer_handwriting.js (Vivus.js + Khoshnus.js 연동)
+
+### 목적
+viewer-ai-tutor.html이 hf_data.json의 handwritingData를 받아서
+Vivus.js(도형/격자)와 Khoshnus.js(수식 텍스트)로 손글씨 애니메이션 재생.
+
+### HTML 구조 (viewer에 이미 있어야 할 것)
+```html
+<!-- Vivus.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.6/vivus.min.js"></script>
+
+<!-- 손글씨 영역 -->
+<svg id="handwriting-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <path id="handwriting-path" d="" stroke="#FF0000" stroke-width="2" fill="none"/>
+</svg>
+```
+
+### 연동 코드 (5줄 핵심)
+```javascript
+function playHandwriting(handwritingData) {
+  // 1. SVG Path 주입
+  document.getElementById('handwriting-path').setAttribute('d', handwritingData.svgPath);
+
+  // 2. 색상 적용
+  document.getElementById('handwriting-path').setAttribute('stroke', handwritingData.color || '#FF0000');
+
+  // 3. Vivus 실행
+  new Vivus('handwriting-svg', {
+    duration: handwritingData.duration || 2000,
+    type: 'delayed',
+    pathTimingFunction: Vivus.EASE
+  });
+}
+```
+
+### 강조 트리거 처리
+```javascript
+// CALCULATION_ERROR일 때 강조 애니메이션
+if (handwritingData.emphasisTrigger === 'CALCULATION_ERROR') {
+  document.getElementById('handwriting-path').style.strokeWidth = '4';
+  document.getElementById('handwriting-path').style.stroke = '#FF0000';
+}
+```
+
+### 수식 텍스트용 (Khoshnus.js)
+```javascript
+// 수식(예: 27-5=22)을 글자별로 손글씨처럼 쓰는 효과
+// Khoshnus는 별도 CDN 추가 필요
+function playMathHandwriting(formulaText) {
+  const instance = new Khoshnus('#math-handwriting-svg', {
+    font: 'Parisienne'
+  });
+  instance.write(formulaText, {
+    writeConfiguration: { eachLetterDelay: 200 }
+  });
+}
+```
+
+### 출력 파일명
+`viewer_handwriting.js`
+
+---
+
 ## [지시서 끝]
 
-완성 후 결과물 2개를 GitHub에 올려줘:
+완성 후 결과물 3개를 GitHub에 올려줘:
 ```
 repo: docssam1/Hyper-Focus-answer-Key
 branch: main
-hf_runtime.py → premier-hyper-focus/data/hf_runtime.py
-hf_data.json → premier-hyper-focus/data/hf_data.json
+hf_runtime.py        → premier-hyper-focus/data/hf_runtime.py
+hf_data.json         → premier-hyper-focus/data/hf_data.json
+viewer_handwriting.js → premier-hyper-focus/data/viewer_handwriting.js
 ```
