@@ -1,26 +1,40 @@
-# GFIELD HF — Gemini 2.5 Pro SVG 유사문제 생성 지시서
+# GFIELD HF — Gemini 2.5 Pro 최종 작업 지시서
 
-> AI Studio (gemini-2.5-pro) 에 아래 내용을 그대로 붙여넣을 것
 > 작성: 2026-06-18
+> 기준 문서: GFIELD Premier HF AI 튜터 / 유사문항 시스템 최종 작업 지시서
 
 ---
 
 ## [지시서 시작 — 아래부터 복사]
 
-너는 GFIELD 프리미어 하이퍼 포커스의 유사문제 SVG 생성 전문가야.
-아래 원본 문제 이미지 54개를 보고, 각 문제당 유사문제 SVG 2개를 생성해줘.
+너는 GFIELD 프리미어 하이퍼 포커스 시스템의 유사문항 생성 전문가야.
+아래 순서대로 정확히 3가지 산출물을 만들어라.
+순서를 바꾸지 마라. 추측하지 마라. 원본 이미지를 반드시 직접 읽어라.
 
 ---
 
-## 원본 문제 이미지 (54개)
-
-아래 URL 패턴으로 1~54번 이미지를 순서대로 읽어라:
+## Context Lock 규칙 (반드시 준수)
 
 ```
-https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-hyper-focus/assets/problems/{번호} {제목}.png
+1. 원본 54개 이미지를 기준으로만 삼는다.
+2. typeId는 01~54로 고정한다.
+3. 유사문항은 원본 구조에서 숫자/조건만 바꾼 고정 산출물이어야 한다.
+4. 원본에 없는 조건 추가 금지.
+5. 그림 문제를 글 문제로 바꾸는 것 금지.
+6. 정답 검산 없이 완료 처리 금지.
+7. sq-a.js, sq-b.js, sq-c.js 찾지 마라. 폐기됐다.
 ```
 
-전체 목록:
+---
+
+## 원본 이미지 위치
+
+```
+repo: docssam1/Hyper-Focus-answer-Key
+path: premier-hyper-focus/assets/problems/
+```
+
+54개 파일명 전체:
 ```
 1 특정 모양과 똑같이 만들기 위해 추가로 필요한 쌓기나무의 개수 구하기.png
 2 정육면체를 완성하기 위해 채우기 위해 필요한 쌓기 나무의 개수 구하기.png
@@ -78,87 +92,196 @@ https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-h
 54. 피보나치 수열 등 특정 수열에서 홀수(또는 짝수)가 나오는 개수 구하기.png
 ```
 
----
-
-## 현재 hf_data.json 참고
-
+Raw URL 패턴:
 ```
-https://raw.githubusercontent.com/docssam1/lete-on/main/hyper-focus/data/hf_data.json
+https://raw.githubusercontent.com/docssam1/Hyper-Focus-answer-Key/main/premier-hyper-focus/assets/problems/{파일명}
 ```
 
-각 typeId의 `fixedSimilars[0]`(easy), `fixedSimilars[1]`(hard) 문제 텍스트와 정답을 참고해서 SVG를 만들어라.
-
 ---
 
-## 생성 규칙
+## 산출물 1 — hf_originals_manifest.json
 
-### SVG Path 생성 원칙
-- 원본 이미지의 핵심 도형/구조를 파악
-- 숫자나 조건만 다르게 바꾼 유사문제를 SVG로 표현
-- 반드시 사람이 쓴 듯한 자연스러운 Bezier 곡선(C, Q 명령어) 포함
-- viewBox: "0 0 300 200"
-- 도형 위주(legacyGroup A): Vivus.js로 그릴 수 있는 stroke 기반 SVG
-- 텍스트 위주(legacyGroup B): 수식을 SVG text 또는 path로 표현
+원본 54개 이미지를 직접 읽고 아래 스키마로 만들어라.
+추측 금지. 이미지를 직접 보고 채워라.
+애매하면 needsReview: true로 둔다.
 
-### 금지어 (텍스트에 절대 사용 금지)
-교차점, 단면화, 단면, 교차
-
-### 유아어 원칙
-- 7세 기준 따뜻하고 친근한 말투
-- "교차점" → "만나는 곳"
-- "단면" → "잘린 면"
-
----
-
-## 출력 형식
-
-아래 JSON 구조로 54개 전체를 배열로 출력:
-
+스키마:
 ```json
-[
-  {
-    "typeId": 1,
-    "svgSimilars": [
-      {
-        "questionId": "q01_svg_1",
-        "difficulty": "easy",
-        "svgPath": "M10 20 C 30 10, 50 10, 70 20 L 70 80 C 50 90, 30 90, 10 80 Z",
-        "viewBox": "0 0 300 200",
-        "duration": 2000,
-        "color": "#4CAF50",
-        "emphasisTrigger": "NONE",
-        "problemText": "유사문제 문장 (숫자/조건 변경)",
-        "answer": "정답",
-        "answerStory": "풀이 설명 (유아어)"
-      },
-      {
-        "questionId": "q01_svg_2",
-        "difficulty": "hard",
-        "svgPath": "...",
-        "viewBox": "0 0 300 200",
-        "duration": 2500,
-        "color": "#F44336",
-        "emphasisTrigger": "CALCULATION_ERROR",
-        "problemText": "유사문제 문장 (더 어려운 조건)",
-        "answer": "정답",
-        "answerStory": "풀이 설명 (유아어)"
-      }
-    ]
-  }
-]
+{
+  "schemaVersion": "hf-originals-v1",
+  "sourceRepo": "docssam1/Hyper-Focus-answer-Key",
+  "sourcePath": "premier-hyper-focus/assets/problems/",
+  "items": [
+    {
+      "typeId": "01",
+      "originalImage": "1 특정 모양과 똑같이 만들기 위해 추가로 필요한 쌓기나무의 개수 구하기.png",
+      "title": "이미지에서 읽은 유형명",
+      "problemKind": "geometry",
+      "visualRequired": true,
+      "sourceStatus": "from_original_image",
+      "needsReview": false,
+      "notes": "이미지에서 읽은 조건, 숫자, 도형 구조 요약"
+    }
+  ]
+}
 ```
 
-JSON만 출력. 다른 텍스트 없이.
-파일명: `hf_svg_similars.json`
+저장 위치:
+```
+repo: docssam1/Hyper-Focus-answer-Key
+path: premier-hyper-focus/data/hf_originals_manifest.json
+```
 
 ---
 
-## GitHub 업로드 위치
+## 산출물 2 — hf_data.json
+
+manifest 완성 후 아래 스키마로 hf_data.json을 만들어라.
+fixedSimilars의 asset은 아직 없으므로 needsReview: true로 둔다.
+답과 풀이는 원본 이미지에서 읽은 것만 넣는다.
+
+스키마:
+```json
+{
+  "schemaVersion": "hf-data-v1",
+  "items": [
+    {
+      "typeId": "01",
+      "title": "유형명",
+      "functionalGroup": "공간/기하",
+      "legacyGroup": "A",
+      "original": {
+        "image": "./assets/problems/1 특정 모양과 똑같이 만들기 위해 추가로 필요한 쌓기나무의 개수 구하기.png",
+        "summary": "원본 문제 구조 요약",
+        "answer": "",
+        "needsReview": true
+      },
+      "fixedSimilars": [
+        {
+          "id": "01_1",
+          "label": "유사문항 1",
+          "difficulty": "same",
+          "format": "svg",
+          "asset": "./assets/book/01_1.svg",
+          "answer": "",
+          "solution": "",
+          "hint": "",
+          "needsReview": true,
+          "handwritingData": {
+            "svgPath": "./assets/book/01_1.svg",
+            "duration": 2000,
+            "color": "#e9c176",
+            "emphasisTrigger": "CALCULATION_ERROR"
+          }
+        },
+        {
+          "id": "01_2",
+          "label": "유사문항 2",
+          "difficulty": "same",
+          "format": "svg",
+          "asset": "./assets/book/01_2.svg",
+          "answer": "",
+          "solution": "",
+          "hint": "",
+          "needsReview": true,
+          "handwritingData": {
+            "svgPath": "./assets/book/01_2.svg",
+            "duration": 2000,
+            "color": "#e9c176",
+            "emphasisTrigger": "CONCEPT_ERROR"
+          }
+        }
+      ],
+      "aiTutorPolicy": {
+        "contextLock": true,
+        "allowedActions": ["checkAnswer","classifyError","giveHint","explainStep","recommendNext","parentGuide"],
+        "forbiddenActions": ["inventProblem","changeOriginal","ignoreTypeId","showUnverifiedProblem"]
+      },
+      "flowController": {
+        "routes": {
+          "NONE": {"nextType": "HARD", "card": "GreenWinCard"},
+          "CALCULATION_ERROR": {"nextType": "SAME", "card": "YellowClinicCard"},
+          "CONCEPT_ERROR": {"nextType": "EASY", "card": "RedClinicCard"},
+          "CONDITION_MISSING": {"nextType": "EASY", "card": "OrangeCheckCard"},
+          "VISUAL_READING_ERROR": {"nextType": "EASY", "card": "PurpleClinicCard"}
+        }
+      }
+    }
+  ]
+}
+```
+
+저장 위치:
+```
+repo: docssam1/Hyper-Focus-answer-Key
+path: premier-hyper-focus/data/hf_data.json
+```
+
+---
+
+## 산출물 3 — assets/book/{typeId}_1.svg, {typeId}_2.svg
+
+manifest와 hf_data.json 완성 후, 원본 이미지를 보고 유사문항 SVG를 만들어라.
+
+규칙:
+```
+- 원본 이미지의 핵심 도형/구조를 그대로 유지
+- 숫자/조건만 바꿔라
+- viewBox: "0 0 400 300"
+- stroke 기반 (Vivus.js 재생 가능하도록)
+- 그림 문제는 반드시 그림으로 (텍스트로 바꾸기 금지)
+- 정답과 풀이를 SVG 내부 <metadata>에 포함
+- 금지어: 교차점, 단면화, 단면, 교차
+```
+
+SVG 내부 구조:
+```xml
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <metadata>
+    <hf:problem xmlns:hf="https://gfield.kr/hf">
+      <hf:typeId>01</hf:typeId>
+      <hf:simId>01_1</hf:simId>
+      <hf:answer>정답</hf:answer>
+      <hf:solution>풀이 (유아어)</hf:solution>
+      <hf:hint>힌트 (유아어)</hf:hint>
+    </hf:problem>
+  </metadata>
+  <!-- 문제 도형/내용 -->
+</svg>
+```
+
+저장 위치:
+```
+repo: docssam1/Hyper-Focus-answer-Key
+path: premier-hyper-focus/assets/book/
+파일명: 01_1.svg, 01_2.svg ... 54_1.svg, 54_2.svg
+```
+
+---
+
+## 실행 순서 (반드시 이 순서대로)
 
 ```
-repo: docssam1/lete-on
-branch: main
-path: hyper-focus/data/hf_svg_similars.json
+1. 원본 이미지 54개 URL 접근해서 읽기
+2. hf_originals_manifest.json 생성 → GitHub push
+3. hf_data.json 생성 → GitHub push
+4. 01_1.svg, 01_2.svg 생성 → GitHub push
+5. 02_1.svg ~ 54_2.svg 순서대로 생성 → GitHub push
+```
+
+GitHub push는 GPT가 담당한다.
+Gemini는 산출물만 만들어서 넘겨라.
+
+---
+
+## 금지 사항
+
+```
+sq-a.js, sq-b.js, sq-c.js 찾지 마라 (폐기됨)
+원본 이미지 직접 연결로 완료 처리 금지
+텍스트 카드형 유사문항 생성 금지
+검산 없이 완료 선언 금지
+뷰어 수정 먼저 하지 마라
 ```
 
 ## [지시서 끝]
