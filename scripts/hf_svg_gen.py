@@ -190,7 +190,10 @@ def main():
             a2 = data['fixedSimilars'][1].get('answer','?')
             print(f"  OK — 정답: {a1}, {a2}")
         except Exception as e:
+            import traceback
             print(f"  ERROR: {e}")
+            print(f"  파일명: {FILES[tid]}")
+            traceback.print_exc()
 
     outpath = os.path.expanduser(f"~/hf_batch_{batch:02d}.json")
     with open(outpath, "w", encoding="utf-8") as f:
