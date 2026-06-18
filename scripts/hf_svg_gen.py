@@ -126,8 +126,19 @@ PROMPT_TEMPLATE = """너는 GFIELD 프리미어 하이퍼 포커스의 유사문
 """
 
 def get_image_b64(filename):
-    url = f"https://raw.githubusercontent.com/{IMG_REPO}/main/{IMG_PATH}/{urllib.parse.quote(filename)}"
-    with urllib.request.urlopen(url) as r:
+    # GitHub Contents API로 받기 (한글 파일명 인코딩 문제 회피)
+    api = f"https://api.github.com/repos/{IMG_REPO}/contents/{IMG_PATH}/{urllib.parse.quote(filename)}?ref=main"
+    req = urllib.request.Request(api, headers={"Accept": "application/vnd.github.v3+json"})
+    tok = os.environ.get("GITHUB_TOKEN")
+    if tok:
+        req.add_header("Authorization", f"token {tok}")
+    with urllib.request.urlopen(req) as r:
+        info = json.loads(r.read())
+    if info.get("content"):
+        return info["content"].replace("\n", "")
+    # 대용량이면 download_url 사용
+    durl = info["download_url"]
+    with urllib.request.urlopen(durl) as r:
         return base64.b64encode(r.read()).decode()
 
 def get_access_token():
