@@ -23,7 +23,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 import google.generativeai as genai
 
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = "gemini-2.0-flash-001"
 DPI = 200
 MAX_RETRIES = 3
 RETRY_DELAY = 5
@@ -123,7 +123,6 @@ def process(input_path: str, output_path: str, dpi: int = DPI):
     inp = Path(input_path)
     is_image = inp.suffix.lower() in IMAGE_EXTS
 
-    # 출력 경로 자동 설정
     if not output_path:
         suffix = inp.suffix if is_image else ".pdf"
         output_path = f"output/{inp.stem}_cleaned{suffix}"
